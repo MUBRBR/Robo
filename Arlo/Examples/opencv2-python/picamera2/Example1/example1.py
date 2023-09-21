@@ -14,6 +14,29 @@ except ImportError:
     print("Camera.py: picamera2 module not available")
     exit(-1)
 
+def angle_between_vectors(vector1, vector2):
+    # Calculate the dot product of the two vectors
+    dot_product = np.dot(vector1, vector2)
+
+    # Calculate the magnitude (norm) of each vector
+    magnitude_vector1 = np.linalg.norm(vector1)
+    magnitude_vector2 = np.linalg.norm(vector2)
+
+    # Calculate the cosine of the angle between the vectors using the dot product formula
+    cosine_theta = dot_product / (magnitude_vector1 * magnitude_vector2)
+
+    # Calculate the angle in radians using the arccosine function
+    angle_rad = np.arccos(cosine_theta)
+
+    # Determine the sign of the angle (clockwise or counterclockwise)
+    cross_product = np.cross(vector1, vector2)
+    if cross_product < 0:
+        angle_rad = -angle_rad
+
+    # Convert the angle to degrees
+    angle_deg = np.degrees(angle_rad)
+
+    return -angle_deg
 
 def focal():
     bigX = 300 # mm højde på objekt
@@ -138,8 +161,10 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     print("rvecs: \n",rvecs)
     print("objPoints:\n ",objPoints)
 
+    angle_between_vectors(tvecs,[0,0,1])
+    print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
     # Beta(tvecs)
-    turn_angle(Beta(tvecs))
+    # turn_angle(Beta(tvecs))
     
     print("Beta: ", Beta(tvecs))
     print("angle",turn_angle(Beta(tvecs)))
