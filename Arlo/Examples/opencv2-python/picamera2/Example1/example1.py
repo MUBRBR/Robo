@@ -108,15 +108,15 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     
     # Show frames
     cv2.imshow(WIN_RF, image)
-    # arucoMarkerLength = Marker_length()
-    arucoMarkerLength = 600
+    arucoMarkerLength = Marker_length()
+   
 
     print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
     print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
     distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
-    rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, distortion_coeffs)
+    rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix)
     print("tvecs: \n",tvecs)
     print("rvecs: \n",rvecs)
     print("objPoints:\n ",objPoints)
