@@ -71,8 +71,14 @@ def intrinsic():
 
 
 def Beta(tvecs):
-    beta = np.cos(np.dot((tvecs/math.sqrt(sum(i**2 for i in tvecs))),[0,0,1]))
+    beta = np.arccos(np.dot((tvecs/math.sqrt(sum(i**2 for i in tvecs))),[0,0,1]))
     return beta
+
+def turn_angle(beta):
+    angle = beta*np.array([1,0,0])
+    return angle
+ 
+
 
 
 
@@ -127,8 +133,11 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     print("rvecs: \n",rvecs)
     print("objPoints:\n ",objPoints)
 
-
+    # Beta(tvecs)
+    turn_angle(Beta(tvecs))
+    
     print("Beta: ", Beta(tvecs))
+    print("angle",turn_angle(Beta(tvecs)))
     
 
 # Finished successfully
