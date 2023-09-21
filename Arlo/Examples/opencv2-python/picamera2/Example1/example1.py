@@ -6,7 +6,7 @@ import time
 import math
 import numpy as np
 from pprint import *
-import calib3d
+
 try:
     import picamera2
     print("Camera.py: Using picamera2 module")
