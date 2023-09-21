@@ -51,6 +51,7 @@ def intrinsic():
                         [0,f,0,height/2],
                         [0,0,1,0]
                         ]),[x,y,z,1])
+    print (intrinisc_matrix)
     return intrinisc_matrix    
 
 
@@ -100,6 +101,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     cv2.imshow(WIN_RF, image)
     arucoMarkerLength = Marker_length()
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+    print(f"aruco_corners= {aruco_corners}, ids = {ids}, rejectImgPoints = {rejectedImgPoints}")
     distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
     rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, distortion_coeffs)
