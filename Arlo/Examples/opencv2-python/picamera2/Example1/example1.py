@@ -97,7 +97,7 @@ def Beta(tvecs):
     beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)),[0,0,1]))
     crossproduct = np.cross(tvecs,[0,0,1])
     print("crossproduct", crossproduct)
-    if crossproduct[0][0] < 0:
+    if crossproduct[0][0][0] < 0:
         return -beta
     return beta
 
