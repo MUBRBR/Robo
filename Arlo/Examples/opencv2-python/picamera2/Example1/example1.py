@@ -13,6 +13,7 @@ except ImportError:
     print("Camera.py: picamera2 module not available")
     exit(-1)
 
+
 def focal():
     bigX = 300 # mm højde på objekt
     Z = [500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800] # distance i mm for hvert billede
@@ -43,12 +44,13 @@ def intrinsic():
     f = 625.33 # from focal calculations
     width = 800 
     height = 600
-
-    intrinisc_matrix =np.matrix([
+    # hardcodede for test
+    x,y,z = 0,1,1
+    intrinisc_matrix =np.dot(np.matrix([
                         [f,0,0,width/2],
                         [0,f,0,height/2],
                         [0,0,1,0]
-                        ])
+                        ]),[x,y,z,1])
     return intrinisc_matrix    
 
 
