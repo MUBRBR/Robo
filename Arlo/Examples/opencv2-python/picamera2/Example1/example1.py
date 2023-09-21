@@ -76,6 +76,7 @@ def Beta(tvecs):
 
 def turn_angle(beta):
     angle = beta*np.array([1,0,0])
+    angle = np.degrees(angle)
     return angle
  
 
