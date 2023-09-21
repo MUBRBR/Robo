@@ -97,13 +97,13 @@ def Beta(tvecs):
     beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)),[0,0,1]))
     crossproduct = np.cross(tvecs,[0,0,1])
     print("crossproduct", crossproduct)
-    if crossproduct < 0:
+    if crossproduct[0] < 0:
         return -beta
     return beta
 
 def turn_angle(beta):
     angle = beta*np.array([1,0,0])
-    angle = np.degrees(angle[1])
+    angle = np.degrees(angle[0])
     return angle
  
 
@@ -161,13 +161,13 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     print("rvecs: \n",rvecs)
     print("objPoints:\n ",objPoints)
 
-    angle_between_vectors(tvecs[0][0],[0,0,1])
-    print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
-    # Beta(tvecs)
-    # turn_angle(Beta(tvecs))
+    # angle_between_vectors(tvecs[0][0],[0,0,1])
+    # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
+    Beta(tvecs)
+    turn_angle(Beta(tvecs))
     
-    # print("Beta: ", Beta(tvecs))
-    # print("angle",turn_angle(Beta(tvecs)))
+    print("Beta: ", Beta(tvecs))
+    print("angle",turn_angle(Beta(tvecs)))
     
 
 # Finished successfully
