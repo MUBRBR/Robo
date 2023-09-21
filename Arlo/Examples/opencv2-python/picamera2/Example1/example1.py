@@ -154,7 +154,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
     # distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
-    rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
+    rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, np.array([8,0,0]))
     print("tvecs: \n",tvecs)
     print("rvecs: \n",rvecs)
     print("objPoints:\n ",objPoints)
