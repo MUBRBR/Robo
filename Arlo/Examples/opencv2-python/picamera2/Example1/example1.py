@@ -72,6 +72,9 @@ def intrinsic():
 
 def Beta(tvecs):
     beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)),[0,0,1]))
+    crossproduct = np.cross(tvecs,[0,0,1])
+    if crossproduct < 0:
+        return -beta
     return beta
 
 def turn_angle(beta):
