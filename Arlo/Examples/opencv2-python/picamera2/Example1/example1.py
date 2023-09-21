@@ -46,14 +46,21 @@ def intrinsic():
     width = 800 
     height = 600
     # hardcodede for test
-    x,y,z = 100,10,0
-    intrinisc_matrix =np.dot(np.matrix([
+    
+    # x,y,z = 100,10,0
+    # intrinsic_matrix =np.dot(np.matrix([
+    #                     [f,0,0,width/2],
+    #                     [0,f,0,height/2],
+    #                     [0,0,1,0]
+    #                     ]),[x,y,z,1])
+
+    intrinsic_matrix = np.matrix([
                         [f,0,0,width/2],
                         [0,f,0,height/2],
                         [0,0,1,0]
-                        ]),[x,y,z,1])
-    print (f"int matrix; {intrinisc_matrix}")
-    return intrinisc_matrix    
+                        ])
+    print (f"int matrix; {intrinsic_matrix}")
+    return intrinsic_matrix    
 
 
 def Beta(tvecs):
