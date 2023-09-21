@@ -60,6 +60,12 @@ def intrinsic():
     #                     [0,0,1,0]
     #                     ])
 
+    intrinsic_matrix = np.matrix([
+                        [f,0,width/2],
+                        [0,f,height/2],
+                        [0,0,1]
+                        ])
+
     print (f"int matrix; {intrinsic_matrix}")
     return intrinsic_matrix    
 
