@@ -161,13 +161,13 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     print("rvecs: \n",rvecs)
     print("objPoints:\n ",objPoints)
 
-    angle_between_vectors(tvecs,[0,0,1])
+    angle_between_vectors(tvecs[0],[0,0,1])
     print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
     # Beta(tvecs)
     # turn_angle(Beta(tvecs))
     
-    print("Beta: ", Beta(tvecs))
-    print("angle",turn_angle(Beta(tvecs)))
+    # print("Beta: ", Beta(tvecs))
+    # print("angle",turn_angle(Beta(tvecs)))
     
 
 # Finished successfully
