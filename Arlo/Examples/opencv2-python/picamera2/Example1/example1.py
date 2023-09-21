@@ -37,7 +37,7 @@ def Marker_length():
 
     for i in range(len(smallX)):
         arucoMarkerLength = 625.33 * (300/smallX[i])
-        print("arucoMarkerLength: ",arucoMarkerLength)
+        # print("arucoMarkerLength: ",arucoMarkerLength)
     return arucoMarkerLength
 
 def intrinsic():
@@ -51,7 +51,7 @@ def intrinsic():
                         [0,f,0,height/2],
                         [0,0,1,0]
                         ]),[x,y,z,1])
-    print (intrinisc_matrix)
+    print (f"int matrix; {intrinisc_matrix}")
     return intrinisc_matrix    
 
 
@@ -100,13 +100,18 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # Show frames
     cv2.imshow(WIN_RF, image)
     arucoMarkerLength = Marker_length()
+    print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
-    print(f"aruco_corners= {aruco_corners}, ids = {ids}, rejectImgPoints = {rejectedImgPoints}")
+    print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
     distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
     rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, distortion_coeffs)
     print("tvecs: ",tvecs)
-    print(Beta(tvecs))
+    print("rvecs: ",rvecs)
+    print("objPoints: ",objPoints)
+
+
+    print("Beta: ", Beta(tvecs))
     
 
 # Finished successfully
