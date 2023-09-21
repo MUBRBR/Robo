@@ -6,6 +6,7 @@ import time
 import math
 import numpy as np
 from pprint import *
+import calib3d
 try:
     import picamera2
     print("Camera.py: Using picamera2 module")
@@ -45,7 +46,7 @@ def intrinsic():
     width = 800 
     height = 600
     # hardcodede for test
-    x,y,z = 0,1,1
+    x,y,z = 100,10,0
     intrinisc_matrix =np.dot(np.matrix([
                         [f,0,0,width/2],
                         [0,f,0,height/2],
@@ -106,9 +107,9 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
     rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, distortion_coeffs)
-    print("tvecs: ",tvecs)
-    print("rvecs: ",rvecs)
-    print("objPoints: ",objPoints)
+    print("tvecs: \n",tvecs)
+    print("rvecs: \n",rvecs)
+    print("objPoints:\n ",objPoints)
 
 
     print("Beta: ", Beta(tvecs))
