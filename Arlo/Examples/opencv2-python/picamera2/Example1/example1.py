@@ -70,7 +70,7 @@ def intrinsic():
     height = 600
     # hardcodede for test
     
-    x,y,z = 100,10,0
+    x,y,z = 0,1,0
     intrinsic_matrix =np.dot(np.matrix([
                         [f,0,0,width/2],
                         [0,f,0,height/2],
@@ -163,8 +163,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
     Beta(tvecs)
     turn_angle(Beta(tvecs))
-    if turn_angle(Beta(tvecs)) < 3:
-        break
+    
     
     print("Beta: ", Beta(tvecs))
     print("angle",turn_angle(Beta(tvecs)))
