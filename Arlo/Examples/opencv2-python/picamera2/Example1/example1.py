@@ -115,8 +115,8 @@ def calc_h(aruco_corners):
     h = aruco_corners[0][0][2][1] - aruco_corners[0][0][1][1]
     return h
 
-def calc_Z(f,h):
-    Z = f* 145/h
+def calc_Z(h):
+    Z = 629.81* 145/h
     return Z
 
 
