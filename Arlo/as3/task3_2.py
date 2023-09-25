@@ -190,6 +190,9 @@ for i in [1]:
     print("aruco corners", aruco_corners)
     dist = Z
     dir = tvecs[0][0]
+    print("dir = tvecs[0][0]", dir)
+    dir = np.array([dir[0], dir[2]])
+    print("dir = np.array([dir[0], dir[2]]\n \n \n", dir)
     
     
     # print("Beta: ", Beta(tvecs))
