@@ -54,7 +54,7 @@ def focal():
     print(f"std of F = {std}")
     return F
 
-
+f = 629.81
 def Marker_length():
     real_Height = 300 #obstacle height in mm
     smallX = [380,308,266,234,206,187,173,159,144,134,128,120,113,107] # størrelse af objekt på billede i pixels
@@ -106,7 +106,7 @@ def turn_angle(beta):
     return angle
  
 
-def calch(aruco_corners):
+def calc_h(aruco_corners):
     print("aruco_corners", aruco_corners)
     print(f"arc[0]", aruco_corners[0])
     print(f"arc[0][0]", aruco_corners[0][0])
@@ -115,6 +115,9 @@ def calch(aruco_corners):
     h = aruco_corners[0][0][2][1] - aruco_corners[0][0][1][1]
     return h
 
+def calc_Z(f,h):
+    Z = f* 145/h
+    return Z
 
 
 
@@ -159,8 +162,9 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
 
     # print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
-    h = calch(aruco_corners)
-    print("h", h)
+    # h = calch(aruco_corners)
+    Z = calc_Z(calc_h(aruco_corners))
+    print("Z", Z)
 
     # print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
     # distortion_coeffs = None # we dont know the distortion 
