@@ -198,7 +198,7 @@ for i in [1]:
 print(f"dist {dist} \n dir {dir}")
 
 print(f"dist {dist} \n dir {dir}")
-arlo.AddDest(np.norm(dir)* (dist/1000))
+arlo.AddDest(np.linalg.norm(dir)* (dist/1000))
 arlo.FollowRoute(True)
 # Finished successfully
 
