@@ -189,16 +189,16 @@ for i in [1]:
     turn_angle(Beta(tvecs))
     print("aruco corners", aruco_corners)
     dist = Z
-    dir = tvecs[0][0] -90
+    dir = tvecs[0][0]
     
     
     # print("Beta: ", Beta(tvecs))
     # print("angle",turn_angle(Beta(tvecs)))
     
 print(f"dist {dist} \n dir {dir}")
-
-print(f"dist {dist} \n dir {dir}")
-arlo.AddDest(np.linalg.norm(dir)* (dist/1000))
+x = np.linalg.norm(dir)* (dist/1000)
+print("dest Vector = ", x)
+arlo.AddDest(x)
 arlo.FollowRoute(True)
 # Finished successfully
 
