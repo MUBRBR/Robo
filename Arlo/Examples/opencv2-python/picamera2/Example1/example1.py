@@ -106,8 +106,9 @@ def turn_angle(beta):
     return angle
  
 
-
-
+def calch():
+    h = aruco_corners[1][1] - aruco_corners[2][1]
+    return h
 
 
 
@@ -153,6 +154,9 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
 
     # print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+    h = calch(aruco_corners)
+    print("h", h)
+
     # print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
     # distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
@@ -166,6 +170,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     Beta(tvecs)
     turn_angle(Beta(tvecs))
     print("aruco corners", aruco_corners)
+
     
     # print("Beta: ", Beta(tvecs))
     # print("angle",turn_angle(Beta(tvecs)))
