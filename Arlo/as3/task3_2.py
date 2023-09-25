@@ -191,8 +191,8 @@ for i in [1]:
     dist = Z
     dir = tvecs[0][0]
     print("dir = tvecs[0][0]", dir)
-    dir = np.array([dir[0], dir[2]])
-    print("dir = np.array([dir[0], dir[2]]\n \n \n", dir)
+    dir = np.array([dir[0]-1506, dir[2]])
+    print("dir = np.array([dir[0], dir[2]]", dir)
     
     
     # print("Beta: ", Beta(tvecs))
