@@ -52,7 +52,7 @@ def focal():
     print(f"Average F = {average}")
     std = np.std(F)
     print(f"std of F = {std}")
-    return F,smallX
+    return F
 
 
 def Marker_length():
@@ -71,11 +71,11 @@ def intrinsic():
     # hardcodede for test
     
     x,y,z = 1,0,0
-    intrinsic_matrix =np.dot(np.matrix([
-                        [f,0,0,width/2],
-                        [0,f,0,height/2],
-                        [0,0,1,0]
-                        ]),[x,y,z,1])
+    # intrinsic_matrix =np.dot(np.matrix([
+    #                     [f,0,0,width/2],
+    #                     [0,f,0,height/2],
+    #                     [0,0,1,0]
+    #                     ]),[x,y,z,1])
 
     # intrinsic_matrix = np.matrix([
     #                     [f,0,0,width/2],
@@ -138,7 +138,8 @@ cv2.moveWindow(WIN_RF, 100, 100)
 
 
 
-focal()
+# focal() # has been calculated already and data extracted
+
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 while cv2.waitKey(4) == -1: # Wait for a key pressed event
 #if (True):
