@@ -101,7 +101,7 @@ def Beta(tvecs):
 def turn_angle(beta):
     angle = beta*np.array([1,0,0])
     # print(f"angle before degree: {angle}")
-    angle = np.degrees(angle[:,0])
+    angle = np.degrees(angle)
     print(f"angle after degree: {angle}")
     return angle
  
