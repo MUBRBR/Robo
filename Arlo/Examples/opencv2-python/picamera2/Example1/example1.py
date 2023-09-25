@@ -106,7 +106,7 @@ def turn_angle(beta):
     return angle
  
 
-def calch():
+def calch(aruco_corners):
     h = aruco_corners[1][1] - aruco_corners[2][1]
     return h
 
