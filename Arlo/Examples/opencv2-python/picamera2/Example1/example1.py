@@ -101,7 +101,7 @@ def Beta(tvecs):
 def turn_angle(beta):
     angle = beta*np.array([1,0,0])
     # print(f"angle before degree: {angle}")
-    angle = np.degrees(angle[0])
+    angle = np.degrees(angle)
     print(f"angle after degree: {angle}")
     return angle
  
@@ -157,7 +157,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
     rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
-    print(f"tvecs: {tvecs} \n tvecs.shape: {tvecs.shape}\n tvecs[0]: {tvecs[0]}\n")
+    # print(f"tvecs: {tvecs} \n tvecs.shape: {tvecs.shape}\n tvecs[0]: {tvecs[0]}\n")
     # print("rvecs: \n",rvecs)
     # print("objPoints:\n ",objPoints)
 
