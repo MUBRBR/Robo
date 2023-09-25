@@ -189,7 +189,7 @@ for i in [1]:
     turn_angle(Beta(tvecs))
     print("aruco corners", aruco_corners)
     dist = Z
-    dir = tvecs[0][0]
+    dir = tvecs[0][0] -90
     
     
     # print("Beta: ", Beta(tvecs))
