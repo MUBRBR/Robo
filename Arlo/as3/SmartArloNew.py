@@ -47,7 +47,7 @@ class Radar(): #Will eventually house maped objects
         self.weighted_distance = 999.0 # until first update, everything is assumed to be really far away
         self.obstacle_angle = 0 
         self.arlo = robot
-        self.active = True
+        self.active = False
 
     def Angle(self):
         return self.obstacle_angle
