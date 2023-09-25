@@ -96,12 +96,12 @@ def intrinsic():
 def Beta(tvecs):
     beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)),[0,0,1]))
     PosNeg = beta * np.sign(np.dot(tvecs, [1,0,0]))
-    return PosNeg[:,0]
+    return PosNeg
 
 def turn_angle(beta):
     angle = beta*np.array([1,0,0])
     # print(f"angle before degree: {angle}")
-    angle = np.degrees(angle)
+    angle = np.degrees(angle[:,0])
     print(f"angle after degree: {angle}")
     return angle
  
