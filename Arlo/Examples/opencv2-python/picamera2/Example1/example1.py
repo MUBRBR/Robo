@@ -89,7 +89,7 @@ def intrinsic():
                         [0,0,1]
                         ])
 
-    print (f"int matrix; {intrinsic_matrix}")
+    # print (f"int matrix; {intrinsic_matrix}")
     return intrinsic_matrix    
 
 
@@ -99,7 +99,7 @@ def Beta(tvecs):
 
 def turn_angle(beta):
     angle = beta*np.array([1,0,0])
-    print(f"angle before degree: {angle}")
+    # print(f"angle before degree: {angle}")
     angle = np.degrees(angle[0])
     print(f"angle after degree: {angle}")
     return angle
@@ -150,15 +150,15 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     arucoMarkerLength = Marker_length()
     # arucoMarkerLength = 600
 
-    print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
+    # print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
-    print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
+    # print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
     # distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
     rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
-    print("tvecs: \n",tvecs)
-    print("rvecs: \n",rvecs)
-    print("objPoints:\n ",objPoints)
+    # print("tvecs: \n",tvecs)
+    # print("rvecs: \n",rvecs)
+    # print("objPoints:\n ",objPoints)
 
     # angle_between_vectors(tvecs[0][0],[0,0,1])
     # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
@@ -166,8 +166,8 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     turn_angle(Beta(tvecs))
     
     
-    print("Beta: ", Beta(tvecs))
-    print("angle",turn_angle(Beta(tvecs)))
+    # print("Beta: ", Beta(tvecs))
+    # print("angle",turn_angle(Beta(tvecs)))
     
 
 # Finished successfully
