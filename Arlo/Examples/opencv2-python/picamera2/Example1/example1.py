@@ -115,8 +115,8 @@ def calc_h(aruco_corners):
     h = aruco_corners[0][0][2][1] - aruco_corners[0][0][1][1]
     return h
 
-def calc_Z(h):
-    Z = 629.81* 145/h
+def calc_Z(h,f):
+    Z = f* (145/h)
     return Z
 
 
@@ -163,7 +163,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
     # h = calch(aruco_corners)
-    Z = calc_Z(calc_h(aruco_corners))
+    Z = calc_Z(calc_h(aruco_corners),f)
     print("Z", Z)
 
     # print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
