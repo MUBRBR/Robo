@@ -65,7 +65,7 @@ def Marker_length():
     return arucoMarkerLength
 
 def intrinsic():
-    f = 625.33 # from focal calculations
+    f = 629.81 # from focal calculations
     width = 800 
     height = 600
     # hardcodede for test
