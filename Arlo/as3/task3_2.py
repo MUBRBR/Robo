@@ -16,7 +16,7 @@ except ImportError:
     exit(-1)
 
 
-arlo = arlo.betterArlo()
+arlo = arlo.betterRobot()
 
 
 def angle_between_vectors(vector1, vector2):

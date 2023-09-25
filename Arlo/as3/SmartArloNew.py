@@ -2,6 +2,7 @@ from time import sleep
 
 import robot as robot
 
+
 import numpy as np
 
 import queue as q
@@ -273,9 +274,9 @@ betterArlo = betterRobot()
 
 
 # manuually folowing obstacles course
-betterArlo.Radar.active = True
+# betterArlo.Radar.active = True
 
-betterArlo.FollowRoute(True)
+# betterArlo.FollowRoute(True)
 
-betterArlo.RotateAngle(180)
+# betterArlo.RotateAngle(180)
 
