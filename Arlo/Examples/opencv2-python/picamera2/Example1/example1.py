@@ -103,6 +103,10 @@ def turn_angle(beta):
     # print(f"angle before degree: {angle}")
     angle = np.degrees(angle)
     print(f"angle after degree: {angle}")
+    print(f"Anders sutter så meget: {angle[0][:,0]}")
+    print(f"Matias {angle[:][0]}")
+    
+    
     return angle
  
 
