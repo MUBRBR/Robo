@@ -110,8 +110,8 @@ def calch(aruco_corners):
     print("aruco_corners", aruco_corners)
     print(f"arc[0]", aruco_corners[0])
     print(f"arc[0][0]", aruco_corners[0][0])
-    print(f"arc[1][1]", aruco_corners[1][1])
-    print(f"arc[2][1]", aruco_corners[2][1])
+    print(f"arc[0][0][0]", aruco_corners[0][0][0])
+    print(f"arc[0][0][0][1]", aruco_corners[0][0][0][1])
     h = aruco_corners[1][1] - aruco_corners[2][1]
     return h
 
