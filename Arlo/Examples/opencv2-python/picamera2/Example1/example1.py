@@ -60,7 +60,7 @@ def Marker_length():
     smallX = [380,308,266,234,206,187,173,159,144,134,128,120,113,107] # størrelse af objekt på billede i pixels
 
     for i in range(len(smallX)):
-        arucoMarkerLength = 625.33 * (300/smallX[i])
+        arucoMarkerLength = 629.81 * (300/smallX[i])
         # print("arucoMarkerLength: ",arucoMarkerLength)
     return arucoMarkerLength
 
@@ -100,12 +100,8 @@ def Beta(tvecs):
 
 def turn_angle(beta):
     angle = beta*np.array([1,0,0])
-    # print(f"angle before degree: {angle}")
     angle = np.degrees(angle)
-    print(f"angle after degree: {angle}")
-    # print(f"Anders sutter så meget: {angle[0][:,0]}")
-    print(f"Matias {angle[:][0]}")
-    
+    print(f"angle degrees: {angle}")
     
     return angle
  
@@ -169,7 +165,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
     Beta(tvecs)
     turn_angle(Beta(tvecs))
-    
+    print("aruco corners", aruco_corners)
     
     # print("Beta: ", Beta(tvecs))
     # print("angle",turn_angle(Beta(tvecs)))
