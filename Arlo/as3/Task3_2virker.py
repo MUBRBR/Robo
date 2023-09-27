@@ -202,7 +202,6 @@ def SearchNTurnNGo():
             arlo.RotateAngle(20)
 
 
-SearchNTurnNGo()
 
 
 
@@ -288,7 +287,9 @@ def MapTargets():
 
         return retVal
 
+# SearchNTurnNGo()
 
 MapTargets()
+print(MapTargets())
 
 
