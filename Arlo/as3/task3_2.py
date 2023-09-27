@@ -36,7 +36,7 @@ def angle_between_vectors(vector1, vector2):
     # Convert the angle to degrees
     angle_deg = np.degrees(angle_rad)
 
-    return -angle_deg
+    return angle_deg
 
 def focal():
     bigX = 300 # mm højde på objekt
@@ -220,18 +220,18 @@ def DetectTargetContinous():
             # dir = rad2degrees(dir)
             # dir = dir[0]
 
-            andersnewdir = GetDegreesFromVector(tvecs[0][0])
-            print(f"andersnewdir={andersnewdir}")
+            # andersnewdir = GetDegreesFromVector(tvecs[0][0])
+            # print(f"andersnewdir={andersnewdir}")
             andersolddir = angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
             print(f"andersolddir={andersolddir}")
-            dir = Beta(tvecs[0][0])
-            dir = rad2degrees(dir)
-            mmdir = dir[0]
-            print(f"mmdir={mmdir}")
+            # dir = Beta(tvecs[0][0])
+            # dir = rad2degrees(dir)
+            # mmdir = dir[0]
+            # print(f"mmdir={mmdir}")
 
-            dist = np.linalg.norm(tvecs)
-            enddist = predict_t_values((dist/100))
-            print(f"enddist={enddist}")
+            # dist = np.linalg.norm(tvecs)
+            # enddist = predict_t_values((dist/100))
+            # print(f"enddist={enddist}")
 
         except:
             pass
