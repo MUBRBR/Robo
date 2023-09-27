@@ -206,6 +206,12 @@ for i in [1]:
     # print("aruco corners", aruco_corners)
     dir = Beta(tvecs[0][0])
     dir = turn_angle(dir)
+    print("turn dir",dir)
+    dir = dir[0]
+    print("turn dir[0]",dir)
+    print("turn dir[0][0]",dir)
+    
+
 
   
     # print("dir = tvecs[0][0] ", dir)
