@@ -60,12 +60,13 @@ def focal():
     return F
 
 f = 629.81
-def Marker_length():
+def Marker_length(h):
     real_Height = 300 #obstacle height in mm
-    smallX = [380,308,266,234,206,187,173,159,144,134,128,120,113,107] # størrelse af objekt på billede i pixels
+    # smallX = [380,308,266,234,206,187,173,159,144,134,128,120,113,107] # størrelse af objekt på billede i pixels
 
-    for i in range(len(smallX)):
-        arucoMarkerLength = 629.81 * (300/smallX[i])
+    # for i in range(len(smallX)):
+    # arucoMarkerLength = 629.81 * (300/smallX[i])
+    arucoMarkerLength = 629.81 * (145/h)
         # print("arucoMarkerLength: ",arucoMarkerLength)
     return arucoMarkerLength
 
@@ -166,12 +167,12 @@ for i in [1]:
     
     # Show frames
     cv2.imshow(WIN_RF, image)
-    arucoMarkerLength = Marker_length()
     # arucoMarkerLength = 600
 
     # print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
-    # h = calch(aruco_corners)
+    h = calc_h(aruco_corners)
+    arucoMarkerLength = Marker_length(h)
     # Z = calc_Z(calc_h(aruco_corners),f)
     # print("Z", Z)
 
