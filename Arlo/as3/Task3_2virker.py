@@ -277,13 +277,16 @@ def MapTargets():
         retVal = []
 
         for i in range(len(KnownIDs)):
+            print("i",i)
             currID = KnownIDs[i]
             currTvec = KnownTvecs[i]
+            print("currTvecs",currTvec)
 
             currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
             FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*np.linalg.norm(currTvec)
 
             retVal.append((FixedCurrTvec,currID))
+            print("retval",retVal)
 
         return retVal
 
