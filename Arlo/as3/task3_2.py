@@ -193,6 +193,10 @@ for i in [1]:
     # dir = np.array([dir[0], dir[2]])
     dist = np.linalg.norm(tvecs)
     print(f"\n\nDist: {dist}\n\n")
+    print(f"\n\nDist: {np.linalg.norm(tvecs)[0]}\n\n")
+    # print(f"\n\nDist: {np.linalg.norm(tvecs)[0][0]}\n\n")
+    for i in tvecs:
+        print(f"\n\n i: {i} | tvecs: {np.linalg.norm(i)} \n\n")
     
     
     # print("Beta: ", Beta(tvecs))
