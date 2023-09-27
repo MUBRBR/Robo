@@ -76,7 +76,7 @@ def intrinsic():
 def GetDegreesFromVector(tvecs):
     beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)),[0,0,1]))
     angleRad = beta * np.sign(np.dot(tvecs, [1,0,0]))
-    angleDeg = np.rad2deg(angleRad[0])
+    angleDeg = 180 * angleRad[0] / math.pi
     return angleDeg
 
 
