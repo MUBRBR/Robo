@@ -1,5 +1,10 @@
-import cv2
-
+import cv2 # Import the OpenCV library
+import time
+import math
+import numpy as np
+from pprint import *
+import SmartArloNew as arlo
+from Task3_2virker import *
 
 def CreateLandmarksMap():
 
@@ -57,6 +62,5 @@ def EvaluateCollisionLandmarksMap(landmarksMap, pos):
 testPos = [0,200]
 
 print(EvaluateCollisionLandmarksMap(landmarksMap, testPos))
-Skriv til DISsemændene
 
 
