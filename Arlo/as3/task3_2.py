@@ -112,7 +112,7 @@ def predict_t_values(X):
     t_predicted = (-coef[1] + np.sqrt(coef[1]**2 - 4*coef[2]*(intercept - X))) / (2*coef[2])
 
     return t_predicted
-
+print("OpenCV version = " + cv2.__version__)
 # Open a camera device for capturing
 imageSize = (800, 600)
 FPS = 30
