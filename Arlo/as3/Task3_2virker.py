@@ -285,7 +285,7 @@ def MapTargets():
 
             print("ids",ids)
             currID = KnownIDs[i][0]
-            currTvec = KnownTvecs[i]
+            currTvec = KnownTvecs[i][0]
             print("currTvecs",currTvec)
 
             currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
