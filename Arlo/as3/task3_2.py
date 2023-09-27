@@ -208,8 +208,8 @@ for i in [1]:
 # print(f"dist {dist} \n dir {dir}")
 # x = np.linalg.norm(dir)* (dist/1000)
 # print("dest Vector = ", x)
-arlo.AddDest(dist)
-arlo.FollowRoute(True)
+# arlo.AddDest(dist)
+# arlo.FollowRoute(True)
 # Finished successfully
 
 
