@@ -173,7 +173,7 @@ cv2.moveWindow(WIN_RF, 100, 100)
 
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 dist = 0
-dir = np.array([])
+dir = 0
 # for i in [1]:
 
 while cv2.waitKey(4) == -1: # Wait for a key pressed event
@@ -205,7 +205,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     turn_angle(Beta(tvecs))
     print("aruco corners", aruco_corners)
     dir = Beta(tvecs[0][0])
-    # print("dir = tvecs[0][0] ", dir)
+    print("dir = tvecs[0][0] ", dir)
     # dir = np.array([dir[0], dir[2]])
     dist = np.linalg.norm(tvecs)
     print(f"\n\nDist: {dist/100}\n\n")
@@ -219,8 +219,9 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     
     # print("Beta: ", Beta(tvecs))
     # print("angle",turn_angle(Beta(tvecs)))
+    
 
-
+# arlo.RotateAngle(turn_angle(Beta(tvecs)))
 
 # print(f"dist {dist} \n dir {dir}")
 # x = np.linalg.norm(dir)* (dist/1000)
