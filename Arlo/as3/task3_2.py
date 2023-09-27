@@ -112,10 +112,11 @@ def predict_t_values(X):
     t_predicted = (-coef[1] + np.sqrt(coef[1]**2 - 4*coef[2]*(intercept - X))) / (2*coef[2])
 
     return t_predicted
+
 print("OpenCV version = " + cv2.__version__)
 # Open a camera device for capturing
 imageSize = (800, 600)
-FPS = 30
+FPS = 15
 cam = picamera2.Picamera2()
 frame_duration_limit = int(1/FPS * 1000000) # Microseconds
 # Change configuration to set resolution, framerate
@@ -137,37 +138,38 @@ cv2.moveWindow(WIN_RF, 100, 100)
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 
 def DetectTarget():
-    for _ in range(5):
+    while cv2.waitKey(4) == -1: # Wait for a key pressed event
+        for _ in range(5):
 
-        try:
-            print("start")
-            image = cam.capture_array("main")
-          
-            cv2.imshow(WIN_RF, image)
+            try:
+                print("start")
+                image = cam.capture_array("main")
+            
+                cv2.imshow(WIN_RF, image)
 
-            aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
-            h = calc_h(aruco_corners)
-            arucoMarkerLength = Marker_length(h)
-            intrinsic_matrix = intrinsic()
-            rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
+                aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+                h = calc_h(aruco_corners)
+                arucoMarkerLength = Marker_length(h)
+                intrinsic_matrix = intrinsic()
+                rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
 
 
-            # dir = Beta(tvecs[0][0])
-            # dir = rad2degrees(dir)
-            # dir = dir[0]
+                # dir = Beta(tvecs[0][0])
+                # dir = rad2degrees(dir)
+                # dir = dir[0]
 
-            dir = GetDegreesFromVector(tvecs[0][0])
+                dir = GetDegreesFromVector(tvecs[0][0])
 
-            dist = np.linalg.norm(tvecs)
-            enddist = predict_t_values((dist/100))
+                dist = np.linalg.norm(tvecs)
+                enddist = predict_t_values((dist/100))
 
-            retvaldir = dir
-            retvaldist = enddist
-        except:
-            retvaldir = 1000 
-            retvaldist = 1000
-        
-    return retvaldir, retvaldist
+                retvaldir = dir
+                retvaldist = enddist
+            except:
+                retvaldir = 1000 
+                retvaldist = 1000
+            
+        return retvaldir, retvaldist
 
 
 def TurnNGo():
