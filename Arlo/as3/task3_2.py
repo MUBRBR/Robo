@@ -179,6 +179,7 @@ dir = 0
 def DetectTarget():
 # while cv2.waitKey(4) == -1: # Wait for a key pressed event
 #if (True):
+    for i in range(5):
 
         try:
             print("start")
