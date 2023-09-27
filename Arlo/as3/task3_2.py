@@ -158,7 +158,7 @@ def DetectTarget():
                 # dir = rad2degrees(dir)
                 # dir = dir[0]
 
-                dir = GetDegreesFromVector(tvecs[0][0])
+                dir = angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
 
                 dist = np.linalg.norm(tvecs)
                 enddist = predict_t_values((dist/100))
@@ -166,8 +166,11 @@ def DetectTarget():
                 retvaldir = dir
                 retvaldist = enddist
             except:
-                retvaldir = 1000 
-                retvaldist = 1000
+                if (retvaldir != 1000):
+                    retvaldir = 1000 
+                    retvaldist = 1000
+                else: 
+                    pass
             
         return retvaldir, retvaldist
 
@@ -179,7 +182,7 @@ def TurnNGo():
     arlo.RotateAngle(currDir)
     arlo.DriveLength(currDist/100)
 
-# TurnNGo()
+TurnNGo()
 
 def SearchNTurnNGo():
     while True:
@@ -237,6 +240,6 @@ def DetectTargetContinous():
             pass
 
 
-DetectTargetContinous()
+# DetectTargetContinous()
 
 
