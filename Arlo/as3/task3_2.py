@@ -152,7 +152,7 @@ def DetectTarget():
                 arucoMarkerLength = Marker_length(h)
                 intrinsic_matrix = intrinsic()
                 rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
-
+                print(f"id: {ids} \n tvec:{tvecs}")
 
                 # dir = Beta(tvecs[0][0])
                 # dir = rad2degrees(dir)
