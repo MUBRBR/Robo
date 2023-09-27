@@ -182,7 +182,8 @@ def TurnNGo():
     arlo.RotateAngle(currDir)
     arlo.DriveLength(currDist/100)
 
-TurnNGo()
+# TurnNGo()
+
 
 def SearchNTurnNGo():
     while True:
@@ -199,7 +200,7 @@ def SearchNTurnNGo():
             arlo.RotateAngle(20)
 
 
-
+SearchNTurnNGo()
 
 
 
