@@ -228,7 +228,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
 # print("dest Vector = ", x)
 arlo.RotateAngle(dir)
 arlo.AddDest(dist)
-arlo.DriveLength(dist)
+arlo.DriveLength(dist/100)
 # arlo.FollowRoute(True)
 # Finished successfully
 
