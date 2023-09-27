@@ -227,8 +227,11 @@ for i in [1]:
 # print(f"dist {dist} \n dir {dir}")
 # x = np.linalg.norm(dir)* (dist/1000)
 # print("dest Vector = ", x)
+print("arlo should drive",dist/100)
+print("arlo should angle",dir)
+
 arlo.RotateAngle(dir)
-arlo.AddDest(dist)
+# arlo.AddDest(dist)
 arlo.DriveLength(dist/100)
 # arlo.FollowRoute(True)
 # Finished successfully
