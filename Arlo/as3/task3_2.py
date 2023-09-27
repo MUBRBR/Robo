@@ -190,11 +190,11 @@ for i in [1]:
     turn_angle(Beta(tvecs))
     print("aruco corners", aruco_corners)
     dir = Beta(tvecs[0][0])
-    print("dir = tvecs[0][0]", dir)
+    print("dir = tvecs[0][0] ", dir)
     # dir = np.array([dir[0], dir[2]])
     dist = np.linalg.norm(tvecs)
     print(f"\n\nDist: {dist}\n\n")
-    print(f"\n\nDist: {np.linalg.norm(tvecs[0])}\n\n")
+    print(f"\n\nDist: {np.linalg.norm(tvecs[0][2])}\n\n")
     # print(f"\n\nDist: {np.linalg.norm(tvecs)[0][0]}\n\n")
     for i in tvecs:
         print(f"\n\n i: {i} | tvecs: {np.linalg.norm(i)} \n\n")
@@ -208,8 +208,8 @@ for i in [1]:
 # print(f"dist {dist} \n dir {dir}")
 # x = np.linalg.norm(dir)* (dist/1000)
 # print("dest Vector = ", x)
-# arlo.AddDest(x)
-# arlo.FollowRoute(True)
+arlo.AddDest(dist)
+arlo.FollowRoute(True)
 # Finished successfully
 
 
