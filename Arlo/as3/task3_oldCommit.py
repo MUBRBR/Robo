@@ -173,10 +173,10 @@ cv2.moveWindow(WIN_RF, 100, 100)
 
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 dist = 0
-dir = 0
-for i in [1]:
+dir = np.array([])
+# for i in [1]:
 
-# while cv2.waitKey(4) == -1: # Wait for a key pressed event
+while cv2.waitKey(4) == -1: # Wait for a key pressed event
 #if (True):
     image = cam.capture_array("main")
     
@@ -202,24 +202,14 @@ for i in [1]:
     # angle_between_vectors(tvecs[0][0],[0,0,1])
     # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
     Beta(tvecs)
-    # dir = turn_angle(Beta(tvecs))
-    # print("aruco corners", aruco_corners)
+    turn_angle(Beta(tvecs))
+    print("aruco corners", aruco_corners)
     dir = Beta(tvecs[0][0])
-    dir = turn_angle(dir)
-    print("turn dir",dir)
-    dir = dir[0]
-    
-    
-
-
-  
     # print("dir = tvecs[0][0] ", dir)
     # dir = np.array([dir[0], dir[2]])
     dist = np.linalg.norm(tvecs)
+    predict_t_values((dist/100))
     print(f"\n\nDist: {dist/100}\n\n")
-    enddist = predict_t_values((dist/100))
-    print(f"calculated dist in cm: {enddist}")
-    dist = enddist
     # print(f"\n\nDist: {np.linalg.norm(tvecs[0][2])}\n\n")
     # print(f"\n\nDist: {np.linalg.norm(tvecs)[0][0]}\n\n")
     # for i in tvecs:
@@ -228,19 +218,13 @@ for i in [1]:
     
     # print("Beta: ", Beta(tvecs))
     # print("angle",turn_angle(Beta(tvecs)))
-    
 
 
 
 # print(f"dist {dist} \n dir {dir}")
 # x = np.linalg.norm(dir)* (dist/1000)
 # print("dest Vector = ", x)
-print("arlo should drive",dist/100)
-print("arlo should angle",dir)
-
-arlo.RotateAngle(dir)
 # arlo.AddDest(dist)
-arlo.DriveLength(dist/100)
 # arlo.FollowRoute(True)
 # Finished successfully
 
