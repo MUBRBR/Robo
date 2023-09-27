@@ -247,10 +247,9 @@ while True:
         print("arlo should angle",currDir)
         arlo.RotateAngle(currDir)
         arlo.DriveLength(currDist/100)
-
         break
-
-    arlo.RotateAngle(20)
+    else:
+        arlo.RotateAngle(20)
 
 
 
