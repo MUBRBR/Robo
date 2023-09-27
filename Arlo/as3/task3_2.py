@@ -176,81 +176,93 @@ dist = 0
 dir = 0
 
 # for i in [1]:
-def program():
+def DetectTarget():
 # while cv2.waitKey(4) == -1: # Wait for a key pressed event
 #if (True):
-    try:
-        print("start")
-        image = cam.capture_array("main")
+
+        try:
+            print("start")
+            image = cam.capture_array("main")
+            
+            # Show frames
+            cv2.imshow(WIN_RF, image)
+
+            # print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
+            aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+            h = calc_h(aruco_corners)
+            arucoMarkerLength = Marker_length(h)
+            # Z = calc_Z(calc_h(aruco_corners),f)
+            # print("Z", Z)
+
+            # print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
+            # distortion_coeffs = None # we dont know the distortion 
+            intrinsic_matrix = intrinsic()
+            rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
+            # print(f"tvecs: {tvecs} \n tvecs.shape: {tvecs.shape}\n tvecs[0]: {tvecs[0]}\n")
+            # print("rvecs: \n",rvecs)
+            # print("objPoints:\n ",objPoints)
+
+            # angle_between_vectors(tvecs[0][0],[0,0,1])
+            # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
+            Beta(tvecs)
+            # dir = turn_angle(Beta(tvecs))
+            # print("aruco corners", aruco_corners)
+            dir = Beta(tvecs[0][0])
+            dir = turn_angle(dir)
+            print("turn dir",dir)
+            dir = dir[0]
+            
+            
+
+
         
-        # Show frames
-        cv2.imshow(WIN_RF, image)
-
-        # print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
-        aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
-        h = calc_h(aruco_corners)
-        arucoMarkerLength = Marker_length(h)
-        # Z = calc_Z(calc_h(aruco_corners),f)
-        # print("Z", Z)
-
-        # print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
-        # distortion_coeffs = None # we dont know the distortion 
-        intrinsic_matrix = intrinsic()
-        rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
-        # print(f"tvecs: {tvecs} \n tvecs.shape: {tvecs.shape}\n tvecs[0]: {tvecs[0]}\n")
-        # print("rvecs: \n",rvecs)
-        # print("objPoints:\n ",objPoints)
-
-        # angle_between_vectors(tvecs[0][0],[0,0,1])
-        # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
-        Beta(tvecs)
-        # dir = turn_angle(Beta(tvecs))
-        # print("aruco corners", aruco_corners)
-        dir = Beta(tvecs[0][0])
-        dir = turn_angle(dir)
-        print("turn dir",dir)
-        dir = dir[0]
+            # print("dir = tvecs[0][0] ", dir)
+            # dir = np.array([dir[0], dir[2]])
+            dist = np.linalg.norm(tvecs)
+            print(f"\n\nDist: {dist/100}\n\n")
+            enddist = predict_t_values((dist/100))
+            print(f"calculated dist in cm: {enddist}")
+            dist = enddist
+            # print(f"\n\nDist: {np.linalg.norm(tvecs[0][2])}\n\n")
+            # print(f"\n\nDist: {np.linalg.norm(tvecs)[0][0]}\n\n")
+            # for i in tvecs:
+            #     print(f"\n\n i: {i} | tvecs: {np.linalg.norm(i)} \n\n")
+            
+            
+            # print("Beta: ", Beta(tvecs))
+            # print("angle",turn_angle(Beta(tvecs)))
+            retvaldir = dir
+            retvaldist = dist
+        except:
+            retvaldir = 1000 
+            retvaldist = 1000
         
-        
-
-
-    
-        # print("dir = tvecs[0][0] ", dir)
-        # dir = np.array([dir[0], dir[2]])
-        dist = np.linalg.norm(tvecs)
-        print(f"\n\nDist: {dist/100}\n\n")
-        enddist = predict_t_values((dist/100))
-        print(f"calculated dist in cm: {enddist}")
-        dist = enddist
-        # print(f"\n\nDist: {np.linalg.norm(tvecs[0][2])}\n\n")
-        # print(f"\n\nDist: {np.linalg.norm(tvecs)[0][0]}\n\n")
-        # for i in tvecs:
-        #     print(f"\n\n i: {i} | tvecs: {np.linalg.norm(i)} \n\n")
-        
-        
-        # print("Beta: ", Beta(tvecs))
-        # print("angle",turn_angle(Beta(tvecs)))
-        retvaldir = dir
-        retvaldist = dist
-    except:
-        retvaldir = 1000 
-        retvaldist = 1000
-    return retvaldir, retvaldist
+        return retvaldir, retvaldist
 
 
 
-while True:
-    currDir, currDist = program()
+def TurnNGo():
+    currDir, currDist = DetectTarget()
+    print("arlo should drive",currDist/100)
+    print("arlo should angle",currDir)
+    arlo.RotateAngle(currDir)
+    arlo.DriveLength(currDist/100)
 
-    if (currDir != 1000):
-        print("arlo should drive",currDist/100)
-        print("arlo should angle",currDir)
-        arlo.RotateAngle(-currDir)
-        arlo.DriveLength(currDist/100)
-        break
-    else:
-        print("here")
-        arlo.RotateAngle(20)
+TurnNGo()
+
+def SearchNTurnNGo():
+    while True:
+        currDir, currDist = DetectTarget()
+
+        if (currDir != 1000):
+            print("arlo should drive",currDist/100)
+            print("arlo should angle",currDir)
+            arlo.RotateAngle(-currDir)
+            arlo.DriveLength(currDist/100)
+            break
+        else:
+            print("here")
+            arlo.RotateAngle(20)
 
 
 
