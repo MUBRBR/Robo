@@ -202,10 +202,12 @@ for i in [1]:
     # angle_between_vectors(tvecs[0][0],[0,0,1])
     # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
     Beta(tvecs)
-    turn_angle(Beta(tvecs))
-    print("aruco corners", aruco_corners)
+    # dir = turn_angle(Beta(tvecs))
+    # print("aruco corners", aruco_corners)
     dir = Beta(tvecs[0][0])
     dir = turn_angle(dir)
+
+  
     # print("dir = tvecs[0][0] ", dir)
     # dir = np.array([dir[0], dir[2]])
     dist = np.linalg.norm(tvecs)
