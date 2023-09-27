@@ -174,9 +174,9 @@ cv2.moveWindow(WIN_RF, 100, 100)
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 dist = 0
 dir = 0
-# for i in [1]:
+for i in [1]:
 
-while cv2.waitKey(4) == -1: # Wait for a key pressed event
+# while cv2.waitKey(4) == -1: # Wait for a key pressed event
 #if (True):
     image = cam.capture_array("main")
     
