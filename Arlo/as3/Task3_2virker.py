@@ -278,21 +278,15 @@ def MapTargets():
                     pass
             
         retVal = []
-        print(f"tvecs inhold: {KnownTvecs}\n length KnownTvecs {len(KnownTvecs)}")
-        print(f"Ids inhold: {KnownIDs}\n length KnownIds {len(KnownIDs)}")
 
         for i in range(len(KnownIDs)):
-
-            print("ids",ids)
             currID = KnownIDs[i][0]
             currTvec = KnownTvecs[i][0]
-            print("currTvecs",currTvec)
 
             currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
-            FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*np.linalg.norm(currTvec)
+            FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(np.linalg.norm(currTvec)/100)
 
             retVal.append((FixedCurrTvec,currID))
-            print("retval",retVal)
 
         return retVal
 
