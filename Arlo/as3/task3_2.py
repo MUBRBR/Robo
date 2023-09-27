@@ -138,6 +138,8 @@ cv2.moveWindow(WIN_RF, 100, 100)
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 
 def DetectTarget():
+    retvaldir = 1000 
+    retvaldist = 1000
     while cv2.waitKey(4) == -1: # Wait for a key pressed event
         for _ in range(5):
 
