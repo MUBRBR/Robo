@@ -172,14 +172,14 @@ for i in [1]:
     # print(f"ArucoMarkerLength: {arucoMarkerLength}\n")
     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
     # h = calch(aruco_corners)
-    Z = calc_Z(calc_h(aruco_corners),f)
-    print("Z", Z)
+    # Z = calc_Z(calc_h(aruco_corners),f)
+    # print("Z", Z)
 
     # print(f"aruco_corners =\n {aruco_corners} \n\n ids =\n {ids} \n\n rejectImgPoints =\n {rejectedImgPoints}\n")
     # distortion_coeffs = None # we dont know the distortion 
     intrinsic_matrix = intrinsic()
     rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
-    # print(f"tvecs: {tvecs} \n tvecs.shape: {tvecs.shape}\n tvecs[0]: {tvecs[0]}\n")
+    print(f"tvecs: {tvecs} \n tvecs.shape: {tvecs.shape}\n tvecs[0]: {tvecs[0]}\n")
     # print("rvecs: \n",rvecs)
     # print("objPoints:\n ",objPoints)
 
@@ -188,10 +188,10 @@ for i in [1]:
     Beta(tvecs)
     turn_angle(Beta(tvecs))
     print("aruco corners", aruco_corners)
-    dist = Z
-    dir = tvecs[0][0]
+    dist = Beta(tvecs[0][0,1])
+    dir = Beta(tvecs[0][0])
     print("dir = tvecs[0][0]", dir)
-    dir = np.array([dir[0]-1506, dir[2]])
+    dir = np.array([dir[0], dir[2]])
     print("dir = np.array([dir[0], dir[2]]", dir)
     
     
