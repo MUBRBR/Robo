@@ -208,8 +208,7 @@ for i in [1]:
     dir = turn_angle(dir)
     print("turn dir",dir)
     dir = dir[0]
-    print("turn dir[0]",dir)
-    print("turn dir[0][0]",dir)
+    
     
 
 
