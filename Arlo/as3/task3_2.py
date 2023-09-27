@@ -208,8 +208,9 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # print("dir = tvecs[0][0] ", dir)
     # dir = np.array([dir[0], dir[2]])
     dist = np.linalg.norm(tvecs)
-    predict_t_values((dist/100))
     print(f"\n\nDist: {dist/100}\n\n")
+    enddist = predict_t_values((dist/100))
+    print(f"calculated dist in cm: {enddist}")
     # print(f"\n\nDist: {np.linalg.norm(tvecs[0][2])}\n\n")
     # print(f"\n\nDist: {np.linalg.norm(tvecs)[0][0]}\n\n")
     # for i in tvecs:
