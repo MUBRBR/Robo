@@ -245,7 +245,7 @@ while True:
     if (currDir != 1000):
         print("arlo should drive",currDist/100)
         print("arlo should angle",currDir)
-        arlo.RotateAngle(currDir)
+        arlo.RotateAngle(-currDir)
         arlo.DriveLength(currDist/100)
         break
     else:
