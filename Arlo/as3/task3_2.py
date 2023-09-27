@@ -126,6 +126,21 @@ def calc_Z(h,f):
     return Z
 
 
+def predict_t_values(X):
+    X = X/100
+    # Get the coefficients and y-intercept from the polynomial model
+    coef = [0.00000000e+00, -2.22966720e-03, 7.68889479e-05]
+    intercept = 0.0993244545876042
+
+    # Calculate the predicted t-values using the inverse transformation of the polynomial features
+    t_predicted = (-coef[1] + np.sqrt(coef[1]**2 - 4*coef[2]*(intercept - X))) / (2*coef[2])
+
+    return t_predicted
+
+
+
+
+
 
 
 print("OpenCV version = " + cv2.__version__)
@@ -193,6 +208,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # print("dir = tvecs[0][0] ", dir)
     # dir = np.array([dir[0], dir[2]])
     dist = np.linalg.norm(tvecs)
+    predict_t_values((dist/100))
     print(f"\n\nDist: {dist/100}\n\n")
     # print(f"\n\nDist: {np.linalg.norm(tvecs[0][2])}\n\n")
     # print(f"\n\nDist: {np.linalg.norm(tvecs)[0][0]}\n\n")
