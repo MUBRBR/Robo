@@ -215,10 +215,12 @@ def DetectTargetContinous():
             cv2.imshow(WIN_RF, image)
 
             aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+         
             h = calc_h(aruco_corners)
             arucoMarkerLength = Marker_length(h)
             intrinsic_matrix = intrinsic()
             rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
+            
             print(f"id: {ids} \n tvec:{tvecs}")
 
             # dir = Beta(tvecs[0][0])
@@ -275,6 +277,8 @@ def MapTargets():
                     pass
             
         retVal = []
+        print(f"tvecs inhold: {KnownTvecs}\n length KnownTvecs {len(KnownTvecs)}")
+        print(f"Ids inhold: {KnownIDs}\n length KnownIds {len(KnownIDs)}")
 
         for i in range(len(KnownIDs)):
             print("i",i)
