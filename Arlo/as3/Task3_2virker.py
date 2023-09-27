@@ -281,7 +281,8 @@ def MapTargets():
         print(f"Ids inhold: {KnownIDs}\n length KnownIds {len(KnownIDs)}")
 
         for i in range(len(KnownIDs)):
-            print("i",i)
+
+            print("ids",ids)
             currID = KnownIDs[i]
             currTvec = KnownTvecs[i]
             print("currTvecs",currTvec)
