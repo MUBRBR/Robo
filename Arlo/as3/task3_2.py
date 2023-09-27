@@ -73,6 +73,13 @@ def intrinsic():
     return intrinsic_matrix    
 
 
+def GetDegreesFromVector(tvecs):
+    beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)),[0,0,1]))
+    angleRad = beta * np.sign(np.dot(tvecs, [1,0,0]))
+    angleDeg = np.rad2deg(angleRad[0])
+    return angleDeg
+
+
 def Beta(tvecs):
     beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)),[0,0,1]))
     PosNeg = beta * np.sign(np.dot(tvecs, [1,0,0]))
@@ -145,9 +152,11 @@ def DetectTarget():
             rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
 
 
-            dir = Beta(tvecs[0][0])
-            dir = rad2degrees(dir)
-            dir = dir[0]
+            # dir = Beta(tvecs[0][0])
+            # dir = rad2degrees(dir)
+            # dir = dir[0]
+
+            dir = GetDegreesFromVector(tvecs[0][0])
 
             dist = np.linalg.norm(tvecs)
             enddist = predict_t_values((dist/100))
