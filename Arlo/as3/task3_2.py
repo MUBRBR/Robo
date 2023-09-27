@@ -164,12 +164,13 @@ dir = np.array([])
 while cv2.waitKey(4) == -1: # Wait for a key pressed event
 #if (True):
     try:
-        # close window
-        key = cv2.waitKey(0) & 0xFF
-        if key == 27:  # close on ESC key
-            cv2.destroyAllWindows()
         image = cam.capture_array("main")
-        
+        while True:
+            k = cv2.waitKey(0) & 0xFF
+            print(k)
+            if k == 27:
+                cv2.destroyAllWindows()
+        break
         # Show frames
         cv2.imshow(WIN_RF, image)
         # arucoMarkerLength = 600
