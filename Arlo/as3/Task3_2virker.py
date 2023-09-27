@@ -270,8 +270,9 @@ def MapTargets():
                 intrinsic_matrix = intrinsic()
                 rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
                 
+                print("tvecs in inner loop:", tvecs)
                 if (len(KnownTvecs) == 0):
-                    KnownTvecs.extend(tvecs[0])
+                    KnownTvecs.extend(tvecs)
                 
             except:
                     pass
@@ -283,7 +284,7 @@ def MapTargets():
         for i in range(len(KnownIDs)):
 
             print("ids",ids)
-            currID = KnownIDs[i]
+            currID = KnownIDs[i][0]
             currTvec = KnownTvecs[i]
             print("currTvecs",currTvec)
 
