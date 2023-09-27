@@ -188,7 +188,7 @@ for i in [1]:
     Beta(tvecs)
     turn_angle(Beta(tvecs))
     print("aruco corners", aruco_corners)
-    dist = Beta(tvecs[0][0,1])
+    dist = np.linalg.norm(tvecs)
     dir = Beta(tvecs[0][0])
     print("dir = tvecs[0][0]", dir)
     dir = np.array([dir[0], dir[2]])
