@@ -249,6 +249,7 @@ while True:
         arlo.DriveLength(currDist/100)
         break
     else:
+        print("here")
         arlo.RotateAngle(20)
 
 
