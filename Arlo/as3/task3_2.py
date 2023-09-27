@@ -188,7 +188,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # print(f"Angle is :\n{angle_between_vectors(tvecs,[0,0,1])}")
     Beta(tvecs)
     turn_angle(Beta(tvecs))
-    # print("aruco corners", aruco_corners)
+    print("aruco corners", aruco_corners)
     dir = Beta(tvecs[0][0])
     # print("dir = tvecs[0][0] ", dir)
     # dir = np.array([dir[0], dir[2]])
