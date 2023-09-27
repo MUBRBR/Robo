@@ -164,8 +164,6 @@ dir = np.array([])
 while cv2.waitKey(4) == -1: # Wait for a key pressed event
 #if (True):
     try:
-        if cv2.waitKey(4) == -1:
-            break
         image = cam.capture_array("main")
         
         # Show frames
