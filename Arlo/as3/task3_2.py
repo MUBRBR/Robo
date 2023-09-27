@@ -211,6 +211,7 @@ for i in [1]:
     print(f"\n\nDist: {dist/100}\n\n")
     enddist = predict_t_values((dist/100))
     print(f"calculated dist in cm: {enddist}")
+    dist = enddist
     # print(f"\n\nDist: {np.linalg.norm(tvecs[0][2])}\n\n")
     # print(f"\n\nDist: {np.linalg.norm(tvecs)[0][0]}\n\n")
     # for i in tvecs:
