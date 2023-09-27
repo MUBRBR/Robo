@@ -205,7 +205,7 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     turn_angle(Beta(tvecs))
     print("aruco corners", aruco_corners)
     dir = Beta(tvecs[0][0])
-    print("dir = tvecs[0][0] ", dir)
+    # print("dir = tvecs[0][0] ", dir)
     # dir = np.array([dir[0], dir[2]])
     dist = np.linalg.norm(tvecs)
     print(f"\n\nDist: {dist/100}\n\n")
@@ -221,13 +221,14 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     # print("angle",turn_angle(Beta(tvecs)))
     
 
-# arlo.RotateAngle(turn_angle(Beta(tvecs)))
+
 
 # print(f"dist {dist} \n dir {dir}")
 # x = np.linalg.norm(dir)* (dist/1000)
 # print("dest Vector = ", x)
-# arlo.AddDest(dist)
-# arlo.FollowRoute(True)
+arlo.RotateAngle(dir)
+arlo.AddDest(dist)
+arlo.FollowRoute(True)
 # Finished successfully
 
 
