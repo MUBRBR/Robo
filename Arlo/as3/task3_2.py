@@ -76,7 +76,7 @@ def intrinsic():
 def GetDegreesFromVector(tvecs):
     beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)),[0,0,1]))
     angleRad = beta * np.sign(np.dot(tvecs, [1,0,0]))
-    angleDeg = 180 * angleRad[0] / math.pi
+    angleDeg = 180 * angleRad / math.pi
     return angleDeg
 
 
@@ -179,7 +179,7 @@ def TurnNGo():
     arlo.RotateAngle(currDir)
     arlo.DriveLength(currDist/100)
 
-TurnNGo()
+# TurnNGo()
 
 def SearchNTurnNGo():
     while True:
@@ -200,7 +200,43 @@ def SearchNTurnNGo():
 
 
 
+def DetectTargetContinous():
+    while cv2.waitKey(4) == -1: # Wait for a key pressed event
+
+        try:
+            print("start")
+            image = cam.capture_array("main")
+        
+            cv2.imshow(WIN_RF, image)
+
+            aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+            h = calc_h(aruco_corners)
+            arucoMarkerLength = Marker_length(h)
+            intrinsic_matrix = intrinsic()
+            rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
+            print(f"id: {ids} \n tvec:{tvecs}")
+
+            # dir = Beta(tvecs[0][0])
+            # dir = rad2degrees(dir)
+            # dir = dir[0]
+
+            andersnewdir = GetDegreesFromVector(tvecs[0][0])
+            print(f"andersnewdir={andersnewdir}")
+            andersolddir = angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
+            print(f"andersolddir={andersolddir}")
+            dir = Beta(tvecs[0][0])
+            dir = rad2degrees(dir)
+            mmdir = dir[0]
+            print(f"mmdir={mmdir}")
+
+            dist = np.linalg.norm(tvecs)
+            enddist = predict_t_values((dist/100))
+            print(f"enddist={enddist}")
+
+        except:
+            pass
 
 
+DetectTargetContinous()
 
 
