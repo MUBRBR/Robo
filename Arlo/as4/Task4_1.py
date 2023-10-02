@@ -44,12 +44,12 @@ def CreateLandmarksMap():
 
         return retVal
 
-landmarksMap = CreateLandmarksMap()
-landmarksMap = np.array([[0,200],[-100,200],[100,200]])
+# landmarksMap = CreateLandmarksMap()
+# landmarksMap = np.array([[0,200],[-100,200],[100,200]])
 
 def EvaluateCollisionLandmarksMap(landmarksMap, pos):
 
-    for elm in landmarksMap:
+    for elm,_ in landmarksMap:
         distance = np.sqrt((pos[0]-elm[0])**2+(pos[1]-elm[1])**2)
 
         required_distance = 34 + 20 #obstacle radius + arlo-radius
@@ -60,7 +60,7 @@ def EvaluateCollisionLandmarksMap(landmarksMap, pos):
     return False
 
 testPos = [0,200]
-
-print(EvaluateCollisionLandmarksMap(landmarksMap, testPos))
+map = MapTargets()[0]
+print(EvaluateCollisionLandmarksMap(map, testPos))
 
 
