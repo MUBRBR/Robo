@@ -49,9 +49,10 @@ def CreateLandmarksMap():
 
 def EvaluateCollisionLandmarksMap(landmarksMap, pos):
 
+    print(f"landmarksmap: {landmarksMap}")
     for elm,_ in landmarksMap:
         distance = np.sqrt((pos[0]-elm[0])**2+(pos[1]-elm[1])**2)
-
+        print(f"Distance: {distance}")
         required_distance = 34 + 20 #obstacle radius + arlo-radius
 
         if (distance <= required_distance):
