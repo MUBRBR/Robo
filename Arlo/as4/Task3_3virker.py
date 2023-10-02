@@ -236,15 +236,15 @@ def DetectTargetContinous():
             # mmdir = dir[0]
             # print(f"mmdir={mmdir}")
 
-            # dist = np.linalg.norm(tvecs)
-            # enddist = predict_t_values((dist/100))
-            # print(f"enddist={enddist}")
+            dist = np.linalg.norm(tvecs)
+            enddist = predict_t_values((dist/100))
+            print(f"enddist={enddist}")
 
         except:
             pass
 
 
-# DetectTargetContinous()
+DetectTargetContinous()
 def MapTargets():
 
     while cv2.waitKey(4) == -1: # Wait for a key pressed event
