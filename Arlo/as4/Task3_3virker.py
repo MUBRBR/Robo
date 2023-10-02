@@ -285,6 +285,8 @@ def MapTargets():
 
             currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
             FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(np.linalg.norm(currTvec)/100)
+            actualDist1 = predict_t_values((FixedCurrTvec))
+            print(f"actualdist1: {actualDist1}")
             retVal.append((FixedCurrTvec,currID))
 
         return retVal
