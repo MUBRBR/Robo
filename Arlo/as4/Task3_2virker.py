@@ -290,7 +290,7 @@ def MapTargets():
 
         return retVal
 
-SearchNTurnNGo()
+# SearchNTurnNGo()
 
 # MapTargets()
 # print(MapTargets())

@@ -221,7 +221,7 @@ def DetectTargetContinous():
             intrinsic_matrix = intrinsic()
             rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
             
-            print(f"id: {ids} \n tvec:{tvecs}")
+            # print(f"id: {ids} \n tvec:{tvecs}")
 
             # dir = Beta(tvecs[0][0])
             # dir = rad2degrees(dir)
@@ -230,7 +230,7 @@ def DetectTargetContinous():
             # andersnewdir = GetDegreesFromVector(tvecs[0][0])
             # print(f"andersnewdir={andersnewdir}")
             andersolddir = angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
-            print(f"andersolddir={andersolddir}")
+            # print(f"andersolddir={andersolddir}")
             # dir = Beta(tvecs[0][0])
             # dir = rad2degrees(dir)
             # mmdir = dir[0]
@@ -244,7 +244,7 @@ def DetectTargetContinous():
             pass
 
 
-DetectTargetContinous()
+# DetectTargetContinous()
 def MapTargets():
 
     while cv2.waitKey(4) == -1: # Wait for a key pressed event
