@@ -244,7 +244,7 @@ def DetectTargetContinous():
             pass
 
 
-DetectTargetContinous()
+# DetectTargetContinous()
 def MapTargets():
 
     while cv2.waitKey(4) == -1: # Wait for a key pressed event
@@ -285,7 +285,6 @@ def MapTargets():
 
             currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
             FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(np.linalg.norm(currTvec)/100)
-
             retVal.append((FixedCurrTvec,currID))
 
         return retVal
