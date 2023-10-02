@@ -5,6 +5,8 @@ import numpy as np
 from pprint import *
 import SmartArloNew as arlo
 from Task3_3virker import *
+from grid_occ import *
+
 
 def CreateLandmarksMap():
 
@@ -60,8 +62,16 @@ def EvaluateCollisionLandmarksMap(landmarksMap, pos):
 
     return False
 
-testPos = [0,200]
-map = MapTargets()
+testPos = [1,0]
+# map = MapTargets()
+
+map = GridOccupancyMap()
+map.populate( MapTargets()[0])
+
+plt.clf()
+map.draw_map()
+plt.show()
+
 print(EvaluateCollisionLandmarksMap(map, testPos))
 
 
