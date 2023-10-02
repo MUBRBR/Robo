@@ -61,7 +61,7 @@ def EvaluateCollisionLandmarksMap(landmarksMap, pos):
     return False
 
 testPos = [0,200]
-map = MapTargets()[0]
+map = MapTargets()
 print(EvaluateCollisionLandmarksMap(map, testPos))
 
 
