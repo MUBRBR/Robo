@@ -244,7 +244,7 @@ def DetectTargetContinous():
             pass
 
 
-DetectTargetContinous()
+# DetectTargetContinous()
 def MapTargets():
 
     while cv2.waitKey(4) == -1: # Wait for a key pressed event
