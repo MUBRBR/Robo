@@ -19,7 +19,7 @@ map.register_obstacle(roboCam.CreateLandmarksMap())
 
 rrt = RRT(
     start=[0.0,0.0],
-    goal =[2.0,3.5],
+    goal =[0.0,3.5],
     map = map,
     expand_dis=0.1,
     path_resolution=path_res
