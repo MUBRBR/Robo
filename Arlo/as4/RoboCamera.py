@@ -175,7 +175,7 @@ class RoboCamera():
 
 
 testRoboCam = RoboCamera()
-
+testRoboCam.start_Camera()
 testRoboCam.CreateLandmarksMap()
 testRoboCam.DetectTargetContinous()
 # testRoboCam.EvaluateCollisionLandmarksMap()
