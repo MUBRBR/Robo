@@ -108,7 +108,7 @@ class betterRobot():
         
         self.arlo.go_diff(self.speed, self.speed, 1, 1)
         
-        sleep(dist*3.5)
+        sleep(dist*3)
 
 
     def Stop(self):

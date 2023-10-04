@@ -14,7 +14,6 @@ roboCam = RoboCamera()
 
 path_res = 0.05
 map = GridOccupancyMap(low=(-3, 0), high=(3, 4), res=path_res)
-print("create landsmarks",roboCam.CreateLandmarksMap())
 map.register_obstacle(roboCam.CreateLandmarksMap())
 
 rrt = RRT(
@@ -35,8 +34,3 @@ arlo.initDir = np.array([1,0])
 for i in range(1,len(optimal_path)):
     arlo.AddDest(optimal_path[i])
 arlo.FollowRoute(False)
-
-
-
-
-
