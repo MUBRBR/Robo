@@ -145,17 +145,23 @@ class RoboCamera():
                     
                     if (len(KnownTvecs) == 0):
                         KnownTvecs.extend(tvecs)
-                        print("no aruco detected")
                     
                 except:
                         pass
-                
+            print("1")
             retVal = []
 
             for i in range(len(KnownIDs)):
+                print("2")
+
                 currTvec = KnownTvecs[i][0]
+                print("3")
+
                 currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
+                print("4")
+
                 FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(np.linalg.norm(currTvec)/100)
+                print("5")
 
                 retVal.append((FixedCurrTvec))
                 print("retval",retVal)
