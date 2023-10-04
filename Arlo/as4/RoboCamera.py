@@ -159,7 +159,7 @@ class RoboCamera():
                 currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
                 FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(enddist)
                 retVal.append((FixedCurrTvec))
-            
+            print("retval",retVal)
 
             return retVal
         
