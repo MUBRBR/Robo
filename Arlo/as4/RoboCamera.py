@@ -20,7 +20,8 @@ class RoboCamera():
         self.WIN_RF = "Example 1"
         self.cam = picamera2.Picamera2()
         self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-
+        self.start_Camera()
+        
     def start_Camera(self):
         print("OpenCV version = " + cv2.__version__)
         # Open a camera device for capturing
@@ -174,8 +175,8 @@ class RoboCamera():
         return False
 
 
-testRoboCam = RoboCamera()
-testRoboCam.start_Camera()
-testRoboCam.CreateLandmarksMap()
-testRoboCam.DetectTargetContinous()
+# testRoboCam = RoboCamera()
+# 
+# testRoboCam.CreateLandmarksMap()
+# testRoboCam.DetectTargetContinous()
 # testRoboCam.EvaluateCollisionLandmarksMap()

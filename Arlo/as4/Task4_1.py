@@ -10,6 +10,7 @@ from RoboCamera import *
 
 roboCam = RoboCamera()
 
+
 testPos = [1,0]
 path_res = 0.05
 map = GridOccupancyMap(low=(0, 0), high=(3, 4), res=path_res)
