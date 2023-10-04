@@ -109,7 +109,6 @@ class betterRobot():
         self.arlo.go_diff(self.speed, self.speed, 1, 1)
         
         sleep(dist*3)
-        self.Stop()
 
 
     def Stop(self):
@@ -272,7 +271,8 @@ class betterRobot():
 
 betterArlo = betterRobot()
 
-
+betterArlo.DriveLength(1)
+betterArlo.Stop()
 
 # manuually folowing obstacles course
 # betterArlo.Radar.active = True
