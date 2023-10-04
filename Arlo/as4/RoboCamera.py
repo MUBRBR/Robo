@@ -146,6 +146,8 @@ class RoboCamera():
                     if (len(KnownTvecs) == 0):
                         KnownTvecs.extend(tvecs)
                     
+                    if (len(KnownIDs) == 0):
+                        KnownIDs.extend(ids)
                 except:
                         pass
             retVal = []
