@@ -126,7 +126,6 @@ class RoboCamera():
     def CreateLandmarksMap(self):
 
         while cv2.waitKey(4) == -1: # Wait for a key pressed event
-            print("1")
             KnownTvecs = []
             KnownIDs = []
 
@@ -136,7 +135,6 @@ class RoboCamera():
                     image = self.cam.capture_array("main")
                 
                     cv2.imshow(self.WIN_RF, image)
-                    print("2")
 
                     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, self.arucoDict)
 
@@ -159,7 +157,7 @@ class RoboCamera():
                 FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(np.linalg.norm(currTvec)/100)
 
                 retVal.append((FixedCurrTvec))
-
+                print("retval",retVal)
             return retVal
         
     def EvaluateCollisionLandmarksMap(self, landmarksMap, pos):
