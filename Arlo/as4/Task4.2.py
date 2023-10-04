@@ -7,7 +7,7 @@ from pprint import *
 from grid_occ import *
 from RoboCamera import *
 from rrt import *
-
+from SmartArloNew import betterRobot
 
 roboCam = RoboCamera()
 
@@ -29,9 +29,13 @@ path, optimal_path = rrt.planning()
 rrt.draw_graph(path, optimal_path)
 map.draw_map()
 
+arlo = betterRobot()
 
-# map.in_collision([0,0])
-# map.draw_map()
+arlo.initDir = np.array([1,0])
+for i in range(1,len(optimal_path)):
+    arlo.AddDest(optimal_path[i])
+arlo.FollowRoute(False)
+
 
 
 
