@@ -4,10 +4,10 @@ import math
 import numpy as np
 from pprint import *
 # import SmartArloNew as arlo
-from grid_occ import *
-from RoboCamera import *
-from rrt import *
-from SmartArloNew import betterRobot
+from src.grid_occ import *
+from src.RoboCamera import *
+from src.rrt import *
+from src.SmartArloNew import betterRobot
 
 roboCam = RoboCamera()
 
