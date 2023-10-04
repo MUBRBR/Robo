@@ -3,7 +3,7 @@ import time
 import math
 import numpy as np
 from pprint import *
-import SmartArloNew as arlo
+# import SmartArloNew as arlo
 
 try:
     import picamera2
