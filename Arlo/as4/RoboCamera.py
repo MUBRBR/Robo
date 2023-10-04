@@ -148,8 +148,10 @@ class RoboCamera():
                     
                 except:
                         pass
-            print("1")
             retVal = []
+            print("KnownIds", KnownIDs)
+            print("KnownT", KnownTvecs)
+
 
             for i in range(len(KnownIDs)):
                 print("2")
