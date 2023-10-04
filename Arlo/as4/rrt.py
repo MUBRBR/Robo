@@ -1,14 +1,5 @@
-"""
-
-Path planning with Randomized Rapidly-Exploring Random Trees (RRT)
-
-Adapted from 
-https://github.com/AtsushiSakai/PythonRobotics/blob/master/PathPlanning/RRT/rrt.py
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FFMpegWriter
 
 class RRT:
     """
@@ -34,7 +25,6 @@ class RRT:
     def __init__(self,
                  start,
                  goal,
-                 robot_model,   #model of the robot
                  map,           #map should allow the algorithm to query if the path in a node is in collision. note this will ignore the robot geom
                  expand_dis=0.2,
                  path_resolution=0.05,
@@ -42,9 +32,8 @@ class RRT:
                  max_iter=500,
                  ):
 
-        self.start = self.Node(start)
-        self.end = self.Node(goal)
-        self.robot = robot_model
+        self.start = self.Node(np.array(start))
+        self.end = self.Node(np.array(goal))
         self.map = map
         
         self.min_rand = map.map_area[0]
@@ -56,8 +45,9 @@ class RRT:
         self.max_iter = max_iter
 
         self.node_list = []
+        self.edges = []
 
-    def planning(self, animation=True, writer=None):
+    def planning(self):
         """
         rrt path planning
 
@@ -66,7 +56,7 @@ class RRT:
 
         self.node_list = [self.start]
 
-        for i in range(self.max_iter):
+        for _ in range(self.max_iter):
             rnd_node = self.get_random_node()
             nearest_ind = self.get_nearest_node_index(self.node_list, rnd_node)
             nearest_node = self.node_list[nearest_ind]
@@ -83,12 +73,24 @@ class RRT:
                 if self.check_collision_free(final_node):
                     return self.generate_final_course(len(self.node_list) - 1)
 
-            if animation:
-                self.draw_graph(rnd_node)
-                if writer is not None:
-                    writer.grab_frame()
-
         return None  # cannot find path
+    
+    def forward_dyn(self, x, u, T):
+        path = [x]
+        #note u must have T ctrl to apply
+        for i in range(T):
+            x_new = path[-1] + u[i] #u is velocity command here
+            path.append(x_new)    
+        
+        return path[1:]    
+    
+    def inverse_dyn(self, x, x_goal, T):
+        #for point mass, the path is just a straight line by taking full ctrl_range at each step
+        dir = (x_goal-x)/np.linalg.norm(x_goal-x)
+
+        u = np.array([dir*0.05 for _ in range(T)])
+
+        return self.forward_dyn(x, u, T)
 
     def steer(self, from_node, to_node, extend_length=float("inf")):
         # integrate the robot dynamics towards the sampled position
@@ -105,7 +107,8 @@ class RRT:
         n_expand = int(extend_length // self.path_resolution)
 
         if n_expand > 0:
-            steer_path = self.robot.inverse_dyn(new_node.pos, to_node.pos, n_expand)
+            steer_path = self.inverse_dyn(new_node.pos, to_node.pos, n_expand)
+
             #use the end position to represent the current node and update the path
             new_node.pos = steer_path[-1]
             new_node.path += steer_path
@@ -119,8 +122,49 @@ class RRT:
             new_node.pos = to_node.pos.copy()
 
         new_node.parent = from_node
+        if not (self.map.in_collision(np.array(new_node.pos))):
+        # if  (self.map.in_collision(np.array(new_node.pos))):
+
+            self.edges += [[new_node.pos,from_node.pos]] #Add edges for plotting
 
         return new_node
+
+    def path_free_of_collision(self, start_pos, end_pos): 
+
+        # Calculate the direction vector
+        direction = np.array(end_pos) -  np.array(start_pos)
+
+        # Calculate distance and steps between points
+        distance = np.linalg.norm(direction)
+        num_steps = int(distance / (self.expand_dis/2))
+        step_size = direction / num_steps
+
+        # Iterate over the line
+        for i in range(num_steps + 1):
+            current_point =  np.array(start_pos) + i * step_size
+
+            if self.map.in_collision(current_point):
+                return False
+
+        return True
+
+    def optimize_path(self, head, tail):    
+        if (len(tail) == 0): # Base case, if theres only one value left that must be the dest (f#-esque solution)
+            return [head]
+        
+        if (self.path_free_of_collision(head,tail[-1])): #If we can make it from the current node to the goal in a stright shot, do that.
+            return [head] + [tail[-1]]
+
+        best_index = 0 # We'll look for the next node in the path were the path connecting that to head in unobstructed
+        for i in range(1,len(tail)):
+            if (self.path_free_of_collision(head,tail[i])):
+                best_index = i
+            else:
+                break 
+
+        newHead = tail[best_index] #Shifting the head to the next "good" node skips all the unnecesary nodes
+        newTail = tail[best_index+1:] if (len(tail) > best_index) else [] # This is again f# implementation, but it works!
+        return [head] + self.optimize_path(newHead,newTail) #Heads are part of the new path, tails are ignored
 
     def generate_final_course(self, goal_ind):
         path = [self.end.pos]
@@ -130,7 +174,11 @@ class RRT:
             node = node.parent
         path.append(node.pos)
 
-        return path
+        path = path[::-1]
+
+        optimized_path = self.optimize_path(path[0],path[1:])
+
+        return path, optimized_path
 
     def get_random_node(self):
         if np.random.randint(0, 100) > self.goal_sample_rate:
@@ -141,39 +189,22 @@ class RRT:
             rnd = self.Node(self.end.pos)
         return rnd
 
-    def draw_graph(self, rnd=None):
-        # plt.clf()
-        # # for stopping simulation with the esc key.
-        # plt.gcf().canvas.mpl_connect(
-        #     'key_release_event',
-        #     lambda event: [exit(0) if event.key == 'escape' else None])
+    def draw_graph(self, path, optimized_path, file_name = "Found path"):
         plt.clf()
-        if rnd is not None:
-            plt.plot(rnd.pos[0], rnd.pos[1], "^k")
-
-        # draw the map
         self.map.draw_map()
+        for edge in self.edges:
+            # Convert lists to numpy arrays for consistency
+            edge = [np.array(p) for p in edge]
 
-        for node in self.node_list:
-            if node.parent:
-                path = np.array(node.path)
-                plt.plot(path[:, 0], path[:, 1], "-g")
+            # Extract x and y coordinates for each point
+            x_coords, y_coords = zip(*edge)
 
-        plt.plot(self.start.pos[0], self.start.pos[1], "xr")
-        plt.plot(self.end.pos[0], self.end.pos[1], "xr")
-        plt.axis(self.map.extent)
+            # Plot the line
+            plt.plot(x_coords, y_coords, '-g')
+        plt.plot([x for (x, y) in path], [y for (x, y) in path], '-r')
+        plt.plot([x for (x, y) in optimized_path], [y for (x, y) in optimized_path], '-b')
         plt.grid(True)
-        plt.pause(0.01)
-
-
-    @staticmethod
-    def get_nearest_node_index(node_list, rnd_node):
-        dlist = [ node.calc_distance_to(rnd_node)
-                 for node in node_list]
-        minind = dlist.index(min(dlist))
-
-        return minind
-
+        plt.savefig(f"{file_name}.png", bbox_inches='tight')
 
     def check_collision_free(self, node):
         if node is None:
@@ -183,48 +214,37 @@ class RRT:
                 return False
         return True
 
+    @staticmethod
+    def get_nearest_node_index(node_list, rnd_node):
+        dlist = [ node.calc_distance_to(rnd_node)
+                 for node in node_list]
+        minind = dlist.index(min(dlist))
 
-import grid_occ, robot_models
+        return minind
+
+import grid_occ
 
 def main():
 
+    # Map gets made here
     path_res = 0.05
-    map = grid_occ.GridOccupancyMap(low=(-1, 0), high=(1, 2), res=path_res)
+    map = grid_occ.GridOccupancyMap(low=(0, 0), high=(3, 4), res=path_res)
     map.populate()
+    # map.register_obstacle([np.array([2,2]),np.array([1.5,2]),np.array([1,3])])
 
-    robot = robot_models.PointMassModel(ctrl_range=[-path_res, path_res])   #
-
+    #RRT is initialized here
     rrt = RRT(
-        start=[0, 0],
-        goal=[0, 1.9],
-        robot_model=robot,
+        start=[1.5,0.0],
+        goal=[1.5,3.5],
         map=map,
-        expand_dis=0.2,
-        path_resolution=path_res,
+        expand_dis=0.1,
+        path_resolution=path_res
         )
     
-    show_animation = True
-    metadata = dict(title="RRT Test")
-    writer = FFMpegWriter(fps=15, metadata=metadata)
-    fig = plt.figure()
-    
-    with writer.saving(fig, "rrt_test.mp4", 100):
-        path = rrt.planning(animation=show_animation, writer=writer)
-
-        if path is None:
-            print("Cannot find path")
-        else:
-            print("found path!!")
-
-            # Draw final path
-            if show_animation:
-                rrt.draw_graph()
-                plt.plot([x for (x, y) in path], [y for (x, y) in path], '-r')
-                plt.grid(True)
-                plt.pause(0.01)  # Need for Mac
-                plt.show()
-                writer.grab_frame()
-
+    path, optimized_path = rrt.planning() # optimized should be used by robot
+    print(f"Path:\n{path}\n")
+    print(f"Optimized path:\n{optimized_path}\n")
+    rrt.draw_graph(path, optimized_path) #path should be saved so it can be viewed afterwards
 
 if __name__ == '__main__':
     main()
