@@ -16,31 +16,30 @@ except ImportError:
 
 class RoboCamera():
     def __init__(self):
-        "insert things ?"
+        self.cam = picamera2.Picamera2()
+        self.imageSize = (800, 600)
+        self.WIN_RF = "Example 1"
+        self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
+
+    def start_Camera(self):
         print("OpenCV version = " + cv2.__version__)
         # Open a camera device for capturing
-        imageSize = (800, 600)
         FPS = 15
-        cam = picamera2.Picamera2()
         frame_duration_limit = int(1/FPS * 1000000) # Microseconds
         # Change configuration to set resolution, framerate
-        picam2_config = cam.create_video_configuration({"size": imageSize, "format": 'RGB888'},
+        picam2_config = self.cam.create_video_configuration({"size": self.imageSize, "format": 'RGB888'},
                                                                     controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)},
                                                                     queue=False)
-        cam.configure(picam2_config) # Not really necessary
-        cam.start(show_preview=False)
+        self.cam.configure(picam2_config) # Not really necessary
+        self.cam.start(show_preview=False)
 
-        pprint(cam.camera_configuration()) # Print the camera configuration in use
+        pprint(self.cam.camera_configuration()) # Print the camera configuration in use
 
         time.sleep(1)  # wait for camera to setup
 
         # Open a window
-        WIN_RF = "Example 1"
-        cv2.namedWindow(WIN_RF)
-        cv2.moveWindow(WIN_RF, 100, 100)
-
-        arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
-
+        cv2.namedWindow(self.WIN_RF)
+        cv2.moveWindow(self.WIN_RF, 100, 100)
 
     def angle_between_vectors(self, vector1, vector2):
         # Calculate the dot product of the two vectors
@@ -103,21 +102,21 @@ class RoboCamera():
 
             try:
                 print("start")
-                image = cam.capture_array("main")
+                image = self.cam.capture_array("main")
             
-                cv2.imshow(WIN_RF, image)
+                cv2.imshow(self.WIN_RF, image)
 
-                aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+                aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, self.arucoDict)
             
-                h = calc_h(aruco_corners)
-                arucoMarkerLength = Marker_length(h)
-                intrinsic_matrix = intrinsic()
+                h = self.calc_h(aruco_corners)
+                arucoMarkerLength = self.Marker_length(h)
+                intrinsic_matrix = self.intrinsic()
                 rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
                 
-                andersolddir = angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
+                andersolddir = self.angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
 
                 dist = np.linalg.norm(tvecs)
-                enddist = predict_t_values((dist/100))
+                enddist = self.predict_t_values((dist/100))
                 print(f"enddist={enddist}")
 
             except:
@@ -133,15 +132,15 @@ class RoboCamera():
             for _ in range(5):
 
                 try:
-                    image = cam.capture_array("main")
+                    image = self.cam.capture_array("main")
                 
-                    cv2.imshow(WIN_RF, image)
+                    cv2.imshow(self.WIN_RF, image)
 
-                    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+                    aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, self.arucoDict)
 
-                    h = calc_h(aruco_corners)
-                    arucoMarkerLength = Marker_length(h)
-                    intrinsic_matrix = intrinsic()
+                    h = self.calc_h(aruco_corners)
+                    arucoMarkerLength = self.Marker_length(h)
+                    intrinsic_matrix = self.intrinsic()
                     rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
                     
                     if (len(KnownTvecs) == 0):
@@ -173,3 +172,10 @@ class RoboCamera():
                 return True
 
         return False
+
+
+testRoboCam = RoboCamera()
+
+testRoboCam.CreateLandmarksMap()
+testRoboCam.DetectTargetContinous()
+# testRoboCam.EvaluateCollisionLandmarksMap()
