@@ -8,6 +8,7 @@ from Task3_3virker import *
 from grid_occ import *
 
 
+
 def CreateLandmarksMap():
 
     while cv2.waitKey(4) == -1: # Wait for a key pressed event
@@ -63,15 +64,12 @@ def EvaluateCollisionLandmarksMap(landmarksMap, pos):
     return False
 
 testPos = [1,0]
-# map = MapTargets()
 
-map = GridOccupancyMap()
-map.populate( MapTargets()[0])
-
-plt.clf()
+map = GridOccupancyMap(low=(0, 0), high=(3, 4), res=path_res)
+map.register_obstacle(CreateLandmarksMap())
+map.in_collision([0,0])
 map.draw_map()
-plt.show()
 
-print(EvaluateCollisionLandmarksMap(map, testPos))
+
 
 
