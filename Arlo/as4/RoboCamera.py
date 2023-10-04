@@ -21,7 +21,7 @@ class RoboCamera():
         self.cam = picamera2.Picamera2()
         self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
         self.start_Camera()
-        
+
     def start_Camera(self):
         print("OpenCV version = " + cv2.__version__)
         # Open a camera device for capturing
@@ -126,7 +126,7 @@ class RoboCamera():
     def CreateLandmarksMap(self):
 
         while cv2.waitKey(4) == -1: # Wait for a key pressed event
-            
+            print("1")
             KnownTvecs = []
             KnownIDs = []
 
@@ -136,6 +136,7 @@ class RoboCamera():
                     image = self.cam.capture_array("main")
                 
                     cv2.imshow(self.WIN_RF, image)
+                    print("2")
 
                     aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, self.arucoDict)
 
