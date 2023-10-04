@@ -50,7 +50,7 @@ class GridOccupancyMap(object):
                         self.grid[i, j] = 1
                         break
 
-    def register_obstacle(self,posLst,radius=0.34): #raidus provided in meters 
+    def register_obstacle(self,posLst,radius=0.56): #raidus provided in meters 
         ####
         #### must register box number in grid
         ####
