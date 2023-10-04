@@ -18,6 +18,7 @@ print("create landsmarks",roboCam.CreateLandmarksMap())
 map.register_obstacle(roboCam.CreateLandmarksMap(),radius=0.34)
 map.in_collision([0,0])
 map.draw_map()
+print(12)
 
 
 
