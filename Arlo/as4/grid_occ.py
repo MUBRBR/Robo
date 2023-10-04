@@ -68,7 +68,7 @@ class GridOccupancyMap(object):
         plt.clf()
         plt.grid()
         plt.imshow(self.grid.T, cmap="Greys", origin='lower', vmin=0, vmax=1, extent=self.extent, interpolation='none')
-        plt.show()
+  
 
 if __name__ == '__main__':
     path_res = 0.05
