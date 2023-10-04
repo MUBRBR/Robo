@@ -55,19 +55,14 @@ class GridOccupancyMap(object):
         #### must register box number in grid
         ####
         for i in range(self.n_grids[0]):
-            print(1)
             for j in range(self.n_grids[1]):
                 centroid = np.array([self.map_area[0][0] + self.resolution * (i+0.5), 
                                      self.map_area[0][1] + self.resolution * (j+0.5)])
-                print(2)
-
                 for pos in posLst:
-                    print(3)
-
                     if np.linalg.norm(centroid - pos) <= radius:
                         self.grid[i, j] = 1
-                        print(4)
-                print(5)
+                    
+
     def draw_map(self):
         #note the x-y axes difference between imshow and plot
         plt.clf()

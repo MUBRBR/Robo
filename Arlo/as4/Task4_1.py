@@ -15,7 +15,7 @@ testPos = [1,0]
 path_res = 0.05
 map = GridOccupancyMap(low=(0, 0), high=(3, 4), res=path_res)
 print("create landsmarks",roboCam.CreateLandmarksMap())
-map.register_obstacle(roboCam.CreateLandmarksMap())
+map.register_obstacle(roboCam.CreateLandmarksMap(),radius=0.34)
 map.in_collision([0,0])
 map.draw_map()
 
