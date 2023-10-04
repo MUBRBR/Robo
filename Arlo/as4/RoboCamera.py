@@ -145,6 +145,7 @@ class RoboCamera():
                     
                     if (len(KnownTvecs) == 0):
                         KnownTvecs.extend(tvecs)
+                        print("no aruco detected")
                     
                 except:
                         pass
