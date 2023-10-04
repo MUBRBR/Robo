@@ -142,7 +142,6 @@ class RoboCamera():
                     arucoMarkerLength = self.Marker_length(h)
                     intrinsic_matrix = self.intrinsic()
                     rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
-                    
                     if (len(KnownTvecs) == 0):
                         KnownTvecs.extend(tvecs)
                     
@@ -155,9 +154,11 @@ class RoboCamera():
 
             for i in range(len(KnownIDs)):
                 currTvec = KnownTvecs[i][0]
+                dist = np.linalg.norm(currTvec)
+                enddist = self.predict_t_values((dist/100))
                 currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
-                FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(np.linalg.norm(currTvec)/100)
-                retVal.append((FixedCurrTvec/100))
+                FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(enddist)
+                retVal.append((FixedCurrTvec))
             
 
             return retVal
