@@ -27,6 +27,7 @@ rrt = RRT(
 
 path, optimal_path = rrt.planning()
 rrt.draw_graph(path, optimal_path)
+plt.show()
 
 # map.in_collision([0,0])
 # map.draw_map()
