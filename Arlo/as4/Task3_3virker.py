@@ -128,7 +128,7 @@ cam.start(show_preview=False)
 
 pprint(cam.camera_configuration()) # Print the camera configuration in use
 
-time.sleep(2)  # wait for camera to setup
+time.sleep(1)  # wait for camera to setup
 
 # Open a window
 WIN_RF = "Example 1"
