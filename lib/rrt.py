@@ -222,7 +222,7 @@ class RRT:
 
         return minind
 
-import lib.grid_occ
+import grid_occ
 
 def main():
 
