@@ -271,9 +271,9 @@ class betterRobot():
 
 betterArlo = betterRobot()
 
-betterArlo.DriveLength(1)
-betterArlo.Stop()
-betterArlo.RotateAngle(90)
+# betterArlo.DriveLength(1)
+# betterArlo.Stop()
+# betterArlo.RotateAngle(90)
 
 # manuually folowing obstacles course
 # betterArlo.Radar.active = True
