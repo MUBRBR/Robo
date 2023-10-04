@@ -16,9 +16,9 @@ except ImportError:
 
 class RoboCamera():
     def __init__(self):
-        self.cam = picamera2.Picamera2()
         self.imageSize = (800, 600)
         self.WIN_RF = "Example 1"
+        self.cam = picamera2.Picamera2()
         self.arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 
     def start_Camera(self):
