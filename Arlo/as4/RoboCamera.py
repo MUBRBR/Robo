@@ -157,10 +157,9 @@ class RoboCamera():
                 dist = np.linalg.norm(currTvec)
                 enddist = self.predict_t_values((dist/100))
                 currTvec2D = np.array([currTvec[0],currTvec[2]]) #remove y
-                FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(enddist)
-                retVal.append((FixedCurrTvec))
+                FixedCurrTvec = (currTvec2D / np.linalg.norm(currTvec2D))*(enddist/100)
+                retVal.append(FixedCurrTvec)
             print("retval",retVal)
-            print("enddist",enddist)
             return retVal
         
     def EvaluateCollisionLandmarksMap(self, landmarksMap, pos):
