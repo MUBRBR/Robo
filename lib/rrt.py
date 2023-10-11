@@ -222,13 +222,13 @@ class RRT:
 
         return minind
 
-import grid_occ
+from grid_occ import GridOccupancyMap
 
 def main():
 
     # Map gets made here
     path_res = 0.05
-    map = grid_occ.GridOccupancyMap(low=(0, 0), high=(3, 4), res=path_res)
+    map = GridOccupancyMap(low=(0, 0), high=(3, 4), res=path_res)
     map.populate()
     # map.register_obstacle([np.array([2,2]),np.array([1.5,2]),np.array([1,3])])
 
