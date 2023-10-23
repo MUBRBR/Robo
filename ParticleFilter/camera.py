@@ -251,8 +251,8 @@ class Camera(object):
             self.cam.set(capPropId("FRAME_WIDTH"), self.imageSize[0])
             self.cam.set(capPropId("FRAME_HEIGHT"), self.imageSize[1])
             #self.cam.set(capPropId("BUFFERSIZE"), 1) # Does not work
-            #self.cam.set(capPropId("FPS"), 15)
-            self.cam.set(capPropId("FPS"), 30)
+            self.cam.set(capPropId("FPS"), 15)
+            # self.cam.set(capPropId("FPS"), 30)
         
             time.sleep(1)
         
