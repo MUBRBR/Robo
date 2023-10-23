@@ -91,8 +91,8 @@ try:
 
     # Draw map
     draw_world(est_pose, particle_filter, world)
-    print("here")
-    cam = camera.Camera(0, 'arlo', useCaptureThread = True)
+    
+    cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
 
     while True:
 
