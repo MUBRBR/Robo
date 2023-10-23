@@ -108,7 +108,7 @@ class Camera(object):
                          Supported types: arlo, frindo, scribbler, macbookpro"""
 
         self.useCaptureThread = useCaptureThread
-
+        print("robottype", robottype)
         # Set camera calibration info
         if robottype == 'arlo':
             self.imageSize = (1280, 720)
