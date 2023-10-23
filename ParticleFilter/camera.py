@@ -459,7 +459,7 @@ if (__name__=='__main__'):
     
     # cam = Camera(0, 'macbookpro', useCaptureThread = True)
     #cam = Camera(0, 'macbookpro', useCaptureThread = False)
-    cam = Camera(0, 'arlo', useCaptureThread = True)
+    # cam = Camera(0, 'arlo', useCaptureThread = True)
     
     # Open a window
     WIN_RF1 = "Camera view"
