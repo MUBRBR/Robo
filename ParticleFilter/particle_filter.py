@@ -5,7 +5,7 @@ class ParticleFilter():
         self.particles = self.create_random_particles(n, min, max)
 
         #Update landmarks dict
-        self.landmarks = dict({5: (0.0, 0.0), 10: (300.0, 0.0)})
+        self.landmarks = dict()
         for key,x,y in landmarkList:
             self.landmarks[key] = (x,y)
 
