@@ -45,7 +45,7 @@ def capPropId(prop):
     return getattr(cv2 if OPCV3 else cv2.cv, ("" if OPCV3 else "CV_") + "CAP_PROP_" + prop)
 
 
-def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=30):
+def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=15):
     """Utility function for setting parameters for the gstreamer camera pipeline"""
     return (
         "libcamerasrc !"
@@ -186,7 +186,7 @@ class Camera(object):
         if piCameraFound:
             # piCamera is available so we use this
             #self.cam = picamera.PiCamera(camidx)
-            self.cam = picamera.PiCamera(camera_num=camidx, resolution=self.imageSize, framerate=30)
+            self.cam = picamera.PiCamera(camera_num=camidx, resolution=self.imageSize, framerate=15)
             
             if not self.useCaptureThread:
                 self.rawCapture = PiRGBArray(self.cam, size=self.cam.resolution)
