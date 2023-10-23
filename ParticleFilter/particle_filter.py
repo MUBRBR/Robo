@@ -71,7 +71,9 @@ class ParticleFilter():
             curr_landmark, curr_dist, curr_angle = objectIDs[i], dists[i], angles[i]
 
             # Get sigma_d and sigma_theta
-            sigma_d = 3 * np.std(np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1)))
+            print(f"sigma D: {np.std(np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, 2])**2, axis=1)))}")
+            # sigma_d = 3 * np.std(np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1)))
+            sigma_d = 3 * np.std(np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, 2])**2, axis=1)))
             sigma_theta = 2 * np.std(self.particles[:, 2])
 
             # Distance-part of weight
