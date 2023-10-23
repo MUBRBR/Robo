@@ -1,5 +1,5 @@
 import cv2
-import camera
+import ParticleFilter.camera as camera
 import numpy as np
 
 import particle_filter as pf
@@ -76,7 +76,7 @@ try:
     cv2.moveWindow(WIN_World, 500, 50)
 
     # Initialize particles
-    num_particles = 10000
+    num_particles = 1000
     landmarks = [[0.0,0.0],[300.0,0.0]]
     particle_filter = pf.ParticleFilter([0,0],[1,1],landmarks,num_particles)
 
