@@ -109,6 +109,7 @@ class Camera(object):
 
         self.useCaptureThread = useCaptureThread
         print("robottype", robottype)
+        robottype = 'arlo'
         # Set camera calibration info
         if robottype == 'arlo':
             self.imageSize = (1280, 720)
