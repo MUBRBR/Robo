@@ -101,7 +101,7 @@ class Camera(object):
     """This class is responsible for doing the image processing. It detects known landmarks and 
     measures distances and orientations to these."""
     
-    def __init__(self, camidx, robottype='macbookpro', useCaptureThread = False):
+    def __init__(self, camidx, robottype='arlo', useCaptureThread = False):
         """Constructor:
              camidx - index of camera
              robottype - specify which robot you are using in order to use the correct camera calibration. 
@@ -457,9 +457,9 @@ class Camera(object):
 if (__name__=='__main__'):
     print("Opening and initializing camera")
     
-    cam = Camera(0, 'macbookpro', useCaptureThread = True)
+    # cam = Camera(0, 'macbookpro', useCaptureThread = True)
     #cam = Camera(0, 'macbookpro', useCaptureThread = False)
-    # cam = Camera(0, 'arlo', useCaptureThread = True)
+    cam = Camera(0, 'arlo', useCaptureThread = True)
     
     # Open a window
     WIN_RF1 = "Camera view"
