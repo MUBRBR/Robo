@@ -101,7 +101,7 @@ class Camera(object):
     """This class is responsible for doing the image processing. It detects known landmarks and 
     measures distances and orientations to these."""
     
-    def __init__(self, camidx, robottype='arlo', useCaptureThread = False):
+    def __init__(self, camidx, robottype='macbookpro', useCaptureThread = False):
         """Constructor:
              camidx - index of camera
              robottype - specify which robot you are using in order to use the correct camera calibration. 
