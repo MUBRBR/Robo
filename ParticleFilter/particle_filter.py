@@ -6,9 +6,8 @@ class ParticleFilter():
 
         #Update landmarks dict
         self.landmarks = dict()
-        for i,(x,y) in enumerate(landmarkList):
-            self.landmarks[i+1] = (x,y)
-
+        for key,x,y in landmarkList:
+            self.landmarks[key] = (x,y)
 
     def create_random_particles(self, n, min, max): 
         particles = np.empty([n, 4])
