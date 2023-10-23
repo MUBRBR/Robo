@@ -62,11 +62,11 @@ class CaptureThread(threading.Thread):
             if piCameraFound:
                 # Use piCamera
 
-                self.cam.capture(self.rawCapture, format="bgr", use_video_port=True)
-                image = self.rawCapture.array
+                # self.cam.capture(self.rawCapture, format="bgr", use_video_port=True)
+                # image = self.rawCapture.array
             
                 # clear the stream in preparation for the next frame
-                self.rawCapture.truncate(0)
+                # self.rawCapture.truncate(0)
                 
                 if sys.version_info[0] > 2:
                     # Python 3.x
