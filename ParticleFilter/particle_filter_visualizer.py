@@ -92,7 +92,7 @@ try:
     # Draw map
     draw_world(est_pose, particle_filter, world)
 
-    cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
+    cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
     while True:
 

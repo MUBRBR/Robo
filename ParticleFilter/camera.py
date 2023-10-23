@@ -457,9 +457,9 @@ class Camera(object):
 if (__name__=='__main__'):
     print("Opening and initializing camera")
     
-    cam = Camera(0, 'macbookpro', useCaptureThread = True)
+    # cam = Camera(0, 'macbookpro', useCaptureThread = True)
     #cam = Camera(0, 'macbookpro', useCaptureThread = False)
-    #cam = Camera(0, 'arlo', useCaptureThread = True)
+    cam = Camera(0, 'arlo', useCaptureThread = True)
     
     # Open a window
     WIN_RF1 = "Camera view"
