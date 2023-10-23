@@ -1,5 +1,5 @@
 import cv2
-import ParticleFilter.camera as camera
+import camera as camera
 import numpy as np
 
 import particle_filter as pf
