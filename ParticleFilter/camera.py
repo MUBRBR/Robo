@@ -45,7 +45,7 @@ def capPropId(prop):
     return getattr(cv2 if OPCV3 else cv2.cv, ("" if OPCV3 else "CV_") + "CAP_PROP_" + prop)
 
 
-def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=15):
+def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=30):
     """Utility function for setting parameters for the gstreamer camera pipeline"""
     return (
         "libcamerasrc !"
@@ -135,13 +135,13 @@ class Camera(object):
 
         # Set camera calibration info
         if robottype == 'arlo':
-            self.imageSize = (1280, 720)
+            self.imageSize = (800, 600)                                                                     # ændret format til det gamle
             #self.intrinsic_matrix = np.asarray([ 7.1305391967046853e+02, 0., 3.1172820723774367e+02, 0.,
             #       7.0564929862291285e+02, 2.5634470978315028e+02, 0., 0., 1. ], dtype = np.float64)
             #self.intrinsic_matrix = np.asarray([ 6.0727040957659040e+02, 0., 3.0757300398967601e+02, 0.,
             #       6.0768864690145904e+02, 2.8935674612358201e+02, 0., 0., 1. ], dtype = np.float64)
-            self.intrinsic_matrix = np.asarray([1687.0, 0., self.imageSize[0] / 2.0, 0.,
-                   1687.0, self.imageSize[1] / 2.0, 0., 0., 1.], dtype = np.float64)
+            self.intrinsic_matrix = np.asarray([629.8, 0., self.imageSize[0] / 2.0, 0.,                     # ændret focal length til vores f værdi
+                   629.8, self.imageSize[1] / 2.0, 0., 0., 1.], dtype = np.float64)
             self.intrinsic_matrix.shape = (3, 3)
             #self.distortion_coeffs = np.asarray([ 1.1911006165076067e-01, -1.0003366233413549e+00,
             #       1.9287903277399834e-02, -2.3728201444308114e-03, -2.8137265581326476e-01 ], dtype = np.float64)
@@ -186,7 +186,7 @@ class Camera(object):
         if piCameraFound:
             # piCamera is available so we use this
             #self.cam = picamera.PiCamera(camidx)
-            self.cam = picamera.PiCamera(camera_num=camidx, resolution=self.imageSize, framerate=15)
+            self.cam = picamera.PiCamera(camera_num=camidx, resolution=self.imageSize, framerate=30)
             
             if not self.useCaptureThread:
                 self.rawCapture = PiRGBArray(self.cam, size=self.cam.resolution)
@@ -251,8 +251,8 @@ class Camera(object):
             self.cam.set(capPropId("FRAME_WIDTH"), self.imageSize[0])
             self.cam.set(capPropId("FRAME_HEIGHT"), self.imageSize[1])
             #self.cam.set(capPropId("BUFFERSIZE"), 1) # Does not work
-            self.cam.set(capPropId("FPS"), 15)
-            # self.cam.set(capPropId("FPS"), 30)
+            #self.cam.set(capPropId("FPS"), 15)
+            self.cam.set(capPropId("FPS"), 30)
         
             time.sleep(1)
         
