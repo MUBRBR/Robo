@@ -53,13 +53,9 @@ def draw_world(est_pose, particle_filter, world):
         cv2.line(world, (x[i], y[i]), b, colours[i], 2)
 
     # Draw landmarks
-    for i, (l_x, l_y) in particle_filter.landmarks.items():
+    for i, (l_x,l_y) in enumerate(particle_filter.landmarks.values()):
         lm = (int(l_x + offsetX), int(ymax - (l_y + offsetY)))
-        # cv2.circle(world, lm, 5, landmark_colors[key - 1], 2)
-        if i == (1,2,3,4):
-            cv2.circle(world, lm, 5, landmark_colors[1], 2)
-        else: 
-            cv2.circle(world, lm, 5, landmark_colors[0], 2)
+        cv2.circle(world, lm, 5, landmark_colors[i], 2)
 
         
 
@@ -83,9 +79,7 @@ try:
 
     # Initialize particles
     num_particles = 10000
-    # landmarks = [(1, 0.0, 0.0),(2, 400.0, 0.0), (3, 0.0, 300.0), (4, 400.0, 300.0)]
-    landmarks = [(1, 0.0, 0.0),(2, 400.0, 0.0), (3, 0.0, 300.0)]
-
+    landmarks = [(1, 0.0, 0.0),(2, 400.0, 0.0), (3, 0.0, 300.0), (4, 400.0, 300.0)]
     particle_filter = pf.ParticleFilter([0,0],[1,1],landmarks, num_particles)
     est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
 

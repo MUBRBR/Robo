@@ -61,8 +61,9 @@ class ParticleFilter():
     def MCL(self, objectIDs, dists, angles, self_localize = False):
         
         #Get all indices that is not a reoccurring objectID
-        unique_indices = [i for i in range(len(objectIDs)) if i == 0 or objectIDs[i - 1] != objectIDs[i]] 
-
+        unique_indices = [i for i in range(len(objectIDs)) if i == 0 and objectIDs[i] in self.landmarks.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in self.landmarks.keys()] 
+        if (len(unique_indices) == 0):
+            return
         #To get the product of weights, the initial weight must be 1
         self.particles[:,3] = 1.0
 
