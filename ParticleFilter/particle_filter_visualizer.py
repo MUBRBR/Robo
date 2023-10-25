@@ -78,7 +78,7 @@ try:
     cv2.moveWindow(WIN_World, 500, 50)
 
     # Initialize particles
-    num_particles = 10000
+    num_particles = 1000
     landmarks = [(1, 0.0, 0.0),(2, 400.0, 0.0), (3, 0.0, 300.0), (4, 400.0, 300.0)]
     particle_filter = pf.ParticleFilter([0,0],[1,1],landmarks, num_particles)
     est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
