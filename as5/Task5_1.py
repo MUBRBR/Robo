@@ -39,9 +39,10 @@ def main():
     objectIDs, dists, angles = cam.detect_aruco_objects(colour)
     
     # makes unique landmarkIDs
-    unique_indices = [i for i in range(len(objectIDs)) 
-                        if i == 0 and objectIDs[i] in landmarkIDS.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS.keys()] 
-    print(f"Zero objects found: {unique_indices}")
+    if not isinstance(objectIDs, type(None)): # if there is actually work to do..
+        unique_indices = [i for i in range(len(objectIDs)) 
+                            if i == 0 and objectIDs[i] in landmarkIDS.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS.keys()] 
+    # print(f"Zero objects found: {unique_indices}")
     
     print(f"Maybe found an object or 2?: {unique_indices}")
     
