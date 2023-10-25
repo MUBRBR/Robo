@@ -14,7 +14,6 @@ import SmartArloNew as arlo
 import particle_filter as pf
 
 
-cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
 # landmarks to find
 # landmarkIDS1 = {
@@ -31,6 +30,7 @@ num_particles = 1000
 particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS, num_particles)
 
 def main():
+    cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
     # Fetch next frame
     colour = cam.get_next_frame()
