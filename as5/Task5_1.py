@@ -37,7 +37,7 @@ def main():
     # Hardcoded 
     # Detect objects
     objectIDs, dists, angles = cam.detect_aruco_objects(colour)
-    
+    unique_indices = []
     # makes unique landmarkIDs
     if not isinstance(objectIDs, type(None)): # if there is actually work to do..
         unique_indices = [i for i in range(len(objectIDs)) 
