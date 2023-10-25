@@ -8,6 +8,7 @@ class ParticleFilter():
         self.landmarks = dict()
         for key,x,y in landmarkList:
             self.landmarks[key] = (x,y)
+        print("landmarks", self.landmarks)
 
     def create_random_particles(self, n, min, max): 
         particles = np.empty([n, 4])
