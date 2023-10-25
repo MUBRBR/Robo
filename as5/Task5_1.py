@@ -59,8 +59,10 @@ def main():
             print(f"Objects in view: {objectIDs}")
             
             # makes unique landmarkIDs
-            unique_indices = [i for i in range(len(objectIDs)) 
-                              if i == 0 and objectIDs[i] in landmarkIDS.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS.keys()] 
+            if not isinstance(objectIDs, type(None)): # if there is actually work to do..
+                unique_indices = [i for i in range(len(objectIDs)) 
+                                if i == 0 and objectIDs[i] in landmarkIDS.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS.keys()] 
+
             print(f"After rotate: {unique_indices}")
             
 
