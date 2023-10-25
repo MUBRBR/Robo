@@ -12,7 +12,7 @@ import framebuffer
 # from ..lib.SmartArloNew import betterRobot as arlo
 import SmartArloNew as arlo
 import particle_filter as pf
-
+from time import sleep
 
 
 # landmarks to find
@@ -53,7 +53,7 @@ def main():
         
         while len(unique_indices) < 1: # indsæt timer så den begynder at køre nye steder for at lede efter tid
             roboarlo.RotateAngle(20)
-            
+            sleep(1)
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(colour)
             print(f"Objects in view: {objectIDs}")
@@ -86,7 +86,7 @@ def main():
 
             particle_filter.add_uncertainty(1,0.1)
 
-        est_pose = pf.estimate_pose() # The estimate of the robots current pose
+        est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
 
 
 if __name__ == '__main__':
