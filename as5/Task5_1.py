@@ -45,14 +45,14 @@ def main():
     # print(f"Zero objects found: {unique_indices}")
     
     print(f"Maybe found an object or 2?: {unique_indices}")
-    
+    roboarlo = arlo.betterRobot()
     while True:
         action = cv2.waitKey(10)
         if action == ord('q'): # Quit
             break
         
         while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
-            arlo.betterRobot.RotateAngle(20)
+            roboarlo.RotateAngle(20)
             
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(colour)
