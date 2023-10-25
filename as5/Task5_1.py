@@ -17,8 +17,8 @@ from time import sleep
 
 # landmarks to find
 landmarkIDS1 = {
-    3: (0.0, 100.0),
-    8: (100.0, 100.0)
+    2: (0.0, 100.0),
+    3: (100.0, 100.0)
 }
 landmarkIDS2 = [(3, 0.0, 100.0), (8, 100.0, 100.0)]
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
@@ -51,7 +51,7 @@ def main():
         if action == ord('q'): # Quit
             break
         
-        while len(unique_indices) < 1: # indsæt timer så den begynder at køre nye steder for at lede efter tid
+        while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
             roboarlo.RotateAngle(20)
             sleep(0.5)
             # Detect objects
