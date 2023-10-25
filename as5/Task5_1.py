@@ -83,8 +83,10 @@ def main():
 
         est_pose = pf.estimate_pose() # The estimate of the robots current pose
 
-    cam.terminateCaptureThread()
 
 if __name__ == '__main__':
     print("abc")
     main()
+    cv2.destroyAllWindows()
+    cam.terminateCaptureThread()
+    
