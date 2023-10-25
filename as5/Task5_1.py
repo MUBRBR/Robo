@@ -53,7 +53,7 @@ def main():
         
         while len(unique_indices) < 1: # indsæt timer så den begynder at køre nye steder for at lede efter tid
             roboarlo.RotateAngle(20)
-            sleep(1)
+            sleep(0.5)
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(colour)
             print(f"Objects in view: {objectIDs}")
@@ -87,7 +87,9 @@ def main():
             particle_filter.add_uncertainty(1,0.1)
 
         est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
+        print(f"Estimated position: {est_pose}")
 
+        
 
 if __name__ == '__main__':
     print("abc")
