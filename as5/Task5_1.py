@@ -3,14 +3,14 @@
 import cv2
 # from ..lib.rrt import RRT
 # from ..lib.grid_occ import GridOccupancyMap
-from ..ParticleFilter import camera as camera
+from ..ParticleFilter.camera import Camera
+# from ..ParticleFilter import camera as camera
 from ..ParticleFilter.framebuffer import *
-from ..ParticleFilter import particle_filter as pf
-from ..lib import SmartArloNew as arlo
+from ..ParticleFilter.particle_filter import ParticleFilter as pf
+from ..lib.SmartArloNew import betterRobot as arlo
 
-arlo = arlo.betterRobot()
 
-cam = camera.Camera(0, 'arlo', useCaptureThread = True)
+cam = Camera(0, 'arlo', useCaptureThread = True)
 
 # landmarks to find
 landmarkIDS = {
@@ -23,7 +23,7 @@ unique_indices = []
 
 # Initialize particles
 num_particles = 1000
-particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS, num_particles)
+particle_filter = pf([0,0],[1,1], landmarkIDS, num_particles)
 
 def main():
     print(f"Zero objects found: {unique_indices}")
