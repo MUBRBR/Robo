@@ -17,7 +17,7 @@ import particle_filter as pf
 cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
 # landmarks to find
-# landmarkIDS = {
+# landmarkIDS1 = {
 #     3: (0.0, 100.0),
 #     8: (100.0, 100.0)
 # }
@@ -31,7 +31,6 @@ num_particles = 1000
 particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS, num_particles)
 
 def main():
-    print(f"Zero objects found: {unique_indices}")
     # Hardcoded 
     # Detect objects
     objectIDs, dists, angles = cam.detect_aruco_objects(colour)
@@ -39,6 +38,7 @@ def main():
     # makes unique landmarkIDs
     unique_indices = [i for i in range(len(objectIDs)) 
                         if i == 0 and objectIDs[i] in landmarkIDS.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS.keys()] 
+    print(f"Zero objects found: {unique_indices}")
     
     print(f"Maybe found an object or 2?: {unique_indices}")
     
