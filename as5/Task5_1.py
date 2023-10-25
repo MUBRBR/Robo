@@ -52,7 +52,7 @@ def main():
             break
         
         while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
-            arlo.RotateAngle(20)
+            arlo.betterRobot.RotateAngle(20)
             
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(colour)
