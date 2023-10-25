@@ -17,10 +17,11 @@ import particle_filter as pf
 cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
 # landmarks to find
-landmarkIDS = {
-    3: (0.0, 100.0),
-    8: (100.0, 100.0)
-}
+# landmarkIDS = {
+#     3: (0.0, 100.0),
+#     8: (100.0, 100.0)
+# }
+landmarkIDS = [(3, 0.0, 100.0), (8, 100.0, 100.0)]
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
 
 unique_indices = []
