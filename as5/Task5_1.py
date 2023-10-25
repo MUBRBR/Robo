@@ -4,7 +4,7 @@ import cv2
 # from ..lib.rrt import RRT
 # from ..lib.grid_occ import GridOccupancyMap
 # from ..ParticleFilter.camera import Camera
-import camera as Camera
+import camera as camera
 # from ..ParticleFilter import camera as camera
 # from ..ParticleFilter.framebuffer import *
 import framebuffer
@@ -14,7 +14,7 @@ import SmartArloNew as arlo
 import particle_filter as pf
 
 
-cam = Camera(0, 'arlo', useCaptureThread = True)
+cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
 # landmarks to find
 landmarkIDS = {
