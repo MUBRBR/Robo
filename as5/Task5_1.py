@@ -27,7 +27,7 @@ unique_indices = []
 
 # Initialize particles
 num_particles = 1000
-particle_filter = pf([0,0],[1,1], landmarkIDS, num_particles)
+particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS, num_particles)
 
 def main():
     print(f"Zero objects found: {unique_indices}")
@@ -70,17 +70,17 @@ def main():
 
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
 
-            pf.MCL(objectIDs, dists, angles)
+            pf.ParticleFilter.MCL(objectIDs, dists, angles)
 
-            pf.add_uncertainty(0.5,0.1)
+            pf.ParticleFilter.add_uncertainty(0.5,0.1)
 
         else:
             # No observation - reset weights to uniform distribution
-            pf.reset_weights()
+            pf.ParticleFilter.reset_weights()
 
-            pf.add_uncertainty(1,0.1)
+            pf.ParticleFilter.add_uncertainty(1,0.1)
 
-        est_pose = pf.estimate_pose() # The estimate of the robots current pose
+        est_pose = pf.ParticleFilter.estimate_pose() # The estimate of the robots current pose
 
     cam.terminateCaptureThread()
 
