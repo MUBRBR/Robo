@@ -80,7 +80,7 @@ try:
     # Initialize particles
     num_particles = 1000
     # landmarks = [(1, 0.0, 0.0),(2, 400.0, 0.0), (3, 0.0, 300.0), (4, 400.0, 300.0)]
-    landmarks = [(1, 0.0, 0.0),(2, 400.0, 0.0), (3, 0.0, 100.0), (4, 100.0, 100.0)]
+    landmarks = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
 
     particle_filter = pf.ParticleFilter([0,0],[1,1],landmarks, num_particles)
     est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
