@@ -25,7 +25,7 @@ def jet(x):
 
 def draw_world(est_pose, particle_filter, world):
 
-    landmark_colors = [CRED, CGREEN]
+    landmark_colors = [CRED, CGREEN, CBLACK, CBLUE]
 
     particles = particle_filter.particles
 
