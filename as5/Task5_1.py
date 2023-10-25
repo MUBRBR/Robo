@@ -16,18 +16,18 @@ import particle_filter as pf
 
 
 # landmarks to find
-# landmarkIDS1 = {
-#     3: (0.0, 100.0),
-#     8: (100.0, 100.0)
-# }
-landmarkIDS = [(3, 0.0, 100.0), (8, 100.0, 100.0)]
+landmarkIDS1 = {
+    3: (0.0, 100.0),
+    8: (100.0, 100.0)
+}
+landmarkIDS2 = [(3, 0.0, 100.0), (8, 100.0, 100.0)]
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
 
 unique_indices = []
 
 # Initialize particles
 num_particles = 1000
-particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS, num_particles)
+particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS2, num_particles)
 
 def main():
     cam = camera.Camera(0, 'arlo', useCaptureThread = True)
@@ -41,7 +41,7 @@ def main():
     # makes unique landmarkIDs
     if not isinstance(objectIDs, type(None)): # if there is actually work to do..
         unique_indices = [i for i in range(len(objectIDs)) 
-                            if i == 0 and objectIDs[i] in landmarkIDS.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS.keys()] 
+                            if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
     # print(f"Zero objects found: {unique_indices}")
     
     print(f"Maybe found an object or 2?: {unique_indices}")
@@ -61,7 +61,7 @@ def main():
             # makes unique landmarkIDs
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                 unique_indices = [i for i in range(len(objectIDs)) 
-                                if i == 0 and objectIDs[i] in landmarkIDS.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS.keys()] 
+                                if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
 
             print(f"After rotate: {unique_indices}")
             
