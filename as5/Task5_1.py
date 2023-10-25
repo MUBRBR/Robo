@@ -70,17 +70,17 @@ def main():
 
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
 
-            pf.ParticleFilter.MCL(objectIDs, dists, angles)
+            particle_filter.MCL(objectIDs, dists, angles)
 
-            pf.ParticleFilter.add_uncertainty(0.5,0.1)
+            particle_filter.add_uncertainty(0.5,0.1)
 
         else:
             # No observation - reset weights to uniform distribution
-            pf.ParticleFilter.reset_weights()
+            particle_filter.reset_weights()
 
-            pf.ParticleFilter.add_uncertainty(1,0.1)
+            particle_filter.add_uncertainty(1,0.1)
 
-        est_pose = pf.ParticleFilter.estimate_pose() # The estimate of the robots current pose
+        est_pose = pf.estimate_pose() # The estimate of the robots current pose
 
     cam.terminateCaptureThread()
 
