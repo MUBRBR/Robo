@@ -38,9 +38,9 @@ def main():
         cv2.namedWindow(WIN_RF1)
         cv2.moveWindow(WIN_RF1, 50, 50)
         
-        # Fetch next frame
-        colour = cam.get_next_frame()
-        cv2.imshow(WIN_RF1, colour)
+        # # Fetch next frame
+        # colour = cam.get_next_frame()
+        # cv2.imshow(WIN_RF1, colour)
         
         # Hardcoded 
         # Detect objects
@@ -65,8 +65,10 @@ def main():
             
             while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
                 roboarlo.RotateAngle(20)
+                sleep(0.25)
+                
                 colour = cam.get_next_frame()
-                sleep(0.5)
+                cv2.imshow(WIN_RF1, colour)
                 # Detect objects
                 objectIDs, dists, angles = cam.detect_aruco_objects(colour)
                 print(f"Objects in view: {objectIDs}")
