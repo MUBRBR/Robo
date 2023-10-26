@@ -204,7 +204,7 @@ def main():
 
                 actualRotation = rotation - estPoseRadtoAng
                 print(f"rotation angle - est: {actualRotation}")
-                # roboarlo.RotateAngle(actualRotation)
+                roboarlo.RotateAngle(rotation)
             
                 # roboarlo.DriveVector(Drive_dist)
                 
