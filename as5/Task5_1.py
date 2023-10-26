@@ -15,12 +15,13 @@ import particle_filter as pf
 from time import sleep
 
 
+
 # landmarks to find
 landmarkIDS1 = {
-    2: (0.0, 100.0),
-    3: (100.0, 100.0)
+    1: (0.0, 300.0),
+    2: (100.0, 300.0)
 }
-landmarkIDS2 = [(3, 0.0, 100.0), (8, 100.0, 100.0)]
+landmarkIDS2 = [(1, 0.0, 300.0), (2, 100.0, 300.0)]
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
 
 unique_indices = []
