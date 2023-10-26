@@ -103,7 +103,7 @@ def main():
         
         # Fetch next frame
         colour = cam.get_next_frame()
-        cv2.imshow(WIN_RF1, colour)
+        # cv2.imshow(WIN_RF1, colour)
         
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
@@ -131,7 +131,7 @@ def main():
         while True:
             action = cv2.waitKey(10)
             colour = cam.get_next_frame()
-            cv2.imshow(WIN_RF1, colour)
+            # cv2.imshow(WIN_RF1, colour)
             
             
             if action == ord('q'): # Quit
