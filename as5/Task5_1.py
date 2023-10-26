@@ -161,7 +161,8 @@ def main():
                 if (len(unique_indices) == 1):
                     while(particle_filter.evaluate_pose() < 10):
                         particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
-
+                        est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
+                        print(f"Est Pose while searching: {est_pose}\n")
 
                 print(f"After rotate: {unique_indices}")
                 
