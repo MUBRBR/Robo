@@ -65,7 +65,7 @@ def main():
         world = np.zeros((500,500,3), dtype=np.uint8)
 
         # Draw map
-        # pfv.draw_world(est_pose, particle_filter, world)
+        pfv.draw_world(est_pose, particle_filter, world)
         
         # makes unique landmarkIDs
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
