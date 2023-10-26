@@ -149,16 +149,19 @@ def main():
                 # Detect objects
                 objectIDs, dists, angles = cam.detect_aruco_objects(colour)
                 print(f"Objects in view: {objectIDs}")
-                if (len(objectIDs) == 1):
-                    while(particle_filter.evaluate_pose() < 10):
-                        particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
-                    
-                    
+                
+                
                     
                 # makes unique landmarkIDs
                 if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                     unique_indices = [i for i in range(len(objectIDs)) 
                                     if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
+                    
+                    
+                if (len(unique_indices) == 1):
+                    while(particle_filter.evaluate_pose() < 10):
+                        particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
+
 
                 print(f"After rotate: {unique_indices}")
                 
