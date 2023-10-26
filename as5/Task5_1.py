@@ -168,7 +168,7 @@ def main():
 
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
 
-                particle_filter.MCL(objectIDs, dists, angles)
+                particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
 
                 particle_filter.add_uncertainty(0.5,0.1)
 
