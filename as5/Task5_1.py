@@ -160,7 +160,7 @@ def main():
 
 
 
-            # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+            print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
 
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
 
@@ -185,13 +185,13 @@ def main():
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
             if (particle_filter.evaluate_pose() < 5):
-                print(f"LandmarkIDs1 {landmarkIDS1}")
-                print(f"LandmarkIDs1[0] {landmarkIDS1[0]}")
-                print(f"LandmarkIDs1[1] {landmarkIDS1[1]}")
-                print(f"LandmarkIDs1[0][0] {landmarkIDS1[0][0]}")
+                print(f"LandmarkIDs2 {landmarkIDS2}")
+                print(f"LandmarkIDs2[0] {landmarkIDS2[0]}")
+                print(f"LandmarkIDs2[1] {landmarkIDS2[1]}")
+                print(f"LandmarkIDs2[0][0] {landmarkIDS2[0][0]}")
                 
-                print(f"Vector to drive: {np.mean(landmarkIDS1[0][0] - landmarkIDS1[1][0]),np.mean(landmarkIDS1[0][1]- landmarkIDS1[1][1])}")
-                roboarlo.DriveVector(np.mean(landmarkIDS1[0][0] - landmarkIDS1[1][0]), np.mean(landmarkIDS1[0][1]- landmarkIDS1[1][1]))
+                print(f"Vector to drive: {np.mean(landmarkIDS2[0][1] - landmarkIDS2[1][1]),np.mean(landmarkIDS2[0][2]- landmarkIDS2[1][2])}")
+                roboarlo.DriveVector(np.mean(landmarkIDS2[0][1] - landmarkIDS2[1][1]), np.mean(landmarkIDS2[0][2]- landmarkIDS2[1][2]))
                 return
     finally: 
         # Make sure to clean up even if an exception occurred
