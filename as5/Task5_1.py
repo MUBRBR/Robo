@@ -189,9 +189,9 @@ def main():
                 print(f"LandmarkIDs2[0] {landmarkIDS2[0]}")
                 print(f"LandmarkIDs2[1] {landmarkIDS2[1]}")
                 print(f"LandmarkIDs2[0][0] {landmarkIDS2[0][0]}")
-                
-                print(f"Vector to drive: {np.mean(landmarkIDS2[0][1] - landmarkIDS2[1][1]),np.mean(landmarkIDS2[0][2]- landmarkIDS2[1][2])}")
-                roboarlo.DriveVector(np.mean(landmarkIDS2[0][1] - landmarkIDS2[1][1]), np.mean(landmarkIDS2[0][2]- landmarkIDS2[1][2]))
+                vectorToDrive = np.mean(landmarkIDS2[0][1] - landmarkIDS2[1][1]), np.mean(landmarkIDS2[0][2]- landmarkIDS2[1][2])
+                print(f"Vector to drive: {np.mean(landmarkIDS2[0][1] - landmarkIDS2[1][1]), np.mean(landmarkIDS2[0][2]- landmarkIDS2[1][2])}")
+                roboarlo.DriveVector(1,1)
                 return
     finally: 
         # Make sure to clean up even if an exception occurred
