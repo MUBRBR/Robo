@@ -213,6 +213,7 @@ def main():
                 vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
                 angle = arlo.angle_between_vectors(vec1, vec2)
+                print(f"Est Pose x, y: {est_pose[0,1]}")
                 print(f"\n\nVec1: {vec1}")
                 print(f"Vec2: {vec2}")
                 print(f"angle: {angle}\n\n")
