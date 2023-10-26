@@ -185,7 +185,7 @@ def main():
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
             if (particle_filter.evaluate_pose() < 5):
-                vectorToDrive = (np.mean(landmarkIDS2[0][1], landmarkIDS2[1][1]), np.mean(landmarkIDS2[0][2], landmarkIDS2[1][2]))
+                vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
                 print(f"\n\nEstimated position: {est_pose}")
                 print(f"\n\nVector to drive: {vectorToDrive}")
                 Drive_dist = (vectorToDrive - est_pose)/100
