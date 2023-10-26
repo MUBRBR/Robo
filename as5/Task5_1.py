@@ -9,6 +9,7 @@ from time import sleep
 import math
 
 
+
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
 
 # unique_indices = []
@@ -189,23 +190,34 @@ def main():
             # If we are somewhat certain of where we are, then drive to given coordinate.
             if (particle_filter.evaluate_pose() < 5):
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
-                print(f"\n\nEstimated position[0],[1]: {est_pose[0], est_pose[1]}")
+                # print(f"\n\nEstimated position[0],[1]: {est_pose[0], est_pose[1]}")
                 print(f"\n\nVector to drive: {vectorToDrive}")
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
                 print(f"\n\n Drive_dist: {Drive_dist} \n\n")
                 
-                print(f"\n\nestpose radian: {est_pose[2]}\n\n")
-                estPoseRadtoAng = math.degrees(est_pose[2])
-                print(f"\n\nestpose angle: {estPoseRadtoAng}\n\n")
+                # print(f"\n\nestpose radian: {est_pose[2]}\n\n")
+                # estPoseRadtoAng = math.degrees(est_pose[2])
+                # print(f"\n\nestpose angle: {estPoseRadtoAng}\n\n")
                 
-                rotation = np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) )))
-                rotation = math.degrees(rotation)
-                print(f"rotation angle: {rotation}")
+                # rotation = np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) )))
+                # rotation = math.degrees(rotation)
+                # print(f"rotation angle: {rotation}")
 
-                actualRotation = rotation - estPoseRadtoAng
-                print(f"rotation angle - est: {actualRotation}")
-                roboarlo.RotateAngle(rotation)
-            
+                # actualRotation = rotation - estPoseRadtoAng
+                # print(f"rotation angle - est: {actualRotation}")
+                # roboarlo.RotateAngle(rotation)
+                
+                
+                
+                middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
+                vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
+                vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
+                angle = arlo.angle_between_vectors(vec1, vec2)
+                print(f"\n\nVec1: {vec1}")
+                print(f"Vec2: {vec2}")
+                print(f"angle: {angle}\n\n")
+                
+                roboarlo.RotateAngle(angle)
                 # roboarlo.DriveVector(Drive_dist)
                 
                 return
