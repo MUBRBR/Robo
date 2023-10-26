@@ -116,8 +116,7 @@ def main():
         # Allocate space for world map
         world = np.zeros((500,500,3), dtype=np.uint8)
 
-        # Draw map
-        draw_world(est_pose, particle_filter, world)
+        
         
         # makes unique landmarkIDs
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
@@ -175,9 +174,16 @@ def main():
 
                 particle_filter.add_uncertainty(1,0.1)
 
+            # estimate pose
             est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
             # print(f"Estimated position: {est_pose}")
             
+            # Draw map
+            draw_world(est_pose, particle_filter, world)
+            # Show world
+            cv2.imshow(WIN_World, world)
+            
+            # If we are somewhat certain of where we are, then drive to given coordinate.
             if (particle_filter.evaluate_pose() < 5):
                 print(f"Vector to drive: {np.mean(unique_indices[0][0] - unique_indices[1][0]),np.mean(unique_indices[0][1]- unique_indices[1][1])}")
                 roboarlo.DriveVector(np.mean(unique_indices[0][0] - unique_indices[1][0]),np.mean(unique_indices[0][1]- unique_indices[1][1]))
