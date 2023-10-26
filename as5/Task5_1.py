@@ -103,7 +103,7 @@ def main():
         
         # Fetch next frame
         colour = cam.get_next_frame()
-        # cv2.imshow(WIN_RF1, colour)
+        cv2.imshow(WIN_RF1, colour)
         
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
@@ -117,7 +117,7 @@ def main():
         world = np.zeros((500,500,3), dtype=np.uint8)
 
         # Draw map
-        # draw_world(est_pose, particle_filter, world)
+        draw_world(est_pose, particle_filter, world)
         
         # makes unique landmarkIDs
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
@@ -177,7 +177,11 @@ def main():
 
             est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
             # print(f"Estimated position: {est_pose}")
-    
+            
+            if (particle_filter.evaluate_pose() < 5):
+                print(f"Vector to drive: {np.mean(unique_indices[0][0] - unique_indices[1][0]),np.mean(unique_indices[0][1]- unique_indices[1][1])}")
+                roboarlo.DriveVector(np.mean(unique_indices[0][0] - unique_indices[1][0]),np.mean(unique_indices[0][1]- unique_indices[1][1]))
+            
     finally: 
         # Make sure to clean up even if an exception occurred
         
