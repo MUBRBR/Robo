@@ -202,8 +202,10 @@ def main():
                 rotation = math.degrees(rotation)
                 print(f"rotation angle: {rotation}")
 
-                print(f"rotation angle - est: {rotation- est_pose[2]}")
-                # roboarlo.RotateAngle(rotation- est_pose[2])
+                actualRotation = rotation - estPoseRadtoAng
+                print(f"rotation angle - est: {actualRotation}")
+                roboarlo.RotateAngle(actualRotation)
+            
                 # roboarlo.DriveVector(Drive_dist)
                 
                 return
