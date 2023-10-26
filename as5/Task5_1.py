@@ -137,7 +137,9 @@ def main():
                 break
             
             while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
-                roboarlo.RotateAngle(20)
+                # roboarlo.RotateAngle(20)
+                roboarlo.RotateVector((1,0))
+
                 sleep(0.5)
                 
                 colour = cam.get_next_frame()
@@ -190,7 +192,8 @@ def main():
                 print(f"\n\nVector to drive: {vectorToDrive}")
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
                 print(f"\n\n Drive_dist: {Drive_dist} \n\n")
-                roboarlo.RotateVector(Drive_dist)
+                
+                roboarlo.RotateVector((1,0))
                 roboarlo.DriveVector(Drive_dist)
                 
                 return
