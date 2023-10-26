@@ -1,5 +1,5 @@
 
-
+import numpy as np
 import cv2
 # from ..lib.rrt import RRT
 # from ..lib.grid_occ import GridOccupancyMap
@@ -9,6 +9,7 @@ import camera as camera
 # from ..ParticleFilter.framebuffer import *
 import framebuffer
 # from ..ParticleFilter.particle_filter import ParticleFilter as pf
+import particle_filter_visualizer as pfv
 # from ..lib.SmartArloNew import betterRobot as arlo
 import SmartArloNew as arlo
 import particle_filter as pf
@@ -16,44 +17,65 @@ from time import sleep
 
 
 
-# landmarks to find
-landmarkIDS1 = {
-    1: (0.0, 300.0),
-    2: (100.0, 300.0)
-}
-landmarkIDS2 = [(1, 0.0, 300.0), (2, 100.0, 300.0)]
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
 
-unique_indices = []
+# unique_indices = []
 
-# Initialize particles
-num_particles = 1000
-particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS2, num_particles)
 
 def main():
     try:
-        cam = camera.Camera(0, 'arlo', useCaptureThread = True)
+        # landmarks to find
+        landmarkIDS1 = {
+            1: (0.0, 300.0),
+            2: (100.0, 300.0)
+        }
+        # double landmarks because bad code needs landmarks as dict + as list.
+        landmarkIDS2 = [(1, 0.0, 300.0), (2, 100.0, 300.0)]
         
+        
+        
+        # create robo object
+        roboarlo = arlo.betterRobot()
+        
+        # init windows
         WIN_RF1 = "Robot view"
         cv2.namedWindow(WIN_RF1)
         cv2.moveWindow(WIN_RF1, 50, 50)
+        
+        WIN_World = "World view"
+        cv2.namedWindow(WIN_World)
+        cv2.moveWindow(WIN_World, 500, 50)
+        
+        # init cam
+        cam = camera.Camera(0, 'arlo', useCaptureThread = True)
         
         # Fetch next frame
         colour = cam.get_next_frame()
         cv2.imshow(WIN_RF1, colour)
         
-        # Hardcoded 
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
         unique_indices = []
+        
+        # Initialize particles
+        num_particles = 1000
+        particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS2, num_particles)
+        
+        # Allocate space for world map
+        world = np.zeros((500,500,3), dtype=np.uint8)
+
+        # Draw map
+        pfv.draw_world(est_pose, particle_filter, world)
+        
         # makes unique landmarkIDs
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
             unique_indices = [i for i in range(len(objectIDs)) 
                                 if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
+        
         # print(f"Zero objects found: {unique_indices}")
         
         print(f"Maybe found an object or 2?: {unique_indices}")
-        roboarlo = arlo.betterRobot()
+        
         while True:
             action = cv2.waitKey(10)
             colour = cam.get_next_frame()
