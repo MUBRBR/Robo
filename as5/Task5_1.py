@@ -6,7 +6,7 @@ import framebuffer
 import SmartArloNew as arlo
 import particle_filter as pf
 from time import sleep
-
+import math
 
 
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
@@ -196,6 +196,7 @@ def main():
                 
                 rotation = (np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) ))))
                 print(f"rotation {rotation}")
+                rotation = math.radians(rotation)
                 roboarlo.RotateAngle(rotation)
                 roboarlo.DriveVector(Drive_dist)
                 
