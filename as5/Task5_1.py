@@ -20,17 +20,17 @@ from time import sleep
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
 
 # unique_indices = []
+# landmarks to find
+landmarkIDS1 = {
+    1: (0.0, 300.0),
+    2: (100.0, 300.0)
+}
+# double landmarks because bad code needs landmarks as dict + as list.
+landmarkIDS2 = [(1, 0.0, 300.0), (2, 100.0, 300.0)]
 
 
 def main():
     try:
-        # landmarks to find
-        landmarkIDS1 = {
-            1: (0.0, 300.0),
-            2: (100.0, 300.0)
-        }
-        # double landmarks because bad code needs landmarks as dict + as list.
-        landmarkIDS2 = [(1, 0.0, 300.0), (2, 100.0, 300.0)]
         
         
         
@@ -65,7 +65,7 @@ def main():
         world = np.zeros((500,500,3), dtype=np.uint8)
 
         # Draw map
-        pfv.draw_world(est_pose, particle_filter, world)
+        # pfv.draw_world(est_pose, particle_filter, world)
         
         # makes unique landmarkIDs
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
@@ -109,7 +109,7 @@ def main():
 
 
 
-            print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+            # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
 
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
 
@@ -124,7 +124,7 @@ def main():
                 particle_filter.add_uncertainty(1,0.1)
 
             est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
-            print(f"Estimated position: {est_pose}")
+            # print(f"Estimated position: {est_pose}")
     
     finally: 
         # Make sure to clean up even if an exception occurred
