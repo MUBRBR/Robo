@@ -195,8 +195,8 @@ def main():
                 print(f"\n\n Drive_dist: {Drive_dist} \n\n")
                 
                 rotation = np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) )))
-                print(f"rotation {rotation}")
                 rotation = math.radians(rotation)
+                print(f"rotation angle: {rotation}")
                 roboarlo.RotateAngle(rotation)
                 roboarlo.DriveVector(Drive_dist)
                 
