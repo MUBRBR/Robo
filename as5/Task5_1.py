@@ -138,7 +138,7 @@ def main():
             
             while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
                 # roboarlo.RotateAngle(20)
-                roboarlo.RotateAngle(30)
+                roboarlo.RotateAngle(90)
 
 
                 sleep(0.5)
@@ -194,7 +194,9 @@ def main():
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
                 print(f"\n\n Drive_dist: {Drive_dist} \n\n")
                 
-                roboarlo.RotateAngle((np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) )))))
+                rotation = (np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) ))))
+                print(f"rotation {rotation}")
+                roboarlo.RotateAngle(rotation)
                 roboarlo.DriveVector(Drive_dist)
                 
                 return
