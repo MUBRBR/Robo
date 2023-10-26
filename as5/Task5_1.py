@@ -200,8 +200,10 @@ def main():
                 
                 rotation = np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) )))
                 rotation = math.degrees(rotation)
-                print(f"rotation angle: {rotation- est_pose[2]}")
-                roboarlo.RotateAngle(rotation- est_pose[2])
+                print(f"rotation angle: {rotation}")
+
+                print(f"rotation angle - est: {rotation- est_pose[2]}")
+                # roboarlo.RotateAngle(rotation- est_pose[2])
                 # roboarlo.DriveVector(Drive_dist)
                 
                 return
