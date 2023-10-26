@@ -137,19 +137,24 @@ def main():
             if action == ord('q'): # Quit
                 break
             
-            while len(unique_indices) < 1: # indsæt timer så den begynder at køre nye steder for at lede efter tid
-                # roboarlo.RotateAngle(20)
-                roboarlo.RotateAngle(40)
-
-
+            while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
+                roboarlo.RotateAngle(20)
                 sleep(0.5)
+                
+
+
                 
                 colour = cam.get_next_frame()
                 cv2.imshow(WIN_RF1, colour)
                 # Detect objects
                 objectIDs, dists, angles = cam.detect_aruco_objects(colour)
                 print(f"Objects in view: {objectIDs}")
-                
+                if (len(objectIDs) == 1):
+                    while(particle_filter.evaluate_pose() < 10):
+                        particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
+                    
+                    
+                    
                 # makes unique landmarkIDs
                 if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                     unique_indices = [i for i in range(len(objectIDs)) 
@@ -184,11 +189,12 @@ def main():
             
             # Draw map
             draw_world(est_pose, particle_filter, world)
+            
             # Show world
             cv2.imshow(WIN_World, world)
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
-            if (particle_filter.evaluate_pose() < 1):
+            if (particle_filter.evaluate_pose() < 2):
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
                 # print(f"\n\nEstimated position[0],[1]: {est_pose[0], est_pose[1]}")
                 print(f"\n\nVector to drive: {vectorToDrive}")
