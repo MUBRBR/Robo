@@ -40,7 +40,7 @@ def main():
         
         # Fetch next frame
         colour = cam.get_next_frame()
-       
+        cv2.imshow(WIN_RF1, colour)
         
         # Hardcoded 
         # Detect objects
@@ -65,7 +65,7 @@ def main():
             
             while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
                 roboarlo.RotateAngle(20)
-                sleep(0.25)
+                sleep(0.5)
                 
                 colour = cam.get_next_frame()
                 cv2.imshow(WIN_RF1, colour)
