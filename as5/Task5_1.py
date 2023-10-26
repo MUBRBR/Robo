@@ -192,6 +192,8 @@ def main():
                 print(f"\n\n Drive_dist: {Drive_dist} \n\n")
                 # roboarlo.RotateVector(Drive_dist)
                 # roboarlo.DriveVector(Drive_dist)
+                roboarlo.AddDest(Drive_dist)
+
                 roboarlo.GoToDest(Drive_dist)
                 return
     finally: 
