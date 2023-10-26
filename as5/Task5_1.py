@@ -185,9 +185,13 @@ def main():
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
             if (particle_filter.evaluate_pose() < 5):
-                vectorToDrive = (np.mean(landmarkIDS2[0][1] - landmarkIDS2[1][1]), np.mean(landmarkIDS2[0][2]- landmarkIDS2[1][2]))
-                print(f"\n \n Vector to drive \n\n: {vectorToDrive}")
-                roboarlo.DriveVector(vectorToDrive)
+                vectorToDrive = (np.mean(landmarkIDS2[0][1], landmarkIDS2[1][1]), np.mean(landmarkIDS2[0][2], landmarkIDS2[1][2]))
+                print(f"\n\nEstimated position: {est_pose}")
+                print(f"\n\nVector to drive: {vectorToDrive}")
+                Drive_dist = (vectorToDrive - est_pose)/100
+                print(f"\n\n Drive_dist: {Drive_dist} \n\n")
+
+                roboarlo.DriveVector(Drive_dist)
                 return
     finally: 
         # Make sure to clean up even if an exception occurred
