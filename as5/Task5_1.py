@@ -38,9 +38,9 @@ def main():
         cv2.namedWindow(WIN_RF1)
         cv2.moveWindow(WIN_RF1, 50, 50)
         
-        # # Fetch next frame
-        # colour = cam.get_next_frame()
-        # cv2.imshow(WIN_RF1, colour)
+        # Fetch next frame
+        colour = cam.get_next_frame()
+       
         
         # Hardcoded 
         # Detect objects
