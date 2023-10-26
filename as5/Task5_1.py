@@ -190,7 +190,7 @@ def main():
                 print(f"\n\nVector to drive: {vectorToDrive}")
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
                 print(f"\n\n Drive_dist: {Drive_dist} \n\n")
-                # roboarlo.RotateVector(Drive_dist-90)
+                roboarlo.RotateVector(Drive_dist-90)
                 roboarlo.DriveVector(Drive_dist)
                 
                 return
