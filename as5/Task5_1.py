@@ -160,7 +160,7 @@ def main():
                     
                 if (len(unique_indices) == 1):
                     print("\n\n\nHERE HERE HERE \n\n\n")
-                    while(particle_filter.evaluate_pose() < 10):
+                    while(particle_filter.evaluate_pose() > 10):
                         print("\n\n\nHERE HERE HERE 22222 \n\n\n")
                         
                         particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
