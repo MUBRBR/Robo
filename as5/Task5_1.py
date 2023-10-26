@@ -32,7 +32,11 @@ particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS2, num_particles)
 
 def main():
     cam = camera.Camera(0, 'arlo', useCaptureThread = True)
-
+    
+    WIN_RF1 = "Robot view"
+    cv2.namedWindow(WIN_RF1)
+    cv2.moveWindow(WIN_RF1, 50, 50)
+    
     # Fetch next frame
     colour = cam.get_next_frame()
     # Hardcoded 
