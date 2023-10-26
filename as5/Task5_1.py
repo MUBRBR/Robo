@@ -185,8 +185,12 @@ def main():
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
             if (particle_filter.evaluate_pose() < 5):
-                print(f"Vector to drive: {np.mean(unique_indices[0][0] - unique_indices[1][0]),np.mean(unique_indices[0][1]- unique_indices[1][1])}")
-                roboarlo.DriveVector(np.mean(unique_indices[0][0] - unique_indices[1][0]),np.mean(unique_indices[0][1]- unique_indices[1][1]))
+                print(f"uniqueindices: {unique_indices}")
+                print(f"uniqueindices[0]: {unique_indices[0]}")
+                print(f"uniqueindices[1]: {unique_indices[1]}")
+                print(f"uniqueindices[0][0]: {unique_indices[0][0]}")
+                # print(f"Vector to drive: {np.mean(unique_indices[0][0] - unique_indices[1][0]),np.mean(unique_indices[0][1]- unique_indices[1][1])}")
+                # roboarlo.DriveVector(np.mean(unique_indices[0][0] - unique_indices[1][0]), np.mean(unique_indices[0][1]- unique_indices[1][1]))
             
     finally: 
         # Make sure to clean up even if an exception occurred
