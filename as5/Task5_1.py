@@ -49,11 +49,14 @@ def main():
     roboarlo = arlo.betterRobot()
     while True:
         action = cv2.waitKey(10)
+        colour = cam.get_next_frame()
+        
         if action == ord('q'): # Quit
             break
         
         while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
             roboarlo.RotateAngle(20)
+            colour = cam.get_next_frame()
             sleep(0.5)
             # Detect objects
             objectIDs, dists, angles = cam.detect_aruco_objects(colour)
