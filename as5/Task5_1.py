@@ -137,7 +137,9 @@ def main():
                 break
             
             while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
-                roboarlo.RotateAngle(20)
+                # roboarlo.RotateAngle(20)
+                roboarlo.RotateAngle(30)
+
 
                 sleep(0.5)
                 
