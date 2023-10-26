@@ -194,10 +194,14 @@ def main():
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
                 print(f"\n\n Drive_dist: {Drive_dist} \n\n")
                 
+                print(f"\n\nestpose radian: {est_pose[2]}\n\n")
+                estPoseRadtoAng = math.radians(est_pose[2])
+                print(f"\n\nestpose angle: {estPoseRadtoAng}\n\n")
+                
                 rotation = np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) )))
                 rotation = math.radians(rotation)
-                print(f"rotation angle: {rotation}")
-                roboarlo.RotateAngle(rotation)
+                print(f"rotation angle: {rotation- est_pose[2]}")
+                roboarlo.RotateAngle(rotation- est_pose[2])
                 roboarlo.DriveVector(Drive_dist)
                 
                 return
