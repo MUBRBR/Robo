@@ -188,7 +188,7 @@ def main():
             cv2.imshow(WIN_World, world)
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
-            if (particle_filter.evaluate_pose() < 5):
+            if (particle_filter.evaluate_pose() < 2):
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
                 # print(f"\n\nEstimated position[0],[1]: {est_pose[0], est_pose[1]}")
                 print(f"\n\nVector to drive: {vectorToDrive}")
