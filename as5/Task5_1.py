@@ -193,7 +193,7 @@ def main():
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
                 print(f"\n\n Drive_dist: {Drive_dist} \n\n")
                 
-                roboarlo.RotateVector((1,0))
+                roboarlo.RotateAngle((np.arcsin(Drive_dist[1]/(np.sqrt((Drive_dist[0]**2) + (Drive_dist[1]**2) )))))
                 roboarlo.DriveVector(Drive_dist)
                 
                 return
