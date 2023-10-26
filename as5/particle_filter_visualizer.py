@@ -124,7 +124,7 @@ try:
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
 
-        # print(f"Meassure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+        print(f"Meassure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
 
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
 

@@ -1,16 +1,8 @@
 
 import numpy as np
 import cv2
-# from ..lib.rrt import RRT
-# from ..lib.grid_occ import GridOccupancyMap
-# from ..ParticleFilter.camera import Camera
 import camera as camera
-# from ..ParticleFilter import camera as camera
-# from ..ParticleFilter.framebuffer import *
 import framebuffer
-# from ..ParticleFilter.particle_filter import ParticleFilter as pf
-# from particle_filter_visualizer import draw_world 
-# from ..lib.SmartArloNew import betterRobot as arlo
 import SmartArloNew as arlo
 import particle_filter as pf
 from time import sleep
@@ -27,7 +19,67 @@ landmarkIDS1 = {
 }
 # double landmarks because bad code needs landmarks as dict + as list.
 landmarkIDS2 = [(1, 0.0, 300.0), (2, 100.0, 300.0)]
+# Some color constants in BGR format
+CRED = (0, 0, 255)
+CGREEN = (0, 255, 0)
+CBLUE = (255, 0, 0)
+CCYAN = (255, 255, 0)
+CYELLOW = (0, 255, 255)
+CMAGENTA = (255, 0, 255)
+CWHITE = (255, 255, 255)
+CBLACK = (0, 0, 0)
 
+def jet(x):
+    """Colour map for drawing particles. This function determines the colour of 
+    a particle from its weight."""
+    r = (x >= 3.0/8.0 and x < 5.0/8.0) * (4.0 * x - 3.0/2.0) + (x >= 5.0/8.0 and x < 7.0/8.0) + (x >= 7.0/8.0) * (-4.0 * x + 9.0/2.0)
+    g = (x >= 1.0/8.0 and x < 3.0/8.0) * (4.0 * x - 1.0/2.0) + (x >= 3.0/8.0 and x < 5.0/8.0) + (x >= 5.0/8.0 and x < 7.0/8.0) * (-4.0 * x + 7.0/2.0)
+    b = (x < 1.0/8.0) * (4.0 * x + 1.0/2.0) + (x >= 1.0/8.0 and x < 3.0/8.0) + (x >= 3.0/8.0 and x < 5.0/8.0) * (-4.0 * x + 5.0/2.0)
+
+    return (255.0*r, 255.0*g, 255.0*b)
+
+def draw_world(est_pose, particle_filter, world):
+
+    landmark_colors = [CRED, CGREEN, CBLACK, CBLUE]
+
+    particles = particle_filter.particles
+
+    offsetX = 100
+    offsetY = 250
+    ymax = world.shape[0]
+
+    world[:] = CWHITE
+
+    max_weight = np.max(particles[:, 3])
+
+    # Draw particles
+    particle_positions = particles[:, :2] + np.array([offsetX, offsetY])
+    particle_angles = particles[:, 2]
+
+    x = particle_positions[:, 0].astype(int)
+    y = ymax - particle_positions[:, 1].astype(int)
+    colours = np.array([jet(x) for x in particles[:, 3] / max_weight])
+
+    particle_ends = particle_positions[:, :2] + 15.0 * np.column_stack((np.cos(particle_angles), -np.sin(particle_angles)))
+
+    for i in range(len(particles)):
+        cv2.circle(world, (x[i], y[i]), 2, colours[i], 2)
+        b = (int(particle_ends[i, 0]), int(ymax - particle_ends[i, 1]))
+        cv2.line(world, (x[i], y[i]), b, colours[i], 2)
+
+    # Draw landmarks
+    for i, (l_x,l_y) in enumerate(particle_filter.landmarks.values()):
+        lm = (int(l_x + offsetX), int(ymax - (l_y + offsetY)))
+        cv2.circle(world, lm, 5, landmark_colors[i], 2)
+
+        
+
+    # Draw estimated robot pose
+    a = (int(est_pose[0]) + offsetX, ymax - (int(est_pose[1]) + offsetY))
+    b = (int(est_pose[0] + 15.0 * np.cos(est_pose[2])) + offsetX, ymax - (int(est_pose[1] + 15.0 * np.sin(est_pose[2])) + offsetY))
+
+    cv2.circle(world, a, 5, CMAGENTA, 2)
+    cv2.line(world, a, b, CMAGENTA, 2)
 
 def main():
     try:
