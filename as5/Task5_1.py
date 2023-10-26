@@ -218,7 +218,7 @@ def main():
                 print(f"angle: {angle}\n\n")
                 
                 roboarlo.RotateAngle(angle)
-                # roboarlo.DriveVector(Drive_dist)
+                roboarlo.DriveVector(Drive_dist)
                 
                 return
     finally: 
