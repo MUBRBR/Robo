@@ -9,7 +9,7 @@ import camera as camera
 # from ..ParticleFilter.framebuffer import *
 import framebuffer
 # from ..ParticleFilter.particle_filter import ParticleFilter as pf
-from particle_filter_visualizer import draw_world 
+# from particle_filter_visualizer import draw_world 
 # from ..lib.SmartArloNew import betterRobot as arlo
 import SmartArloNew as arlo
 import particle_filter as pf
@@ -65,7 +65,7 @@ def main():
         world = np.zeros((500,500,3), dtype=np.uint8)
 
         # Draw map
-        draw_world(est_pose, particle_filter, world)
+        # draw_world(est_pose, particle_filter, world)
         
         # makes unique landmarkIDs
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
