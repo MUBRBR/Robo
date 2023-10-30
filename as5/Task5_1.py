@@ -205,7 +205,8 @@ def main():
                     roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
                 else:
                     roboarlo.DriveVector(Drive_dist)
-            
+                
+                start_time = time.time()
                     
                 #-----------------------------------------------------------
                 # kør robot frem og mcl 
@@ -228,7 +229,7 @@ def main():
                     
 
 
-                return
+            
     finally: 
         # Make sure to clean up even if an exception occurred
         
