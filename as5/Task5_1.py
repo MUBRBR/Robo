@@ -125,7 +125,7 @@ def main():
         
         # failsafe to end infinite loop
         seconds = 10
-        # start_time = time.time()
+        start_time = time.time()
         
         
         while True:
