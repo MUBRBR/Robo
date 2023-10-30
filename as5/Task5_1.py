@@ -188,9 +188,9 @@ def main():
                 middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
                 vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
-                angle = arlo.angle_between_vectors(vec1, vec2)
+                angle = -arlo.angle_between_vectors(vec1, vec2)
                 print(f"Est Pose x, y: {(est_pose[0], est_pose[1])}")
-                print(f"Vec1: {vec1}, vec2: {vec2}, angle: {-angle} \n\n")
+                print(f"Vec1: {vec1}, vec2: {vec2}, angle: {angle} \n\n")
                 
                 roboarlo.RotateAngle(angle)
                 particle_filter.move_particles(0, 0, angle - prev_angle)

@@ -137,7 +137,7 @@ class betterRobot():
 
         self.Log(f"I turn {angle} degrees")
 
-        if (angle < 0):
+        if (angle > 0):
             self.arlo.go_diff(turn_speed, turn_speed, 1, 0)
             sleep(turn_time)
         else:
