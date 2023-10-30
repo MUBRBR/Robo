@@ -124,7 +124,7 @@ def main():
         # print(f"Zero objects found: {unique_indices}")
         
         # failsafe to end infinite loop
-        seconds = 10
+        seconds = 30
         start_time = time.time()
         
         
