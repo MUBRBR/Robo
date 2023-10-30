@@ -178,7 +178,7 @@ def main():
             if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) > seconds)):
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
                 # print(f"\n\nEstimated position[0],[1]: {est_pose[0], est_pose[1]}")
-                print(f"\n\nVector to drive: {vectorToDrive}")
+                # print(f"\n\nVector to drive: {vectorToDrive}")
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
  
                 # calculate angle between the vector from robo to LM1 and from robo to middle of LM1 and LM2
@@ -198,13 +198,16 @@ def main():
                 
                 #calculate distance as a int
                 distVecAsLength = np.linalg.norm(Drive_dist)
-                print(f"distVec: {distVecAsLength}")
                 
-                if (distVecAsLength >= 99):
+                if (distVecAsLength >= 0.99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
+                    print(f"distVec/2: {distVecAsLength/2}")
                     roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
                 else:
+                    print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
+                
+                particle_filter.move_particles(est_pose[0], est_pose[1], 0)
                 
                 start_time = time.time()
                     
