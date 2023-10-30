@@ -114,36 +114,6 @@ class ParticleFilter():
         # Define a normalized probability distribution
         probabilities = self.particles[:,3] / np.sum(self.particles[:,3])
 
-        # ekstra part---------------------------------
-        for i in unique_indices:
-            curr_landmark, curr_dist, curr_angle = objectIDs[i], dists[i], angles[i]
-
-            # Get sigma_d and sigma_theta
-
-            sigma_d = 3 * np.std(np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1)))
-            sigma_theta = 2 * np.std(self.particles[:, 2])
-
-            # Distance-part of weight
-            measured_dists = np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1))
-            first_term_d = 1 / (np.sqrt(2 * np.pi * (sigma_d**2)))
-            second_term_d = np.exp(-((measured_dists - curr_dist)**2) / (2 * (sigma_d**2)))
-            weights_d = first_term_d * second_term_d
-
-            # Angle-part of weight
-            e_i_theta = np.column_stack([np.cos(self.particles[:, 2]), np.sin(self.particles[:, 2])])
-            e_i_theta_hat = np.column_stack([-np.sin(self.particles[:, 2]), np.cos(self.particles[:, 2])])
-            e_i_l = (self.landmarks[curr_landmark] - self.particles[:, :2]) / curr_dist
-            theta_i = np.sign(np.sum(e_i_l * e_i_theta_hat, axis=1)) * np.arccos(np.sum(e_i_l * e_i_theta, axis=1))
-            theta_i[np.isnan(theta_i)] = 0.0
-            first_term_theta = 1 / (np.sqrt(2 * np.pi * (sigma_theta**2)))
-            second_term_theta = np.exp(-((curr_angle - theta_i)**2) / (2 * (sigma_theta**2)))
-            weights_theta = first_term_theta * second_term_theta
-
-            #Update particle weight
-            epsilon = 0.00000001 # Hashtag numerical stability
-            weights = weights_d * weights_theta + epsilon
-            self.particles[:, 3] *= weights  # Weight is multiplied onto existing weight, as we consider multiple landmarks
-            # ekstra part---------------------------------
 
         # Now draw new particles:
         selected_indices = np.random.choice(self.particles.shape[0], size=self.particles.shape[0], p=probabilities)
