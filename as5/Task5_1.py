@@ -159,7 +159,7 @@ def main():
                     
             print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
-                particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
+                particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
                 particle_filter.add_uncertainty(0.5,0.1)
             else:
                 # No observation - reset weights to uniform distribution
@@ -193,13 +193,13 @@ def main():
                 print(f"Vec1: {vec1}, vec2: {vec2}, angle: {angle} \n\n")
                 
                 roboarlo.RotateAngle(angle)
-                particle_filter.move_particles(0, 0, angle - prev_angle)
+                particle_filter.move_particles(0, 0, (angle - prev_angle))
                 est_pose = particle_filter.estimate_pose()
                 
                 #calculate distance as a int
                 distVecAsLength = np.linalg.norm(Drive_dist)
                  
-                angle *= -1
+                
 
                 if (distVecAsLength >= 0.99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
@@ -217,7 +217,7 @@ def main():
                 
                 for i in range(0, 50):
                     print(f"Measure of pose: {particle_filter.evaluate_pose()}")
-                    particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
+                    particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
                     particle_filter.add_uncertainty(0.5,0.1)
                     
                 #-----------------------------------------------------------
