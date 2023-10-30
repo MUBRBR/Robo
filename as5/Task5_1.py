@@ -199,7 +199,7 @@ def main():
                 #calculate distance as a int
                 distVecAsLength = np.linalg.norm(Drive_dist)
                  
-                prev_angle *= -1
+                angle *= -1
 
                 if (distVecAsLength >= 0.99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
