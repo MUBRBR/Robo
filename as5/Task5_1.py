@@ -193,7 +193,7 @@ def main():
                 print(f"angle: {angle}\n\n")
                 
                 roboarlo.RotateAngle(angle)
-                # particle_filter.move_particles(0, 0, angle)
+                particle_filter.move_particles(0, 0, angle)
                 est_pose = particle_filter.estimate_pose()
                 
                 #calculate distance as a int
@@ -201,13 +201,15 @@ def main():
                 
                 if (distVecAsLength >= 0.99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
+                    particle_filter.move_particles(Drive_dist[0]/2 - est_pose[0], Drive_dist[1]/2 - est_pose[1], 0)
                     print(f"distVec/2: {distVecAsLength/2}")
                     roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
                 else:
+                    particle_filter.move_particles(Drive_dist[0] - est_pose[0], Drive_dist[1] - est_pose[1], 0)
                     print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
                 
-                # particle_filter.move_particles(est_pose[0], est_pose[1], 0)
+                
                 
                 start_time = time.time()
                     
