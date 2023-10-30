@@ -127,6 +127,8 @@ def main():
         seconds = 30
         start_time = time.time()
         
+        # Creating variable prev_angle
+        prev_angle = 0
         
         while True:
             action = cv2.waitKey(10)
@@ -191,7 +193,7 @@ def main():
                 print(f"Vec1: {vec1}, vec2: {vec2}, angle: {angle} \n\n")
                 
                 roboarlo.RotateAngle(angle)
-                particle_filter.move_particles(0, 0, angle)
+                particle_filter.move_particles(0, 0, angle - prev_angle)
                 est_pose = particle_filter.estimate_pose()
                 
                 #calculate distance as a int
@@ -207,7 +209,7 @@ def main():
                     print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
                 
-                
+                prev_angle = angle
                 
                 start_time = time.time()
                     
