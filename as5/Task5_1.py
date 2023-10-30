@@ -200,6 +200,7 @@ def main():
                 distVecAsLength = np.linalg.norm(Drive_dist)
                 if prev_angle < 0: 
                     prev_angle *= -1
+                    
                 if (distVecAsLength >= 0.99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
                     particle_filter.move_particles(Drive_dist[0]/2 - est_pose[0], Drive_dist[1]/2 - est_pose[1], 0)
