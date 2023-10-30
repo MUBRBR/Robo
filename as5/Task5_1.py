@@ -212,6 +212,11 @@ def main():
                 prev_angle = angle
                 
                 start_time = time.time()
+                
+                for i in range(0, 100):
+                    print(f"Measure of pose: {particle_filter.evaluate_pose()}")
+                    particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
+                    particle_filter.add_uncertainty(0.5,0.1)
                     
                 #-----------------------------------------------------------
                 # kør robot frem og mcl 
