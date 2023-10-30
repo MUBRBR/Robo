@@ -133,7 +133,7 @@ def main():
         while True:
             action = cv2.waitKey(10)
             colour = cam.get_next_frame()
-            # cv2.imshow(WIN_RF1, colour)
+            cv2.imshow(WIN_RF1, colour)
             
             
             if action == ord('q'): # Quit
@@ -160,11 +160,11 @@ def main():
             print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                 particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
-                particle_filter.add_uncertainty(0.1,0.1)
+                particle_filter.add_uncertainty(0.5,0.1)
             else:
                 # No observation - reset weights to uniform distribution
                 particle_filter.reset_weights()
-                particle_filter.add_uncertainty(0.1,0.1)
+                particle_filter.add_uncertainty(1,0.1)
 
             # estimate pose
             est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
@@ -215,10 +215,10 @@ def main():
                 
                 start_time = time.time()
                 
-                for i in range(0, 50):
+                for _ in range(0, 50):
                     print(f"Measure of pose: {particle_filter.evaluate_pose()}")
                     particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
-                    particle_filter.add_uncertainty(0.1,0.1)
+                    particle_filter.add_uncertainty(0.5,0.1)
                     
                 #-----------------------------------------------------------
                 # kør robot frem og mcl 
