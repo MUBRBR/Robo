@@ -7,7 +7,7 @@ import SmartArloNew as arlo
 import particle_filter as pf
 from time import sleep
 import math
-
+import time
 
 
 # landmarkIDs = [(3, 0.0, 100.0), (4, 100.0, 100.0)] #tester
@@ -29,6 +29,8 @@ CYELLOW = (0, 255, 255)
 CMAGENTA = (255, 0, 255)
 CWHITE = (255, 255, 255)
 CBLACK = (0, 0, 0)
+
+
 
 def jet(x):
     """Colour map for drawing particles. This function determines the colour of 
@@ -121,6 +123,10 @@ def main():
         
         # print(f"Zero objects found: {unique_indices}")
         
+        # failsafe to end infinite loop
+        seconds = 10
+        # start_time = time.time()
+        
         
         while True:
             action = cv2.waitKey(10)
@@ -136,6 +142,7 @@ def main():
                 sleep(0.5)
                 colour = cam.get_next_frame()
                 cv2.imshow(WIN_RF1, colour)
+                
                 # Detect objects
                 objectIDs, dists, angles = cam.detect_aruco_objects(colour)
         
@@ -143,32 +150,18 @@ def main():
                 if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                     unique_indices = [i for i in range(len(objectIDs)) 
                                     if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
+                
+                #failsafe time thing
+                if (len(unique_indices) >= 2):
+                    start_time = time.time()
                     
-                    
-                # try MCL while only 1 object in view
-                # if (len(unique_indices) == 1):
-                #     print("\n\n\nHERE HERE HERE \n\n\n")
-                #     while(particle_filter.evaluate_pose() > 10):
-                #         print("\n\n\nHERE HERE HERE 22222 \n\n\n")
-                        
-                #         particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
-                #         est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
-                #         print(f"Est Pose while searching: {est_pose}\n")
-
-
-
             print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
-
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
-
                 particle_filter.MCL(objectIDs, dists, angles, self_localize= True)
-
                 particle_filter.add_uncertainty(0.5,0.1)
-
             else:
                 # No observation - reset weights to uniform distribution
                 particle_filter.reset_weights()
-
                 particle_filter.add_uncertainty(1,0.1)
 
             # estimate pose
@@ -182,14 +175,12 @@ def main():
             cv2.imshow(WIN_World, world)
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
-            if (particle_filter.evaluate_pose() < 2):
+            if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) < seconds)):
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
                 # print(f"\n\nEstimated position[0],[1]: {est_pose[0], est_pose[1]}")
                 print(f"\n\nVector to drive: {vectorToDrive}")
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
  
-                
-                
                 # calculate angle between the vector from robo to LM1 and from robo to middle of LM1 and LM2
                 # This works well IF estimated pose is correct-ish
                 middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
@@ -205,7 +196,6 @@ def main():
                 particle_filter.move_particles(0, 0, angle)
                 est_pose = particle_filter.estimate_pose()
 
-                
                 if (Drive_dist >= 99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
                     roboarlo.DriveVector(Drive_dist/2)
