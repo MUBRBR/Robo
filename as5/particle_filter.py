@@ -88,8 +88,8 @@ class ParticleFilter():
             e_i_theta = np.column_stack([np.cos(self.particles[:, 2]), np.sin(self.particles[:, 2])])
             e_i_theta_hat = np.column_stack([-np.sin(self.particles[:, 2]), np.cos(self.particles[:, 2])])
             e_i_l = (self.landmarks[curr_landmark] - self.particles[:, :2]) / curr_dist
-            theta_i = np.sign(np.sum(e_i_l * e_i_theta_hat, axis=1)) * np.arccos(np.sum(e_i_l * e_i_theta, axis=1)) # anders original
-            # theta_i = np.sign(np.dot(e_i_l, e_i_theta_hat, axis=1)) * np.arccos(np.dot(e_i_l, e_i_theta, axis=1)) # forsøg
+            # theta_i = np.sign(np.sum(e_i_l * e_i_theta_hat, axis=1)) * np.arccos(np.sum(e_i_l * e_i_theta, axis=1)) # anders original
+            theta_i = np.sign(np.dot(e_i_l, e_i_theta_hat, axis=1)) * np.arccos(np.dot(e_i_l, e_i_theta, axis=1)) # forsøg
             theta_i[np.isnan(theta_i)] = 0.0
             first_term_theta = 1 / (np.sqrt(2 * np.pi * (sigma_theta**2))) # Anders original
             # first_term_theta = 1 / (np.sqrt(2 * np.pi * sigma_theta)) #forsøg
