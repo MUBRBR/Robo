@@ -265,15 +265,15 @@ def main():
                  
                 
                 # Multiplying Drive_dist by 100 because the field is in cm's
-                if (distVecAsLength >= 0.99):
-                    # roboarlo.RotateAngle(-angle)  # return back angle
-                    particle_filter.move_particles(Drive_dist[0]*100/2 - est_pose[0], Drive_dist[1]*100/2 - est_pose[1], 0)
-                    print(f"distVec/2: {distVecAsLength/2}")
-                    roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
-                else:
-                    particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
-                    print(f"distVec: {distVecAsLength}")
-                    roboarlo.DriveVector(Drive_dist)
+                # if (distVecAsLength >= 0.99):
+                #     # roboarlo.RotateAngle(-angle)  # return back angle
+                #     particle_filter.move_particles(Drive_dist[0]*100/2 - est_pose[0], Drive_dist[1]*100/2 - est_pose[1], 0)
+                #     print(f"distVec/2: {distVecAsLength/2}")
+                #     roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
+                # else:
+                #     particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
+                #     print(f"distVec: {distVecAsLength}")
+                #     roboarlo.DriveVector(Drive_dist)
                 
                
 
