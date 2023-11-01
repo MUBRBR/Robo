@@ -199,7 +199,7 @@ def main():
                 print(f"robot determined angle {np.degrees(est_pose[2])}")
 
                 # new 
-                new_ang = arlo.angle_between_vectors((est_pose[0], est_pose[1]), vec2)
+                new_ang = arlo.angle_between_vectors(vec2,(est_pose[0], est_pose[1]))
                 print(f"new_ang {new_ang}")
                 # if new_ang < est_pose[2]:
                 #     roboarlo.RotateAngle(-new_ang)
