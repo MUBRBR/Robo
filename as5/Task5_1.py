@@ -142,6 +142,8 @@ def main():
             while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
                 roboarlo.RotateAngle(20)
                 sleep(0.5)
+                
+                action = cv2.waitKey(10)
                 colour = cam.get_next_frame()
                 cv2.imshow(WIN_RF1, colour)
                 
@@ -190,9 +192,9 @@ def main():
                 middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
                 vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
-                angle = -arlo.angle_between_vectors(vec1, vec2)
+                angle = arlo.angle_between_vectors(vec1, vec2)
                 print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
-                print(f"Drive_dist (vector): {Drive_dist}")
+                print(f"Drive_dist (vector):  in cm: {Drive_dist*100}")
                 print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
                 
                 roboarlo.RotateAngle(angle)
@@ -229,6 +231,14 @@ def main():
                 #resetting found landmarks to make it turn around again and find them again but not if really close 
                 if (distVecAsLength > 1):
                     unique_indices = []
+                    # doing the following here because it might already face one of the LM's before rotating in the while loop
+                    objectIDs, dists, angles = cam.detect_aruco_objects(colour)
+                    # makes unique landmarkIDs
+                    if not isinstance(objectIDs, type(None)): # if there is actually work to do..
+                        unique_indices = [i for i in range(len(objectIDs)) 
+                                        if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
+        
+                
                 
     finally: 
         # Make sure to clean up even if an exception occurred
