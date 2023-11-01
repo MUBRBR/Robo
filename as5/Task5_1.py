@@ -96,7 +96,7 @@ def main():
         
         WIN_World = "World view"
         cv2.namedWindow(WIN_World)
-        cv2.moveWindow(WIN_World, 500, 50)
+        cv2.moveWindow(WIN_World, 400, 400)
         
         # init cam
         cam = camera.Camera(0, 'arlo', useCaptureThread = True)
@@ -139,7 +139,7 @@ def main():
             if action == ord('q'): # Quit
                 break
             
-            while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter tid
+            while len(unique_indices) < 2: # indsæt timer så den begynder at køre nye steder for at lede efter x tid
                 roboarlo.RotateAngle(20)
                 sleep(0.5)
                 
@@ -162,7 +162,7 @@ def main():
             # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                 particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
-                particle_filter.add_uncertainty(0.5,0.1)
+                particle_filter.add_uncertainty(0.5,0.1) 
             else:
                 # No observation - reset weights to uniform distribution
                 particle_filter.reset_weights()
@@ -196,6 +196,8 @@ def main():
                 print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
                 print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
+                print(f"robot determined angle {est_pose[2]}")
+
                 
                 roboarlo.RotateAngle(angle)
                 particle_filter.move_particles(0, 0, (angle - prev_angle))
@@ -216,7 +218,6 @@ def main():
                     print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
                 
-                print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 
                 #Setting prev angle as curr angle
                 prev_angle = angle
@@ -230,6 +231,7 @@ def main():
                     particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
                     particle_filter.add_uncertainty(0.5,0.1)
                 
+                print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 #resetting found landmarks to make it turn around again and find them again but not if really close 
                 if (distVecAsLength > 1):
                     unique_indices = []
