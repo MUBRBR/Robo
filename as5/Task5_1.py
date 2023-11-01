@@ -200,6 +200,7 @@ def main():
 
                 # new 
                 new_ang = arlo.angle_between_vectors((est_pose[0], est_pose[1]), vec2)
+                print(f"new_ang {new_ang}")
                 if new_ang < est_pose[2]:
                     roboarlo.RotateAngle(-new_ang)
                 else:
@@ -228,8 +229,8 @@ def main():
                     # particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
                     particle_filter.move_particles(vec2[0] - est_pose[0], vec2[1] - est_pose[1], 0) # test
                     print(f"distVec: {distVecAsLength}")
-                    # roboarlo.DriveVector(Drive_dist)
-                    roboarlo.DriveVector(vec2[0] - est_pose[0], vec2[1] - est_pose[1], 0) #test
+                    roboarlo.DriveVector(Drive_dist)
+                    # roboarlo.DriveVector(vec2[0] - est_pose[0], vec2[1] - est_pose[1], 0) #test
 
                 
                 
