@@ -198,8 +198,17 @@ def main():
                 print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
                 print(f"robot determined angle {est_pose[2]}")
 
-                
-                roboarlo.RotateAngle(angle)
+                # new 
+                new_ang = arlo.angle_between_vectors(est_pose[3], vec2)
+                if new_ang < est_pose[3]:
+                    roboarlo.RotateAngle(-new_ang)
+                else:
+                    roboarlo.RotateAngle(new_ang)
+
+
+
+
+                # roboarlo.RotateAngle(angle)
                 particle_filter.move_particles(0, 0, (angle - prev_angle))
                 est_pose = particle_filter.estimate_pose()
                 
@@ -233,7 +242,9 @@ def main():
                 
                 print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 #resetting found landmarks to make it turn around again and find them again but not if really close 
-                if (distVecAsLength > 1):
+                
+                if (est_pose[1] - distVecAsLength[1] < 1):
+                # if (distVecAsLength > 1):
                     unique_indices = []
                     # doing the following here because it might already face one of the LM's before rotating in the while loop
                     objectIDs, dists, angles = cam.detect_aruco_objects(colour)
