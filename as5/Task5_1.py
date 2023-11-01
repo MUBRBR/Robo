@@ -261,7 +261,7 @@ def main():
                 print(f"angle: {-angle}")
                 roboarlo.RotateAngle(-angle)
 
-                
+                roboarlo.Stop()
                 
                 
                 
