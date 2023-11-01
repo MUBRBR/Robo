@@ -194,7 +194,7 @@ def main():
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
                 angle = arlo.angle_between_vectors(vec1, vec2)
                 print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
-                print(f"Drive_dist (vector):  in cm: {Drive_dist*100}")
+                print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
                 print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
                 
                 roboarlo.RotateAngle(angle)
@@ -215,6 +215,8 @@ def main():
                     particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
                     print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
+                
+                print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 
                 #Setting prev angle as curr angle
                 prev_angle = angle
