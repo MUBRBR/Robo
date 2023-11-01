@@ -202,8 +202,9 @@ def main():
                 print(f"robot determined angle {ang_robo_parti}")
                 # new 
                 new_ang = arlo.angle_between_vectors((est_pose[0], est_pose[1]), vec2)
+                print(f"new_ang1 {new_ang}")
                 new_ang = ang_robo_parti - new_ang
-                print(f"new_ang {new_ang}")
+                print(f"new_ang2 {new_ang}")
                 # if new_ang < est_pose[2]:
                 #     roboarlo.RotateAngle(-new_ang)
                 # else:
