@@ -227,7 +227,7 @@ def main():
                     particle_filter.add_uncertainty(0.5,0.1)
                 
                 #resetting found landmarks to make it turn around again and find them again but not if really close 
-                if (distVecAsLength > 0.5):
+                if (distVecAsLength > 1):
                     unique_indices = []
                 
     finally: 

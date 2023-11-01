@@ -259,7 +259,7 @@ class betterRobot():
         angle = angle_between_vectors([0,1], self.currDir)
             
 
-        print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
+        # print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
         # with np.printoptions(sign='+'):
             
         # # with np.printoptions(floatmode="fixed", precision=1):
