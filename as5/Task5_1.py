@@ -30,7 +30,49 @@ CMAGENTA = (255, 0, 255)
 CWHITE = (255, 255, 255)
 CBLACK = (0, 0, 0)
 
+arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 
+def Marker_length(h):
+    arucoMarkerLength = 629.81 * (145/h)
+
+    return arucoMarkerLength
+
+def angle_between_vectors(vector1, vector2):
+    # Calculate the dot product of the two vectors
+    dot_product = np.dot(vector1, vector2)
+
+    # Calculate the magnitude (norm) of each vector
+    magnitude_vector1 = np.linalg.norm(vector1)
+    magnitude_vector2 = np.linalg.norm(vector2)
+
+    # Calculate the cosine of the angle between the vectors using the dot product formula
+    cosine_theta = dot_product / (magnitude_vector1 * magnitude_vector2)
+
+    # Calculate the angle in radians using the arccosine function
+    angle_rad = np.arccos(cosine_theta)
+
+    # Determine the sign of the angle (clockwise or counterclockwise)
+    cross_product = np.cross(vector1, vector2)
+    if cross_product < 0:
+        angle_rad = -angle_rad
+
+    # Convert the angle to degrees
+    angle_deg = np.degrees(angle_rad)
+
+    return angle_deg
+
+def intrinsic():
+    f = 629.81 # from focal calculations
+    width = 800 
+    height = 600
+
+    intrinsic_matrix = np.matrix([
+                        [f,0,width/2],
+                        [0,f,height/2],
+                        [0,0,1]
+                        ])
+
+    return intrinsic_matrix    
 
 def jet(x):
     """Colour map for drawing particles. This function determines the colour of 
@@ -190,31 +232,30 @@ def main():
                 # calculate angle between the vector from robo to LM1 and from robo to middle of LM1 and LM2
                 # This works well IF estimated pose is correct-ish
                 middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
-                vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
-                vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
-                angle = arlo.angle_between_vectors(vec1, vec2)
-                print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
-                print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
-                print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
+                # vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
+                # vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
+                # angle = arlo.angle_between_vectors(vec1, vec2)
+                # print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
+                # print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
+                # print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
+                # print(f"robot determined angle {est_pose[2]}")
+
                 
 
-                ang_robo_parti = np.degrees(est_pose[2])
-                print(f"robot determined angle {ang_robo_parti}")
-                # new 
-                new_ang = arlo.angle_between_vectors((est_pose[0], est_pose[1]), vec2)
-                print(f"new_ang1 {new_ang}")
-                new_ang = ang_robo_parti - new_ang
-                print(f"new_ang2 {new_ang}")
-                # if new_ang < est_pose[2]:
-                #     roboarlo.RotateAngle(-new_ang)
-                # else:
-                    # roboarlo.RotateAngle(new_ang)
-                roboarlo.RotateAngle(new_ang)
+                image = cam.capture_array("main")
+                
+                aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+                arucoMarkerLength = Marker_length(h)
+                intrinsic_matrix = intrinsic()
 
+                rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
 
+                angle = angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
 
+                print(f"beta: {angle}")
 
-
+                roboarlo.RotateAngle(angle)
+                
                 # roboarlo.RotateAngle(angle)
                 particle_filter.move_particles(0, 0, (angle - prev_angle))
                 est_pose = particle_filter.estimate_pose()
@@ -226,20 +267,17 @@ def main():
                 # Multiplying Drive_dist by 100 because the field is in cm's
                 if (distVecAsLength >= 0.99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
-                    # particle_filter.move_particles(Drive_dist[0]*100/2 - est_pose[0], Drive_dist[1]*100/2 - est_pose[1], 0)
-                    particle_filter.move_particles(vec2[0]/2, vec2[1]/2, 0)
-
+                    particle_filter.move_particles(Drive_dist[0]*100/2 - est_pose[0], Drive_dist[1]*100/2 - est_pose[1], 0)
                     print(f"distVec/2: {distVecAsLength/2}")
                     roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
                 else:
-                    # particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
-                    particle_filter.move_particles(vec2[0], vec2[1], 0) # test
+                    particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
                     print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
-                    # roboarlo.DriveVector(vec2[0] - est_pose[0], vec2[1] - est_pose[1], 0) #test
+                
+               
 
-                
-                
+
                 #Setting prev angle as curr angle
                 prev_angle = angle
                 
@@ -254,8 +292,6 @@ def main():
                 
                 print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 #resetting found landmarks to make it turn around again and find them again but not if really close 
-                
-                
                 if (distVecAsLength > 1):
                     unique_indices = []
                     # doing the following here because it might already face one of the LM's before rotating in the while loop
@@ -264,25 +300,7 @@ def main():
                     if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                         unique_indices = [i for i in range(len(objectIDs)) 
                                         if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
-                
-                #-----------------------------------------------------------
-                # kør robot frem og mcl 
-                # angle rotation idea 
-                # find theta to the new spot and nagle between vector to it
-                # new_angle = arlo.angle_between_vectors(vec2,(est_pose[0,1]))
-                # roboarlo.RotateAngle(new_angle)
-
-                
-                # while pose > 2:
-                #     pose =  theta_landmark2 - theta
-                #     roboarlo.RotateAngle(-1)
-                #     theta_landmark2 = arlo.angle_between_vectors(vec2,(landmarkIDS2[0][1],landmarkIDS2[1][1]))
-                #     theta = arlo.angle_between_vectors(vec2,(est_pose[0,1]))
-                #     print(f"theta_landmark2 angle: {theta_landmark2}")
-                #     print(f"arlo angle compared to dest: {theta}")
-                #     print(f"pose {pose}")
-                #-------------------------------------------------------------------------------  
-                
+        
                 
     finally: 
         # Make sure to clean up even if an exception occurred
