@@ -232,9 +232,9 @@ def main():
                 # calculate angle between the vector from robo to LM1 and from robo to middle of LM1 and LM2
                 # This works well IF estimated pose is correct-ish
                 middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
-                # vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
-                # vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
-                # angle = arlo.angle_between_vectors(vec1, vec2)
+                vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
+                vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
+                angle = arlo.angle_between_vectors(vec1, vec2)
                 # print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 # print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
                 # print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
@@ -242,17 +242,19 @@ def main():
 
                 
 
-                image = cam.capture_array("main")
+                # image = cam.capture_array("main")
                 
-                aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
-                arucoMarkerLength = Marker_length(h)
-                intrinsic_matrix = intrinsic()
+                # aruco_corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(image, arucoDict)
+                # arucoMarkerLength = Marker_length(h)
+                # intrinsic_matrix = intrinsic()
 
-                rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
+                # rvecs, tvecs, objPoints = cv2.aruco.estimatePoseSingleMarkers(aruco_corners, arucoMarkerLength, intrinsic_matrix, None)
 
-                angle = angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
+                # angle = angle_between_vectors(np.array([tvecs[0][0][0],tvecs[0][0][2]]),np.array([0,1]))
+                
+                # print(f"beta: {angle}")
 
-                print(f"beta: {angle}")
+                print(f"angles: {angles} | dists: {dists}")
 
                 roboarlo.RotateAngle(angle)
                 
