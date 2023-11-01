@@ -157,7 +157,7 @@ def main():
                 if (len(unique_indices) >= 2):
                     start_time = time.time()
                     
-            print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+            # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                 particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
                 particle_filter.add_uncertainty(0.5,0.1)
@@ -178,19 +178,21 @@ def main():
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
             if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) > seconds)):
+                print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+                
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
                 # print(f"\n\nEstimated position[0],[1]: {est_pose[0], est_pose[1]}")
                 # print(f"\n\nVector to drive: {vectorToDrive}")
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
- 
                 # calculate angle between the vector from robo to LM1 and from robo to middle of LM1 and LM2
                 # This works well IF estimated pose is correct-ish
                 middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
                 vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
                 angle = -arlo.angle_between_vectors(vec1, vec2)
-                print(f"Est Pose x, y: {(est_pose[0], est_pose[1])}")
-                print(f"Vec1: {vec1}, vec2: {vec2}, angle: {angle} \n\n")
+                print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
+                print(f"Drive_dist (vector): {Drive_dist}")
+                print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
                 
                 roboarlo.RotateAngle(angle)
                 particle_filter.move_particles(0, 0, (angle - prev_angle))
@@ -211,37 +213,21 @@ def main():
                     print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
                 
+                #Setting prev angle as curr angle
                 prev_angle = angle
                 
+                #resetting start time
                 start_time = time.time()
                 
+                # Running MCL a bunch of times of times
                 for _ in range(0, 50):
                     print(f"Measure of pose: {particle_filter.evaluate_pose()}")
                     particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
                     particle_filter.add_uncertainty(0.5,0.1)
-                    
-                #-----------------------------------------------------------
-                # kør robot frem og mcl 
-
-                # angle rotation idea 
-                # find theta to the new spot and nagle between vector to it
-                # new_angle = arlo.angle_between_vectors(vec2,(est_pose[0,1]))
-                # roboarlo.RotateAngle(new_angle)
-
                 
-                # while pose > 2:
-                #     pose =  theta_landmark2 - theta
-                #     roboarlo.RotateAngle(-1)
-                #     theta_landmark2 = arlo.angle_between_vectors(vec2,(landmarkIDS2[0][1],landmarkIDS2[1][1]))
-                #     theta = arlo.angle_between_vectors(vec2,(est_pose[0,1]))
-                #     print(f"theta_landmark2 angle: {theta_landmark2}")
-                #     print(f"arlo angle compared to dest: {theta}")
-                #     print(f"pose {pose}")
-             #-------------------------------------------------------------------------------   
-                    
-
-
-            
+                #resetting found landmarks to make it turn around again and find them again
+                unique_indices = []
+                
     finally: 
         # Make sure to clean up even if an exception occurred
         
