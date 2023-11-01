@@ -223,13 +223,13 @@ def main():
                 if (distVecAsLength >= 0.99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
                     # particle_filter.move_particles(Drive_dist[0]*100/2 - est_pose[0], Drive_dist[1]*100/2 - est_pose[1], 0)
-                    particle_filter.move_particles(vec2[0]/2 - est_pose[0], vec2[1]/2 - est_pose[1], 0)
+                    particle_filter.move_particles(vec2[0]/2, vec2[1]/2, 0)
 
                     print(f"distVec/2: {distVecAsLength/2}")
                     roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
                 else:
                     # particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
-                    particle_filter.move_particles(vec2[0] - est_pose[0], vec2[1] - est_pose[1], 0) # test
+                    particle_filter.move_particles(vec2[0], vec2[1], 0) # test
                     print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
                     # roboarlo.DriveVector(vec2[0] - est_pose[0], vec2[1] - est_pose[1], 0) #test
@@ -260,7 +260,24 @@ def main():
                     if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                         unique_indices = [i for i in range(len(objectIDs)) 
                                         if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
-        
+                
+                #-----------------------------------------------------------
+                # kør robot frem og mcl 
+                # angle rotation idea 
+                # find theta to the new spot and nagle between vector to it
+                # new_angle = arlo.angle_between_vectors(vec2,(est_pose[0,1]))
+                # roboarlo.RotateAngle(new_angle)
+
+                
+                # while pose > 2:
+                #     pose =  theta_landmark2 - theta
+                #     roboarlo.RotateAngle(-1)
+                #     theta_landmark2 = arlo.angle_between_vectors(vec2,(landmarkIDS2[0][1],landmarkIDS2[1][1]))
+                #     theta = arlo.angle_between_vectors(vec2,(est_pose[0,1]))
+                #     print(f"theta_landmark2 angle: {theta_landmark2}")
+                #     print(f"arlo angle compared to dest: {theta}")
+                #     print(f"pose {pose}")
+                #-------------------------------------------------------------------------------  
                 
                 
     finally: 
