@@ -254,9 +254,16 @@ def main():
                 
                 # print(f"beta: {angle}")
 
-                print(f"angles: {np.degrees(angles)} | dists: {dists}")
+                
+                angle_to_lm1 = np.degrees(angles[0])
+                print(f"angles: {-angle_to_lm1} | dists: {dists}")
+                roboarlo.RotateAngle(-angle_to_lm1)
+                print(f"angle: {-angle}")
+                roboarlo.RotateAngle(-angle)
 
-                # roboarlo.RotateAngle(angle)
+                
+                
+                
                 
                 # roboarlo.RotateAngle(angle)
                 particle_filter.move_particles(0, 0, (angle - prev_angle))
