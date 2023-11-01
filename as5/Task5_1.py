@@ -15,11 +15,11 @@ import time
 # unique_indices = []
 # landmarks to find
 landmarkIDS1 = {
-    8: (0.0, 300.0),
-    9: (100.0, 300.0)
+    7: (0.0, 300.0),
+    8: (100.0, 300.0)
 }
 # double landmarks because bad code needs landmarks as dict + as list.
-landmarkIDS2 = [(8, 0.0, 300.0), (9, 100.0, 300.0)]
+landmarkIDS2 = [(7, 0.0, 300.0), (8, 100.0, 300.0)]
 # Some color constants in BGR format
 CRED = (0, 0, 255)
 CGREEN = (0, 255, 0)
