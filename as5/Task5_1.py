@@ -243,8 +243,8 @@ def main():
                 print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 #resetting found landmarks to make it turn around again and find them again but not if really close 
                 
-                if (est_pose[1] - distVecAsLength[1] < 1):
-                # if (distVecAsLength > 1):
+                
+                if (distVecAsLength > 1):
                     unique_indices = []
                     # doing the following here because it might already face one of the LM's before rotating in the while loop
                     objectIDs, dists, angles = cam.detect_aruco_objects(colour)
