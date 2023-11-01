@@ -181,9 +181,10 @@ def main():
                 print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
                 
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
-                # print(f"\n\nEstimated position[0],[1]: {est_pose[0], est_pose[1]}")
-                # print(f"\n\nVector to drive: {vectorToDrive}")
+                # Dividing by 100 because smartarlo needs meters
                 Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
+                
+                
                 # calculate angle between the vector from robo to LM1 and from robo to middle of LM1 and LM2
                 # This works well IF estimated pose is correct-ish
                 middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
@@ -202,14 +203,14 @@ def main():
                 distVecAsLength = np.linalg.norm(Drive_dist)
                  
                 
-
+                # Multiplying Drive_dist by 100 because the field is in cm's
                 if (distVecAsLength >= 0.99):
                     # roboarlo.RotateAngle(-angle)  # return back angle
-                    particle_filter.move_particles(Drive_dist[0]/2 - est_pose[0], Drive_dist[1]/2 - est_pose[1], 0)
+                    particle_filter.move_particles(Drive_dist[0]*100/2 - est_pose[0], Drive_dist[1]*100/2 - est_pose[1], 0)
                     print(f"distVec/2: {distVecAsLength/2}")
                     roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
                 else:
-                    particle_filter.move_particles(Drive_dist[0] - est_pose[0], Drive_dist[1] - est_pose[1], 0)
+                    particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
                     print(f"distVec: {distVecAsLength}")
                     roboarlo.DriveVector(Drive_dist)
                 
@@ -221,12 +222,13 @@ def main():
                 
                 # Running MCL a bunch of times of times
                 for _ in range(0, 50):
-                    print(f"Measure of pose: {particle_filter.evaluate_pose()}")
+                    # print(f"Measure of pose: {particle_filter.evaluate_pose()}")
                     particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
                     particle_filter.add_uncertainty(0.5,0.1)
                 
-                #resetting found landmarks to make it turn around again and find them again
-                unique_indices = []
+                #resetting found landmarks to make it turn around again and find them again but not if really close 
+                if (distVecAsLength > 0.5):
+                    unique_indices = []
                 
     finally: 
         # Make sure to clean up even if an exception occurred
