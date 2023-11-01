@@ -196,10 +196,10 @@ def main():
                 print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
                 print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
-                print(f"robot determined angle {est_pose[2]}")
+                print(f"robot determined angle {np.degrees(est_pose[2])}")
 
                 # new 
-                new_ang = arlo.angle_between_vectors(est_pose[1,2], vec2)
+                new_ang = arlo.angle_between_vectors((est_pose[0], est_pose[1]), vec2)
                 if new_ang < est_pose[2]:
                     roboarlo.RotateAngle(-new_ang)
                 else:
