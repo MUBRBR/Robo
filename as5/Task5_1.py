@@ -201,10 +201,12 @@ def main():
                 # new 
                 new_ang = arlo.angle_between_vectors((est_pose[0], est_pose[1]), vec2)
                 print(f"new_ang {new_ang}")
-                if new_ang < est_pose[2]:
-                    roboarlo.RotateAngle(-new_ang)
-                else:
-                    roboarlo.RotateAngle(new_ang)
+                # if new_ang < est_pose[2]:
+                #     roboarlo.RotateAngle(-new_ang)
+                # else:
+                    # roboarlo.RotateAngle(new_ang)
+                roboarlo.RotateAngle(new_ang)
+
 
 
 
