@@ -48,11 +48,11 @@ class proto_arlo():
         self.est_pose = np.array([150.0, 0.0, np.pi()])
 
     def __del__(self):
-        # safely shut down arlo
-        self.arlo.__del__()
-
         #Clean-up capture thread
         self.cam.terminateCaptureThread()
+
+        # safely shut down arlo
+        self.arlo.__del__()
 
 
  
