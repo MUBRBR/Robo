@@ -25,6 +25,7 @@ class proto_arlo():
 
         self.speed = 50
 
+        self.cam = camera.Camera(0, 'arlo', useCaptureThread = True)
         self.currentRoute = q.Queue()
 
         self.state = "LOCALIZE"
@@ -38,7 +39,7 @@ class proto_arlo():
             3: (400.0, 0.0),
             4: (400.0, 300.0)
         }
-        self.particle_filter = particle_filter.ParticleFilter(self.landmarks)
+        self.particle_filter = particle_filter.ParticleFilter(self.landmarks, self.cam)
 
         self.next_landmark_target = 1 # so we can +=1 at some point
 
@@ -46,7 +47,6 @@ class proto_arlo():
 
         self.Radar = radar.Radar(self.arlo)
 
-        self.cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
         # self.RRT = rrt.RRT()
 

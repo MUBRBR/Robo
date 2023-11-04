@@ -21,11 +21,11 @@ class Radar(): #Will eventually house maped objects
         # if (not self.active):
         #     pass
 
-        left_distance = self.arlo.read_left_ping_sensor() / 1000
+        left_distance = self.arlo.read_left_ping_sensor() / 10
  
-        front_distance = self.arlo.read_front_ping_sensor() / 1000
+        front_distance = self.arlo.read_front_ping_sensor() / 10
         
-        right_distance = self.arlo.read_right_ping_sensor() / 1000
+        right_distance = self.arlo.read_right_ping_sensor() / 10
 
         self.weighted_distance = min((left_distance)*2,front_distance,(right_distance)*2) # We need to know if something is close, we use the closest regardless of direction. We dont care as much about the side sensors
 
