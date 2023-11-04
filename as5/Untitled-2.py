@@ -204,7 +204,6 @@ def main():
             
             print("Time in seconds since the epoch:", seconds)
             local_time = time.ctime(seconds)
-            start_time = local_time
             print("Local time:", local_time)
             
             # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
@@ -216,7 +215,7 @@ def main():
                 # No observation - reset weights to uniform distribution
                 particle_filter.reset_weights()
                 particle_filter.add_uncertainty(1,0.1)
-            print("time to MCL:", start_time - local_time)
+            print("time after MCL:",local_time)
             
             
 
@@ -231,7 +230,7 @@ def main():
             # Show world
             # cv2.imshow(WIN_World, world)
             print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
-            print(f"time {tid}")
+           
 
 
             while True:
@@ -254,9 +253,10 @@ def main():
                 #failsafe time thing
                 # if (len(unique_indices) >= 2):
                 #     start_time = time.time()
+                seconds = time.time()
+                
                 print("Time in seconds since the epoch:", seconds)
                 local_time = time.ctime(seconds)
-                start_time = local_time
                 print("Local time:", local_time)
                 
                 # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
@@ -268,7 +268,7 @@ def main():
                     # No observation - reset weights to uniform distribution
                     particle_filter.reset_weights()
                     particle_filter.add_uncertainty(1,0.1)
-                print("time to MCL:", start_time - local_time)
+                print("time after MCL:",local_time)
                     
                 
 
