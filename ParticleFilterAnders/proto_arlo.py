@@ -7,7 +7,7 @@ import os
 import radar 
 import camera
 import particle_filter
-import rrt
+# import rrt
 
 os.system("clear && printf '\e[3J'")
 
