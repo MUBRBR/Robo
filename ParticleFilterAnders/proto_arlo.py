@@ -56,7 +56,7 @@ class proto_arlo():
 
 
  
-    def boot_and_rally(self):
+    # def boot_and_rally(self):
         
         # while True:
             
