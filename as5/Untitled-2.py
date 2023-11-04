@@ -302,7 +302,7 @@ def main():
                 vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
                 Theta = np.degrees(est_pose[2])
-                angle_of_vec2 = math.atan2(vec2[0],vec2[1])
+                angle_of_vec2 = np.degrees(math.atan2(vec2[0],vec2[1]))
                 print(f"angle_of_vec2{angle_of_vec2}")
                 # angle = arlo.angle_between_vectors(vec2, Theta)
                 angle = angle_of_vec2 - Theta
