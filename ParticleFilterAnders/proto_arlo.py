@@ -102,7 +102,7 @@ class proto_arlo():
         for _ in range(n):
             self.particle_filter.move_particles(dist[0] / n, dist[1] / n , 0.0)
             # self.particle_filter.perform_MCL()
-            # self.particle_filter.ParticleFilter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
+            # self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
 
 
             self.arlo.go_diff(self.speed, self.speed, 1, 1)
@@ -137,9 +137,9 @@ class proto_arlo():
 
         n = 2
         for _ in range(n):
-            self.particle_filter.ParticleFilter.move_particles(0.0, 0.0, np.degrees(angle) / n)
+            self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
             # self.particle_filter.perform_MCL()
-            # self.particle_filter.ParticleFilter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
+            # self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
 
             if (angle < 0):
                 self.arlo.go_diff(turn_speed, turn_speed, 1, 0)
