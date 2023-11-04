@@ -152,7 +152,9 @@ def main():
         unique_indices = []
         
         # Initialize particles
-        num_particles = 100000
+        # num_particles = 100000
+        num_particles = 10000
+
         particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS2, num_particles)
         
         # Allocate space for world map
@@ -230,7 +232,7 @@ def main():
             # Show world
             # cv2.imshow(WIN_World, world)
             print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
-           
+            roboarlo.RotateAngle(-20)
 
 
             while True:
