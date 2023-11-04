@@ -211,88 +211,88 @@ def main():
                 # No observation - reset weights to uniform distribution
                 particle_filter.reset_weights()
                 particle_filter.add_uncertainty(1,0.1)
-            print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
-            print(f"time {time.time()}")
-            break
+            
+            
 
             # estimate pose
             est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
             # print(f"Estimated position: {est_pose}")
             
             # Draw map
-            draw_world(est_pose, particle_filter, world)
+            # draw_world(est_pose, particle_filter, world)
   
             # Show world
             cv2.imshow(WIN_World, world)
-            
-            # If we are somewhat certain of where we are, then drive to given coordinate.
-            if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) > seconds)):
-                print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+            print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+            print(f"time {time.time()}")
+            # # If we are somewhat certain of where we are, then drive to given coordinate.
+            # if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) > seconds)):
+            #     print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
                 
-                vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
-                # Dividing by 100 because smartarlo needs meters
-                Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
+            #     vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
+            #     # Dividing by 100 because smartarlo needs meters
+            #     Drive_dist = ((vectorToDrive[0] - est_pose[0])/100, (vectorToDrive[1] - est_pose[1])/100)
                 
                 
-                # calculate angle between the vector from robo to LM1 and from robo to middle of LM1 and LM2
-                # This works well IF estimated pose is correct-ish
-                middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
-                vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
-                vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
-                angle = arlo.angle_between_vectors(vec1, vec2)
-                # print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
-                # print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
-                # print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
-                # print(f"robot determined angle {est_pose[2]}")
+            #     # calculate angle between the vector from robo to LM1 and from robo to middle of LM1 and LM2
+            #     # This works well IF estimated pose is correct-ish
+            #     middleOfLMs = np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]])
+            #     vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
+            #     vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
+            #     angle = arlo.angle_between_vectors(vec1, vec2)
+            #     # print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
+            #     # print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
+            #     # print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
+            #     # print(f"robot determined angle {est_pose[2]}")
 
                 
 
 
-                # forsøg som ikke rigtigt bruger particle filter..
-                angle_to_lm1 = np.degrees(angles[0])
-                print(f"angles: {-angle_to_lm1} | dists: {dists}")
-                roboarlo.RotateAngle(-angle_to_lm1)
-                print(f"angle: {angle}")
-                roboarlo.RotateAngle(angle)
+            #     # forsøg som ikke rigtigt bruger particle filter..
+            #     angle_to_lm1 = np.degrees(angles[0])
+            #     print(f"angles: {-angle_to_lm1} | dists: {dists}")
+            #     roboarlo.RotateAngle(-angle_to_lm1)
+            #     print(f"angle: {angle}")
+            #     roboarlo.RotateAngle(angle)
 
                 
                 
                 
-                # roboarlo.RotateAngle(angle)
-                particle_filter.move_particles(0, 0, (angle - prev_angle))
-                est_pose = particle_filter.estimate_pose()
+            #     # roboarlo.RotateAngle(angle)
+            #     particle_filter.move_particles(0, 0, (angle - prev_angle))
+            #     est_pose = particle_filter.estimate_pose()
                 
-                #calculate distance as a int
-                distVecAsLength = np.linalg.norm(Drive_dist)
+            #     #calculate distance as a int
+            #     distVecAsLength = np.linalg.norm(Drive_dist)
                  
                 
-                # Multiplying Drive_dist by 100 because the field is in cm's
-                if (distVecAsLength >= 0.99):
-                    # roboarlo.RotateAngle(-angle)  # return back angle
-                    particle_filter.move_particles(Drive_dist[0]*100/2 - est_pose[0], Drive_dist[1]*100/2 - est_pose[1], 0)
-                    print(f"distVec/2: {distVecAsLength/2}")
-                    roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
-                else:
-                    particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
-                    print(f"distVec: {distVecAsLength}")
-                    roboarlo.DriveVector(Drive_dist)
+            #     # Multiplying Drive_dist by 100 because the field is in cm's
+            #     if (distVecAsLength >= 0.99):
+            #         # roboarlo.RotateAngle(-angle)  # return back angle
+            #         particle_filter.move_particles(Drive_dist[0]*100/2 - est_pose[0], Drive_dist[1]*100/2 - est_pose[1], 0)
+            #         print(f"distVec/2: {distVecAsLength/2}")
+            #         roboarlo.DriveVector((Drive_dist[0]/2, Drive_dist[1]/2))
+            #     else:
+            #         particle_filter.move_particles(Drive_dist[0]*100 - est_pose[0], Drive_dist[1]*100 - est_pose[1], 0)
+            #         print(f"distVec: {distVecAsLength}")
+            #         roboarlo.DriveVector(Drive_dist)
                 
                
 
 
-                #Setting prev angle as curr angle
-                prev_angle = angle
+            #     #Setting prev angle as curr angle
+            #     prev_angle = angle
                 
-                #resetting start time
-                start_time = time.time()
+            #     #resetting start time
+            #     start_time = time.time()
                 
-                # Running MCL a bunch of times of times
-                for _ in range(0, 50):
-                    # print(f"Measure of pose: {particle_filter.evaluate_pose()}")
-                    particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
-                    particle_filter.add_uncertainty(0.5,0.1)
+            #     # Running MCL a bunch of times of times
+            #     for _ in range(0, 50):
+            #         # print(f"Measure of pose: {particle_filter.evaluate_pose()}")
+            #         particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
+            #         particle_filter.add_uncertainty(0.5,0.1)
                 
-                print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
+            #     print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 #resetting found landmarks to make it turn around again and find them again but not if really close 
                 # if (distVecAsLength > 1):
                 #     unique_indices = []
