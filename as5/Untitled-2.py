@@ -153,7 +153,7 @@ def main():
         
         # Initialize particles
         # num_particles = 100000
-        num_particles = 10000
+        num_particles = 100000
 
         particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS2, num_particles)
         
