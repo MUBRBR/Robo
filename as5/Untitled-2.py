@@ -152,13 +152,12 @@ def main():
         unique_indices = []
         
         # Initialize particles
-        # num_particles = 100000
         num_particles = 10000
 
         particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS2, num_particles)
         
         # Allocate space for world map
-        world = np.zeros((500,500,3), dtype=np.uint8)
+        # world = np.zeros((500,500,3), dtype=np.uint8)
 
         # makes unique landmarkIDs
         if not isinstance(objectIDs, type(None)): # if there is actually work to do..
@@ -259,7 +258,7 @@ def main():
             vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
             vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
             Theta = np.degrees(est_pose[2])
-            angle_of_vec2 = np.degrees(math.atan2(vec2[0],vec2[1]))
+            angle_of_vec2 = np.degrees(math.atan2(vec2[1],vec2[0]))
             # angle = arlo.angle_between_vectors(vec2, Theta)
             angle = angle_of_vec2 - Theta
             # print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
