@@ -349,7 +349,7 @@ def angle_between_vectors(vector1, vector2):
 # BetterArlo starts in (150, 0, pi)
 betterArlo = proto_arlo((1))
 betterArlo.AddDest(Vec(0.0, 100.0))
-betterArlo.AddDest(Vec(200.0, 150.0))
+betterArlo.AddDest(Vec(200.0, 100.0))
 betterArlo.AddDest(Vec(400.0, 200.0))
 betterArlo.FollowRoute(1)
 
