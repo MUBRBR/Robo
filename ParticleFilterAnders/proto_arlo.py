@@ -43,7 +43,7 @@ class proto_arlo():
 
         self.cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
-        self.RRT = rrt.RRT()
+        # self.RRT = rrt.RRT()
 
         self.est_pose = np.array([150.0, 0.0, np.pi()])
 
@@ -297,7 +297,7 @@ class proto_arlo():
         
         print('\033[0m', end='')
 
-betterArlo = proto_arlo()
+betterArlo = proto_arlo(1)
 
 
 
