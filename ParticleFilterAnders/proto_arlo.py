@@ -50,7 +50,7 @@ class proto_arlo():
 
         # self.RRT = rrt.RRT()
 
-        self.est_pose = np.array([150.0, 0.0, np.pi()])
+        self.est_pose = np.array([150.0, 0.0, np.pi])
 
     def __del__(self):
         #Clean-up capture thread
@@ -346,7 +346,7 @@ def angle_between_vectors(vector1, vector2):
 
 # test
 # BetterArlo starts in (150, 0, pi)
-betterArlo = proto_arlo((1))
+betterArlo = proto_arlo()
 betterArlo.AddDest((0,100))
 betterArlo.AddDest((200,150))
 betterArlo.AddDest((400,200))
