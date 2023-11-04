@@ -15,6 +15,9 @@ class ParticleFilter():
 
         self.particles = self.create_random_particles(n)
 
+    def hardcode_init_pos(self):
+        self.particles = np.array([150.0,0.0,np.pi(),0.0])
+
     def create_random_particles(self, n): 
         particles = np.empty([n, 4])
         particles[:,0] = np.random.uniform(self.min_x-50, self.max_x+50, n)
