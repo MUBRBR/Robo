@@ -58,27 +58,27 @@ class proto_arlo():
  
     def boot_and_rally(self):
         
-        while True:
+        # while True:
             
-            match self.state:
-                case "LOCALIZE":
-                    pass
-                # Here we''l call self_localize()
+        #     match self.state:
+        #         case "LOCALIZE":
+        #             pass
+        #         # Here we''l call self_localize()
 
-                case "GET_PATH":
-                    pass
+        #         case "GET_PATH":
+        #             pass
 
-                case "FOLLOW_PATH":
-                    pass
-                    # Here we''l call follow_path()
+        #         case "FOLLOW_PATH":
+        #             pass
+        #             # Here we''l call follow_path()
 
-                case "FINISHED":
-                    self.Log("ProtoArlo has completed the Rally!")
-                    return                                
+        #         case "FINISHED":
+        #             self.Log("ProtoArlo has completed the Rally!")
+        #             return                                
                                         
-                case _: # Should never be matched, but I do not like not having a default
-                    self.Log(f"Unexpected state: {self.state = }")
-                    self.state = "LOCALIZE"
+        #         case _: # Should never be matched, but I do not like not having a default
+        #             self.Log(f"Unexpected state: {self.state = }")
+        #             self.state = "LOCALIZE"
 
 
     # def DriveVector(self, vector): # drives forward at the length of the given Vector. Keeps track of pos from Vector
@@ -345,6 +345,6 @@ def angle_between_vectors(vector1, vector2):
 betterArlo.AddDest((0,100))
 betterArlo.AddDest((200,150))
 betterArlo.AddDest((400,200))
-
+betterArlo.FollowRoute(1)
 
 
