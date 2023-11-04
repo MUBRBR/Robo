@@ -316,7 +316,7 @@ def main():
                 # forsøg som ikke rigtigt bruger particle filter..
                 print(f"theta before rotate: {Theta}")
                 print(f"rotation angle {angle}")
-                roboarlo.RotateAngle(angle)
+                roboarlo.RotateAngle(angle_of_vec2 - Theta)
 
                 # angle_to_lm1 = np.degrees(angles[0])
                 # print(f"angles: {-angle_to_lm1} | dists: {dists}")
