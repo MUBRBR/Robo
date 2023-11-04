@@ -91,7 +91,7 @@ class proto_arlo():
         self.currPos += vector
         
         length = np.linalg.norm(vector)
-        n = 1
+        n = 2
         for _ in range(n):
             self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0)
             # self.particle_filter.perform_MCL()
@@ -135,7 +135,7 @@ class proto_arlo():
 
         self.Log(f"I turn {angle} degrees")
 
-        n = 1
+        n = 2
         for _ in range(n):
             self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
             # self.particle_filter.perform_MCL()
@@ -247,7 +247,7 @@ class proto_arlo():
         
         self.DriveVector(distance)
         self.est_pose = (self.est_pose[0] + dest[0], self.est_pose[1] + dest[1], self.est_pose[2])
-
+        print(f"Est_pose: {self.est_pose}")
         # self.DriveLength(norm_distance)
 
         self.Stop()
