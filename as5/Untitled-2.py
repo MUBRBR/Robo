@@ -263,7 +263,7 @@ def main():
                 
                 # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
                 if not isinstance(objectIDs, type(None)): # if there is actually work to do..
-                    for i in range(100):
+                    for _ in range(100):
                         particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
                         particle_filter.add_uncertainty(0.5,0.1) 
                 else:
@@ -303,7 +303,7 @@ def main():
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
                 Theta = np.degrees(est_pose[2])
                 angle_of_vec2 = np.degrees(math.atan2(vec2[0],vec2[1]))
-                print(f"angle_of_vec2{angle_of_vec2}")
+                print(f"angle_of_vec2: {angle_of_vec2}")
                 # angle = arlo.angle_between_vectors(vec2, Theta)
                 angle = angle_of_vec2 - Theta
                 # print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
@@ -317,7 +317,7 @@ def main():
                 # forsøg som ikke rigtigt bruger particle filter..
                 print(f"theta before rotate: {Theta}")
                 print(f"rotation angle {angle}")
-                roboarlo.RotateAngle(angle_of_vec2 - Theta)
+                roboarlo.RotateAngle(Theta - angle_of_vec2)
 
                 # angle_to_lm1 = np.degrees(angles[0])
                 # print(f"angles: {-angle_to_lm1} | dists: {dists}")
