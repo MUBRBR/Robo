@@ -204,9 +204,8 @@ def main():
                 #     start_time = time.time()
             seconds = time.time()
             
-            print("Time in seconds since the epoch:", seconds)
             local_time = time.ctime(seconds)
-            print("Local time:", local_time)
+            # print("Local time:", local_time)
             
             # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
@@ -217,7 +216,7 @@ def main():
                 # No observation - reset weights to uniform distribution
                 particle_filter.reset_weights()
                 particle_filter.add_uncertainty(1,0.1)
-            print("time after MCL:",local_time)
+            # print("time after MCL:",local_time)
             
             
 
@@ -257,9 +256,8 @@ def main():
                 #     start_time = time.time()
                 seconds = time.time()
                 
-                print("Time in seconds since the epoch:", seconds)
                 local_time = time.ctime(seconds)
-                print("Local time:", local_time)
+                # print("Local time:", local_time)
                 
                 # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
                 if not isinstance(objectIDs, type(None)): # if there is actually work to do..
@@ -270,7 +268,7 @@ def main():
                     # No observation - reset weights to uniform distribution
                     particle_filter.reset_weights()
                     particle_filter.add_uncertainty(1,0.1)
-                print("time after MCL:",local_time)
+                # print("time after MCL:",local_time)
                     
                 
 
@@ -303,7 +301,6 @@ def main():
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
                 Theta = np.degrees(est_pose[2])
                 angle_of_vec2 = np.degrees(math.atan2(vec2[0],vec2[1]))
-                print(f"angle_of_vec2: {angle_of_vec2}")
                 # angle = arlo.angle_between_vectors(vec2, Theta)
                 angle = angle_of_vec2 - Theta
                 # print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
@@ -316,8 +313,13 @@ def main():
 
                 # forsøg som ikke rigtigt bruger particle filter..
                 print(f"theta before rotate: {Theta}")
-                print(f"rotation angle {angle}")
-                roboarlo.RotateAngle(Theta - angle_of_vec2)
+                print(f"angle_of_vec2: {angle_of_vec2}")
+                print(f"rotation angle as anglevec2 - theta: {angle}")
+                if (angle_of_vec2 < 0): 
+                    roboarlo.RotateAngle(-angle_of_vec2)
+                else:
+                    roboarlo.RotateAngle(angle_of_vec2)
+                    
 
                 # angle_to_lm1 = np.degrees(angles[0])
                 # print(f"angles: {-angle_to_lm1} | dists: {dists}")
