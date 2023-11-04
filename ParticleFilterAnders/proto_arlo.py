@@ -139,6 +139,7 @@ class proto_arlo():
         for _ in range(n):
             self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
             # self.particle_filter.perform_MCL()
+            
             # self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
 
             if (angle < 0):
@@ -189,7 +190,7 @@ class proto_arlo():
         
         
         self.RotateAngle(theta_target)
-
+        self.est_pose = (self.est_pose[0], self.est_pose[1], self.est_pose[2]+theta_target)
 
         # angle = angle_between_vectors(dest, (self.est_pose[0], self.est_pose[1]))
 
@@ -245,6 +246,8 @@ class proto_arlo():
         # self.DriveVector(dest - self.currPos)
         
         self.DriveVector(distance)
+        self.est_pose = (self.est_pose[0] + distance[0], self.est_pose[1] + distance[1], self.est_pose[2])
+
         # self.DriveLength(norm_distance)
 
         self.Stop()
