@@ -288,10 +288,10 @@ class proto_arlo():
 
         # with np.printoptions(sign='+', floatmode="fixed", precision=1):
 
-        # angle = angle_between_vectors([0,1], self.currDir)
+        angle = angle_between_vectors([0,1], self.currDir)
             
 
-        # print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
+        print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
         # with np.printoptions(sign='+'):
             
         # # with np.printoptions(floatmode="fixed", precision=1):
@@ -299,7 +299,7 @@ class proto_arlo():
         #     angle = angle_between_vectors([0,1], self.currDir)
             
 
-        #     print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
+            # print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
         
         print('\033[0m', end='')
 
