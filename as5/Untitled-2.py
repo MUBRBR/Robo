@@ -300,7 +300,9 @@ def main():
                 vec1 = (landmarkIDS2[0][1] - est_pose[0], landmarkIDS2[0][2] - est_pose[1])
                 vec2 = (middleOfLMs[0] - est_pose[0], middleOfLMs[1] - est_pose[1])
                 Theta = np.degrees(est_pose[2])
-                angle = arlo.angle_between_vectors(vec2, Theta)
+                angle_of_vec2 = np.atan2(vec2[0],vec2[1])
+                # angle = arlo.angle_between_vectors(vec2, Theta)
+                angle = angle_of_vec2 - Theta
                 # print(f"\n\n Est Pose x, y: {(est_pose[0], est_pose[1])}")
                 # print(f"Drive_dist (vector):  in cm: {Drive_dist[0]*100, Drive_dist[1]*100}")
                 # print(f"angle: {angle} | Vec1: {vec1} | vec2: {vec2} \n\n")
@@ -311,10 +313,8 @@ def main():
 
                 # forsøg som ikke rigtigt bruger particle filter..
                 print(f"theta before rotate: {Theta}")
-                if angle < (angle):
-                    roboarlo.RotateAngle(-angle)
-                else:
-                    roboarlo.RotateAngle(angle)
+                print(f"rotation angle {angle}")
+                roboarlo.RotateAngle(angle)
 
                 # angle_to_lm1 = np.degrees(angles[0])
                 # print(f"angles: {-angle_to_lm1} | dists: {dists}")
