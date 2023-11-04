@@ -104,7 +104,7 @@ class proto_arlo():
     def DriveLength(self, dist): #Goes for4ward for dist length, does not stop on its own, does not update any fields
         self.Log(f"I drive {dist} centimers")
         #makes centimeters to meters (Drives in meters)
-        # dist /= 100 # Probably not needed
+        dist /= 100 
             
         self.arlo.go_diff(self.speed, self.speed, 1, 1)
         sleep(dist * 3)
