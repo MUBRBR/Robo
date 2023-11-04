@@ -201,7 +201,8 @@ def main():
                 # if (len(unique_indices) >= 2):
                 #     start_time = time.time()
             start_time = time.time()
-            print(f"time {start_time}")
+            tid = time.time() - start_time
+            print(f"time {tid}")
             # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                 for i in range(100):
@@ -224,7 +225,8 @@ def main():
             # Show world
             cv2.imshow(WIN_World, world)
             print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
-            print(f"time {start_time}")
+            print(f"time {tid}")
+
             # # If we are somewhat certain of where we are, then drive to given coordinate.
             # if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) > seconds)):
             #     print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
