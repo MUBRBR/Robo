@@ -152,7 +152,7 @@ def main():
         unique_indices = []
         
         # Initialize particles
-        num_particles = 10000
+        num_particles = 100000
         particle_filter = pf.ParticleFilter([0,0],[1,1], landmarkIDS2, num_particles)
         
         # Allocate space for world map
@@ -201,7 +201,7 @@ def main():
                 # if (len(unique_indices) >= 2):
                 #     start_time = time.time()
             start_time = time.time()
-            print(f"time {time.time()}")
+            print(f"time {start_time}")
             # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
                 for i in range(100):
@@ -216,7 +216,7 @@ def main():
 
             # estimate pose
             est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
-            # print(f"Estimated position: {est_pose}")
+            print(f"Estimated position: {est_pose}")
             
             # Draw map
             # draw_world(est_pose, particle_filter, world)
@@ -224,7 +224,7 @@ def main():
             # Show world
             cv2.imshow(WIN_World, world)
             print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
-            print(f"time {time.time()}")
+            print(f"time {start_time}")
             # # If we are somewhat certain of where we are, then drive to given coordinate.
             # if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) > seconds)):
             #     print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
