@@ -1,15 +1,13 @@
 import numpy as np
 
 class ParticleFilter():
-    def __init__(self, landmarkList, n = 1000):
+    def __init__(self, landmarks, n = 1000):
 
-        #Update landmarks dict
-        self.landmarks = dict()
-        for key,x,y in landmarkList:
-            self.landmarks[key] = (x,y)
+        #Set 
+        self.landmarks = landmarks
 
         #Get bounds for the particles
-        landmarks_array = np.array(landmarkList)
+        landmarks_array = np.array([[x,y] for (x,y) in landmarks.values()])
         self.min_x, self.max_x = np.min(landmarks_array[:,1]), np.max(landmarks_array[:,1])
         self.min_y, self.max_y = np.min(landmarks_array[:,2]), np.max(landmarks_array[:,2])
 
