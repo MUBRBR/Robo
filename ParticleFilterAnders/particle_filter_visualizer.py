@@ -73,10 +73,18 @@ try:
     cv2.namedWindow(WIN_World)
     cv2.moveWindow(WIN_World, 500, 50)
 
+    cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
+
     # Initialize particles
     num_particles = 10000
-    landmarks = [[1, 0.0, 0.0],[2, 400.0, 0.0], [3, 0.0, 300.0], [4, 400.0, 300.0]]
-    particle_filter = pf.ParticleFilter(landmarks, num_particles)
+    # landmarks = [[1, 0.0, 0.0],[2, 400.0, 0.0], [3, 0.0, 300.0], [4, 400.0, 300.0]]
+    landmarks = {
+        1: (0.0, 0.0),  
+        2: (0.0, 300.0),
+        3: (400.0, 0.0),
+        4: (400.0, 300.0) 
+    }
+    particle_filter = pf.ParticleFilter(landmarks, cam, num_particles)
 
     est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
 
@@ -90,28 +98,32 @@ try:
     # Draw map
     draw_world(est_pose, particle_filter, world)
 
-    cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
+    # Testing perform MCL
+    # particle_filter.perform_MCL(n = 100, self_localize = True)
 
     while True:
 
         # Move the robot according to user input (only for testing)
         action = cv2.waitKey(10)
-        if action == ord('q'): # Quit
+        if action == ord('x'): # Quit
             break
     
     
         if True: # cause we aint runnin' on arlo bois
             if action == ord('w'): # Forward
-                velocity += 4.0
-            elif action == ord('x'): # Backwards
-                velocity -= 4.0
-            elif action == ord('s'): # Stop
-                velocity = 0.0
-                angular_velocity = 0.0
+                particle_filter.move_particles(4,0,0)
+            elif action == ord('s'): # Backwards
+                particle_filter.move_particles(-4,0,0)
             elif action == ord('a'): # Left
-                angular_velocity += 0.2
+                particle_filter.move_particles(0,-4,0)
             elif action == ord('d'): # Right
-                angular_velocity -= 0.2
+                particle_filter.move_particles(0,4,0)
+
+            elif action == ord('q'): # Turn left
+                particle_filter.move_particles(0,0,1)
+            elif action == ord('e'): # Turn right
+                particle_filter.move_particles(0,0,1)
+
 
         # Fetch next frame
         colour = cam.get_next_frame()
