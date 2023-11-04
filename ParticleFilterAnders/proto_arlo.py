@@ -173,7 +173,7 @@ class proto_arlo():
         clear_path_length = step_length * 2.5
 
 
-        norm_distance = np.linalg.norm(dest[0] - self.est_pose[0], dest[1] - self.est_pose[1])
+        norm_distance = np.linalg.norm((dest[0] - self.est_pose[0], dest[1] - self.est_pose[1]))
 
         # while (norm_distance > step_length): # while there is still some way to go, go!
         # while (np.linalg.norm(dest - self.currPos) > step_length): # while there is still some way to go, go!
