@@ -252,20 +252,20 @@ class proto_arlo():
         while (not self.destQ.empty()):
             self.GoToDest(self.destQ.get())
 
-        if ("dsitance to target" < 40):
+        # if ("dsitance to target" < 40):
             
-            self.Log(f"Arrived at current landmark: {self.curr}", "g")
+        #     self.Log(f"Arrived at current landmark: {self.curr}", "g")
             
-            match self.next_landmark_target:
-                case 4:
-                    self.next_landmark_target = 1
-                case _:
-                    self.next_landmark_target += 1
+        #     match self.next_landmark_target:
+        #         case 4:
+        #             self.next_landmark_target = 1
+        #         case _:
+        #             self.next_landmark_target += 1
 
-            self.state = "GET_PATH"
+        #     self.state = "GET_PATH"
             
-            if ("is last landmark"):
-                self.Log("ITS A CELEBRATION", "g")
+        #     if ("is last landmark"):
+        #         self.Log("ITS A CELEBRATION", "g")
 
 
     def Log(self, action: str, color = "None"):
