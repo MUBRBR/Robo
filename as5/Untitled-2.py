@@ -32,47 +32,47 @@ CBLACK = (0, 0, 0)
 
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 
-def Marker_length(h):
-    arucoMarkerLength = 629.81 * (145/h)
+# def Marker_length(h):
+#     arucoMarkerLength = 629.81 * (145/h)
 
-    return arucoMarkerLength
+#     return arucoMarkerLength
 
-def angle_between_vectors(vector1, vector2):
-    # Calculate the dot product of the two vectors
-    dot_product = np.dot(vector1, vector2)
+# def angle_between_vectors(vector1, vector2):
+#     # Calculate the dot product of the two vectors
+#     dot_product = np.dot(vector1, vector2)
 
-    # Calculate the magnitude (norm) of each vector
-    magnitude_vector1 = np.linalg.norm(vector1)
-    magnitude_vector2 = np.linalg.norm(vector2)
+#     # Calculate the magnitude (norm) of each vector
+#     magnitude_vector1 = np.linalg.norm(vector1)
+#     magnitude_vector2 = np.linalg.norm(vector2)
 
-    # Calculate the cosine of the angle between the vectors using the dot product formula
-    cosine_theta = dot_product / (magnitude_vector1 * magnitude_vector2)
+#     # Calculate the cosine of the angle between the vectors using the dot product formula
+#     cosine_theta = dot_product / (magnitude_vector1 * magnitude_vector2)
 
-    # Calculate the angle in radians using the arccosine function
-    angle_rad = np.arccos(cosine_theta)
+#     # Calculate the angle in radians using the arccosine function
+#     angle_rad = np.arccos(cosine_theta)
 
-    # Determine the sign of the angle (clockwise or counterclockwise)
-    cross_product = np.cross(vector1, vector2)
-    if cross_product < 0:
-        angle_rad = -angle_rad
+#     # Determine the sign of the angle (clockwise or counterclockwise)
+#     cross_product = np.cross(vector1, vector2)
+#     if cross_product < 0:
+#         angle_rad = -angle_rad
 
-    # Convert the angle to degrees
-    angle_deg = np.degrees(angle_rad)
+#     # Convert the angle to degrees
+#     angle_deg = np.degrees(angle_rad)
 
-    return angle_deg
+#     return angle_deg
 
-def intrinsic():
-    f = 629.81 # from focal calculations
-    width = 800 
-    height = 600
+# def intrinsic():
+#     f = 629.81 # from focal calculations
+#     width = 800 
+#     height = 600
 
-    intrinsic_matrix = np.matrix([
-                        [f,0,width/2],
-                        [0,f,height/2],
-                        [0,0,1]
-                        ])
+#     intrinsic_matrix = np.matrix([
+#                         [f,0,width/2],
+#                         [0,f,height/2],
+#                         [0,0,1]
+#                         ])
 
-    return intrinsic_matrix    
+#     return intrinsic_matrix    
 
 def jet(x):
     """Colour map for drawing particles. This function determines the colour of 
@@ -166,11 +166,11 @@ def main():
         # print(f"Zero objects found: {unique_indices}")
         
         # failsafe to end infinite loop
-        seconds = 30
-        start_time = time.time()
+        # seconds = 30
+        # start_time = time.time()
         
-        # Creating variable prev_angle
-        prev_angle = 0
+        # # Creating variable prev_angle
+        # prev_angle = 0
         
         while True:
             action = cv2.waitKey(10)
@@ -198,17 +198,22 @@ def main():
                                     if i == 0 and objectIDs[i] in landmarkIDS1.keys() or objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in landmarkIDS1.keys()] 
                 
                 #failsafe time thing
-                if (len(unique_indices) >= 2):
-                    start_time = time.time()
-                    
+                # if (len(unique_indices) >= 2):
+                #     start_time = time.time()
+            start_time = time.time()
+            print(f"time {time.time()}")
             # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
             if not isinstance(objectIDs, type(None)): # if there is actually work to do..
-                particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
-                particle_filter.add_uncertainty(0.5,0.1) 
+                for i in range(100):
+                    particle_filter.MCL(objectIDs, dists, angles, self_localize= False)
+                    particle_filter.add_uncertainty(0.5,0.1) 
             else:
                 # No observation - reset weights to uniform distribution
                 particle_filter.reset_weights()
                 particle_filter.add_uncertainty(1,0.1)
+            print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+            print(f"time {time.time()}")
+            break
 
             # estimate pose
             est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
@@ -222,7 +227,7 @@ def main():
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
             if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) > seconds)):
-                # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+                print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
                 
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
                 # Dividing by 100 because smartarlo needs meters
