@@ -7,14 +7,20 @@ class ParticleFilter():
         self.cam = cam
 
         #Set landmarks dict
+
         self.landmarks = landmarks
 
         #Get bounds for the particles
         landmarks_array = np.array([[x,y] for (x,y) in landmarks.values()])
+
         self.min_x, self.max_x = np.min(landmarks_array[:,0]), np.max(landmarks_array[:,0])
         self.min_y, self.max_y = np.min(landmarks_array[:,1]), np.max(landmarks_array[:,1])
 
+
         self.particles = self.create_random_particles(n)
+
+    def hardcode_init_pos(self):
+        self.particles = np.array([150.0,0.0,np.pi(),0.0])
 
     def create_random_particles(self, n): 
         particles = np.empty([n, 4])
