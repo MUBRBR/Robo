@@ -31,8 +31,13 @@ class proto_arlo():
 
 
 
-        self.landmarks = [[1, 0.0, 0.0],[2, 0.0, 300.0], [3, 400.0, 0.0], [4, 400.0, 300.0]]
-
+        # self.landmarks = [[1, 0.0, 0.0],[2, 0.0, 300.0], [3, 400.0, 0.0], [4, 400.0, 300.0]]
+        self.landmarks = {
+            1: (0.0, 0.0),
+            2: (0.0, 300.0),
+            3: (400.0, 0.0),
+            4: (400.0, 300.0)
+        }
         self.particle_filter = particle_filter.ParticleFilter(self.landmarks)
 
         self.next_landmark_target = 1 # so we can +=1 at some point
