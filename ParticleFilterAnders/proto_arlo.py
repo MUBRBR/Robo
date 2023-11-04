@@ -254,8 +254,8 @@ class proto_arlo():
 
     def FollowRoute(self, reset):
         
-        while (not self.destQ.empty()):
-            self.GoToDest(self.destQ.get())
+        while (not self.currentRoute.empty()):
+            self.GoToDest(self.currentRoute.get())
 
         # if ("dsitance to target" < 40):
             
