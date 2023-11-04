@@ -86,28 +86,28 @@ class proto_arlo():
         #             self.state = "LOCALIZE"
 
 
-    # def DriveVector(self, vector): # drives forward at the length of the given Vector. Keeps track of pos from Vector
+    def DriveVector(self, vector): # drives forward at the length of the given Vector. Keeps track of pos from Vector
         
-    #     self.currPos += vector
+        self.currPos += vector
         
-    #     length = np.linalg.norm(vector)
+        length = np.linalg.norm(vector)
+        n = 2
+        for _ in range(n):
+            self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0)
+            # self.particle_filter.perform_MCL()
+            # self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
+            self.DriveLength(length/n)
 
-    #     self.DriveLength(length)
+
+
 
     def DriveLength(self, dist): #Goes for4ward for dist length, does not stop on its own, does not update any fields
         self.Log(f"I drive {dist} centimers")
         #makes centimeters to meters (Drives in meters)
-        dist /= 100
-        n = 2
-        for _ in range(n):
-            self.particle_filter.move_particles(dist[0] / n, dist[1] / n , 0.0)
-            # self.particle_filter.perform_MCL()
-            # self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
-
-
-            self.arlo.go_diff(self.speed, self.speed, 1, 1)
+        # dist /= 100 # Probably not needed
             
-            sleep((dist * 3) / n)
+        self.arlo.go_diff(self.speed, self.speed, 1, 1)
+        sleep(dist * 3)
 
 
     def Stop(self):
@@ -173,7 +173,7 @@ class proto_arlo():
         clear_path_length = step_length * 2.5
 
 
-        norm_distance = np.linalg.norm((dest[0] - self.est_pose[0], dest[1] - self.est_pose[1]))
+        distance = (dest[0] - self.est_pose[0], dest[1] - self.est_pose[1])
 
         # while (norm_distance > step_length): # while there is still some way to go, go!
         # while (np.linalg.norm(dest - self.currPos) > step_length): # while there is still some way to go, go!
@@ -243,8 +243,9 @@ class proto_arlo():
         # self.RotateVector(dest - self.currPos)
 
         # self.DriveVector(dest - self.currPos)
-
-        self.DriveLength(norm_distance)
+        
+        self.DriveVector(distance)
+        # self.DriveLength(norm_distance)
 
         self.Stop()
     
