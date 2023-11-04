@@ -246,7 +246,7 @@ class proto_arlo():
         # self.DriveVector(dest - self.currPos)
         
         self.DriveVector(distance)
-        self.est_pose = (self.est_pose[0] + dest[0], self.est_pose[1] + dest[1], self.est_pose[2])
+        self.est_pose = (dest[0] - self.est_pose[0], dest[1] - self.est_pose[1], self.est_pose[2])
         print(f"Est_pose: {self.est_pose}")
         # self.DriveLength(norm_distance)
 
