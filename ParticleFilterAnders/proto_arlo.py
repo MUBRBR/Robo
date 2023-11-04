@@ -185,7 +185,7 @@ class proto_arlo():
 
         # Calculating target angle as arctan2(y_2 - y_1, x_2 - x_1) - Theta (Robots current angle)
         theta_target = np.arctan2(dest[1] - self.est_pose[1], dest[0] - self.est_pose[0]) - self.est_pose[2]
-
+        print(f"Theta: {theta_target}")
         
         
         self.RotateAngle(theta_target)
