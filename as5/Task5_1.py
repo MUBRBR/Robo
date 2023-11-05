@@ -222,7 +222,7 @@ def main():
             
             # If we are somewhat certain of where we are, then drive to given coordinate.
             if ((particle_filter.evaluate_pose() < 2) or ((time.time() - start_time) > seconds)):
-                # print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
+                print(f"Measure of how sure we are of the current estimated pose: {particle_filter.evaluate_pose()}")
                 
                 vectorToDrive = (np.mean([landmarkIDS2[0][1], landmarkIDS2[1][1]]), np.mean([landmarkIDS2[0][2], landmarkIDS2[1][2]]))
                 # Dividing by 100 because smartarlo needs meters
