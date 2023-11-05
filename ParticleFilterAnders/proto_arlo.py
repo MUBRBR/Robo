@@ -181,6 +181,8 @@ class proto_arlo():
         self.currPos += vector
         
         length = np.linalg.norm(vector)
+
+        print(f"vector to drive: {vector} | normed vektor: {length}")
         n = 2
         for _ in range(n):
             self.particle_filter.perform_MCL(int (20 / n))
@@ -188,6 +190,7 @@ class proto_arlo():
             self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
             self.DriveLength(length/n)
             self.currPos = self.particle_filter.estimate_pose()
+            print(f"currPos estimate in drive: {self.currPos}")
 
 
 
