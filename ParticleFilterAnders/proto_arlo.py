@@ -66,9 +66,23 @@ class proto_arlo():
             self.RotateAngle(np.deg2rad(20))
             print(f"iter{_}")
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
-            self.particle_filter.perform_MCL(int (100/iterations), self_localize= True)
+            
+            
+            colour = self.cam.get_next_frame()
+            # Detect objects
+            objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
+            
+            #Get all indices that is not a reoccurring objectID. 
+            valid_indices = [i for i in range(len(objectIDs)) if 
+                (i == 0 and objectIDs[i] in self.landmarks.keys()) or # First ID is always valid unless it is not in landmarks
+                (objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in self.landmarks.keys())] # If ID is new it is valid unless it is not in landmarks
+            if (len(valid_indices > 0)):
+                self.particle_filter.perform_MCL(int (20), self_localize= True)
+
             sleep(0.5)
             print(f"has slept{_}")
+
+
             
             
 
@@ -92,16 +106,17 @@ class proto_arlo():
                 angleToTarget = self.CalcTheta_target(self.currPos, dest)
                 print(f"AngleToTarget: {angleToTarget}")
                 self.RotateAngle(angleToTarget)
-                optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map=False)
+                optimal_path = self.RRT.get_path(currLm, self.currPos, dest)
                 print(f"Optimal path: {optimal_path}")
                 self.state = "FOLLOW_PATH"
 
             elif self.state == "FOLLOW_PATH":
                 # Here we'll call follow_path()
-                for i in range(1, len(optimal_path)):
-                    betterArlo.AddDest(optimal_path[i])
-                betterArlo.FollowRoute(1)
-                # end with updating the currLm
+                if not isinstance(optimal_path, type(None)):
+                    for i in range(1, len(optimal_path)):
+                        betterArlo.AddDest(optimal_path[i])
+                    betterArlo.FollowRoute(1)
+                    # end with updating the currLm
                 if currLm != 4:
                     currLm += 1
                 else:
@@ -218,7 +233,7 @@ class proto_arlo():
                 sleep(turn_time / n)
 
             self.currPos = self.particle_filter.estimate_pose()
-
+            print(f"estimated pose while rotating: {self.currPos}")
             self.arlo.stop()
 
     def RotateTime(self,time):
