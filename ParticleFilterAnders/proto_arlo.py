@@ -73,13 +73,15 @@ class proto_arlo():
             objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
             
             #Get all indices that is not a reoccurring objectID. 
-            
+            if isinstance(objectIDs, type(None)): 
+                break
+            valid_indices = [i for i in range(len(objectIDs)) if 
+                (i == 0 and objectIDs[i] in self.landmarks.keys()) or # First ID is always valid unless it is not in landmarks
+                (objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in self.landmarks.keys())] # If ID is new it is valid unless it is not in landmarks
             if not isinstance(valid_indices, type(None)):
-                valid_indices = [i for i in range(len(objectIDs)) if 
-                    (i == 0 and objectIDs[i] in self.landmarks.keys()) or # First ID is always valid unless it is not in landmarks
-                    (objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in self.landmarks.keys())] # If ID is new it is valid unless it is not in landmarks
-                if (len(valid_indices > 0)):
-                    self.particle_filter.perform_MCL(int (20), self_localize= True)
+            # if (len(valid_indices > 0)):
+
+                self.particle_filter.perform_MCL(int (20), self_localize= True)
 
             sleep(0.5)
             print(f"has slept{_}")
