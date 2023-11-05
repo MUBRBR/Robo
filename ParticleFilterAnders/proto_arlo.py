@@ -65,7 +65,7 @@ class proto_arlo():
         for _ in range(iterations):
             self.RotateAngle(np.deg2rad(20))
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
-            self.particle_filter.perform_MCL(n = 1000/iterations, self_localize= True)
+            self.particle_filter.perform_MCL(int (1000/iterations), self_localize= True)
             
             
 
@@ -154,7 +154,7 @@ class proto_arlo():
         length = np.linalg.norm(vector)
         n = 2
         for _ in range(n):
-            self.particle_filter.perform_MCL(1000 / n)
+            self.particle_filter.perform_MCL(int (1000 / n))
             self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0)
             self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
             self.DriveLength(length/n)
@@ -199,7 +199,7 @@ class proto_arlo():
 
         n = 2
         for _ in range(n):
-            self.particle_filter.perform_MCL(1000 / n)
+            self.particle_filter.perform_MCL(int (1000 / n))
             self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
             self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
             if (angle < 0):
