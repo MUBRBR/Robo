@@ -65,6 +65,8 @@ class proto_arlo():
         for _ in range(iterations):
             self.RotateAngle(np.deg2rad(20))
             print(f"iter{_}")
+            sleep(0.5)
+            
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
             
             
@@ -82,9 +84,8 @@ class proto_arlo():
             # if (len(valid_indices > 0)):
 
                 self.particle_filter.perform_MCL(int (20), self_localize= True)
+                print(f"has slept{_}")
 
-            sleep(0.5)
-            print(f"has slept{_}")
 
 
             
@@ -125,6 +126,7 @@ class proto_arlo():
                     currLm += 1
                 else:
                     currLm = 1
+                self.state = "GET_PATH"
 
             elif self.state == "FINISHED":
                 self.Log("ProtoArlo has completed the Rally!")
