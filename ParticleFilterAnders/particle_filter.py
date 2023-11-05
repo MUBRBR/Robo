@@ -154,12 +154,13 @@ class ParticleFilter():
 
                 self.MCL(objectIDs, dists, angles, self_localize)
 
-                self.add_uncertainty(0.5,0.1)
+                # self.add_uncertainty(0.5,0.1)
 
             else:
                 # No observation - reset weights to uniform distribution
+                
+                # This is weird
                 self.reset_weights()
-
                 self.add_uncertainty(0.1,0.1)
 
                 #maybe return here, deends on the definition of the MCL algoritm

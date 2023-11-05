@@ -7,7 +7,8 @@ import os
 import radar 
 import camera
 import particle_filter
-# import rrt
+import rrt
+from grid_occ import GridOccupancyMap
 
 os.system("clear && printf '\e[3J'")
 
@@ -47,10 +48,8 @@ class proto_arlo():
 
         self.Radar = radar.Radar(self.arlo)
 
+        self.RRT = rrt.RRT(map = GridOccupancyMap(low=(0, 0), high=(4, 3), res=0.05), cam = self.cam)
 
-        # self.RRT = rrt.RRT()
-
-        self.est_pose = np.array([150.0, 0.0, np.pi])
 
     def __del__(self):
         #Clean-up capture thread
@@ -59,31 +58,61 @@ class proto_arlo():
         # safely shut down arlo
         self.arlo.__del__()
 
-
- 
-    # def boot_and_rally(self):
-        
-        # while True:
+    # spin 360 degrees and find unique landmarks and perform MCL with Self_localization
+    def observe360Degrees(self):
+        # rotating 20 degrees 18 times (360 degrees) and storing landmarks seen
+        iterations = 18
+        for _ in range(iterations):
+            self.RotateAngle(np.deg2rad(20))
+            # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
+            self.particle_filter.perform_MCL(n = 1000/iterations, self_localize= True)
             
-        #     match self.state:
-        #         case "LOCALIZE":
-        #             pass
-        #         # Here we''l call self_localize()
+            
 
-        #         case "GET_PATH":
-        #             pass
+    def boot_and_rally(self):
+        currLm = 1
+        while True:
+            
+            match self.state:
+                case "LOCALIZE":
+                    
+                # Here we''l call self_localize()
+                #   Reset queue, perform MCL with *10 parti while rotating
+                    self.currentRoute = q.Queue()
+                    self.observe360Degrees()
+                    self.state = "GET_PATH"
 
-        #         case "FOLLOW_PATH":
-        #             pass
-        #             # Here we''l call follow_path()
+                case "GET_PATH":
+                    # Estimate pose and then perform RRT to get a route to curr LM
+                    self.currPos = self.particle_filter.estimate_pose()
+                    dest = self.landmarks[currLm]
+                    angleToTarget = self.CalcTheta_target(self.currPos, dest)
+                    self.RotateAngle(angleToTarget)
+                    optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map= False)
+                    self.state = "FOLLOW_PATH" 
 
-        #         case "FINISHED":
-        #             self.Log("ProtoArlo has completed the Rally!")
-        #             return                                
+                case "FOLLOW_PATH":
+                    # Here we'll call follow_path()
+                    for i in range(1,len(optimal_path)):
+                        betterArlo.AddDest(optimal_path[i])
+                    betterArlo.FollowRoute(1)
+                    # end with updating the currLm
+                    if currLm != 4:
+                        currLm += 1
+                    else:
+                        currLm = 1
+                      
+                    
+                    
+
+                case "FINISHED":
+                    self.Log("ProtoArlo has completed the Rally!")
+                    return                                
                                         
-        #         case _: # Should never be matched, but I do not like not having a default
-        #             self.Log(f"Unexpected state: {self.state = }")
-        #             self.state = "LOCALIZE"
+                case _: # Should never be matched, but I do not like not having a default
+                    self.Log(f"Unexpected state: {self.state = }")
+                    self.state = "LOCALIZE"
+
 
 
     def DriveVector(self, vector): # drives forward at the length of the given Vector. Keeps track of pos from Vector
@@ -93,10 +122,11 @@ class proto_arlo():
         length = np.linalg.norm(vector)
         n = 2
         for _ in range(n):
+            self.particle_filter.perform_MCL(1000 / n)
             self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0)
-            # self.particle_filter.perform_MCL()
-            # self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
+            self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
             self.DriveLength(length/n)
+            self.currPos = self.particle_filter.estimate_pose()
 
 
 
@@ -137,17 +167,17 @@ class proto_arlo():
 
         n = 2
         for _ in range(n):
+            self.particle_filter.perform_MCL(1000 / n)
             self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
-            # self.particle_filter.perform_MCL()
-            
-            # self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
-
+            self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
             if (angle < 0):
                 self.arlo.go_diff(turn_speed, turn_speed, 1, 0)
                 sleep(turn_time / n)
             else:
                 self.arlo.go_diff(turn_speed, turn_speed, 0, 1)
                 sleep(turn_time / n)
+
+            self.currPos = self.particle_filter.estimate_pose()
 
         self.arlo.stop()
 
@@ -166,7 +196,10 @@ class proto_arlo():
 
         self.currentRoute.put(dest)
 
-
+    def CalcTheta_target(currPos, dest):
+        return np.arctan2(dest[1] - currPos[1], dest[0] - currPos[0]) - currPos[2]
+        
+    
     def GoToDest(self,dest): # dest is a Vector
 
         step_length = 0.1 # længde den prøver at køre i skridt
@@ -174,33 +207,17 @@ class proto_arlo():
         clear_path_length = step_length * 2.5
 
 
-        distance = (dest[0] - self.est_pose[0], dest[1] - self.est_pose[1])
-
-        # while (norm_distance > step_length): # while there is still some way to go, go!
-        # while (np.linalg.norm(dest - self.currPos) > step_length): # while there is still some way to go, go!
+        distance = (dest[0] - self.currPos[0], dest[1] - self.currPos[1])
 
         self.Log("Moving forward")
 
-        # path = dest - self.currPos
-        path = (dest[0] - self.est_pose[0], dest[1] - self.est_pose[1])
-
+        
         # Calculating target angle as arctan2(y_2 - y_1, x_2 - x_1) - Theta (Robots current angle)
-        theta_target = np.arctan2(dest[1] - self.est_pose[1], dest[0] - self.est_pose[0]) - self.est_pose[2]
+        theta_target = self.CalcTheta_target(self.currPos, dest)
         print(f"Theta: {np.degrees(theta_target)}")
         
         
         self.RotateAngle(theta_target)
-        self.est_pose = (self.est_pose[0], self.est_pose[1], self.est_pose[2]+theta_target)
-
-        # angle = angle_between_vectors(dest, (self.est_pose[0], self.est_pose[1]))
-
-        # step = (path / np.linalg.norm(path)) * step_length
-
-        # Rotate towards target
-
-        # self.RotateVector(step)
-        
-
 
         self.Log( "after rotate towards current target dest")
 
@@ -246,8 +263,6 @@ class proto_arlo():
         # self.DriveVector(dest - self.currPos)
         
         self.DriveVector(distance)
-        self.est_pose = (dest[0], dest[1], self.est_pose[2])
-        print(f"Est_pose: {self.est_pose}")
         # self.DriveLength(norm_distance)
 
         self.Stop()
@@ -350,6 +365,7 @@ def angle_between_vectors(vector1, vector2):
 
 # test
 # BetterArlo starts in (150, 0, pi)
+# try/finally to properly stop the program when using 'CTRL+C' to terminate program
 try:
     betterArlo = proto_arlo((1))
     betterArlo.AddDest(Vec(0.0, 100.0))

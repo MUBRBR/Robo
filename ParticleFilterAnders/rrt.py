@@ -255,7 +255,7 @@ class RRT:
             if (id == current_landmark): # if its our current target don't block it
                 break
             elif (id in [1,2,3,4]): # if its a landmark we need to go oruond in a wider radius
-                self.map.register_obstacle(new_vector, radius = .50)
+                self.map.register_obstacle(new_vector, radius = .60)
             else: #else its just an obstacle
                 self.map.register_obstacle(new_vector, radius = .30)
                 
