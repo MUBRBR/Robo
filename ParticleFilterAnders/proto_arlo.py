@@ -86,10 +86,14 @@ class proto_arlo():
             elif self.state == "GET_PATH":
                 # Estimate pose and then perform RRT to get a route to curr LM
                 self.currPos = self.particle_filter.estimate_pose()
+                print(f"Estimated current pose: {self.currPos}")
                 dest = self.landmarks[currLm]
+                print(f"Dest: {dest}")
                 angleToTarget = self.CalcTheta_target(self.currPos, dest)
+                print(f"AngleToTarget: {angleToTarget}")
                 self.RotateAngle(angleToTarget)
                 optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map=False)
+                print(f"Optimal path: {optimal_path}")
                 self.state = "FOLLOW_PATH"
 
             elif self.state == "FOLLOW_PATH":
