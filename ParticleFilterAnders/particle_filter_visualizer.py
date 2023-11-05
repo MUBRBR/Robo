@@ -2,7 +2,7 @@ import cv2
 import camera
 import numpy as np
 
-import particle_filter as pf
+from particle_filter import ParticleFilter
 
 # Some color constants in BGR format
 CRED = (0, 0, 255)
@@ -84,7 +84,7 @@ try:
         3: (400.0, 0.0),
         4: (400.0, 300.0) 
     }
-    particle_filter = pf.ParticleFilter(landmarks, cam, num_particles)
+    particle_filter = ParticleFilter(landmarks, cam, num_particles)
 
     est_pose = particle_filter.estimate_pose() # The estimate of the robots current pose
 
@@ -99,7 +99,7 @@ try:
     draw_world(est_pose, particle_filter, world)
 
     # Testing perform MCL
-    # particle_filter.perform_MCL(n = 100, self_localize = True)
+    particle_filter.perform_MCL(n = 1000, self_localize = True)
 
     while True:
 

@@ -19,18 +19,23 @@ class ParticleFilter():
 
         self.particles = self.create_random_particles(n)
 
-    def hardcode_init_pos(self):
-        self.particles = np.array([150.0,0.0,np.pi(),0.0])
-
     def create_random_particles(self, n): 
         particles = np.empty([n, 4])
-        particles[:,0] = np.random.uniform(self.min_x-50, self.max_x+50, n)
-        particles[:,1] = np.random.uniform(self.min_y-50, self.max_y+50, n)
+        particles[:,0] = np.random.uniform(self.min_x-100, self.max_x+100, n)
+        particles[:,1] = np.random.uniform(self.min_y-100, self.max_y+100, n)
         particles[:,2] = np.mod(2.0*np.pi*np.random.rand(n), 2.0*np.pi)
         particles[:,3] = 1/n
 
         return particles
+    
+    def add_n_particles(self, n):
+        #Adds n random particles to the filter
+        self.particles = np.append(self.particles, self.create_random_particles(n),axis=0)
 
+    def remove_n_particles(self, n):
+        #removes n random particles from our filter
+        np.random.shuffle(self.particles)
+        self.particles = self.particles[:-n]
 
     def move_particles(self, delta_x, delta_y, delta_theta):
         self.particles[:,0] += delta_x
@@ -113,8 +118,7 @@ class ParticleFilter():
             weights = weights_d * weights_theta + epsilon
             self.particles[:, 3] *= weights  # Weight is multiplied onto existing weight, as we consider multiple landmarks
 
-            #"Histogramize" the top 10%. Reasonning: We want the top x% to be evenly weighted in the probability distribution, in order to slow down the convergence on a single point. This creates the circle when looking at only one point
-            # If we are -very unsure- (very large variance), then we must remain open to multiple good options. When sufficently low, we can skip this and focus onto a point.
+        #"Histogramize" the top 10%. Reasonning: We want the top x% to be evenly weighted in the probability distribution, in order to slow down the convergence on a single point. This creates the circle when looking at only one point
         if (self_localize): 
             sorted_indices = np.argsort(self.particles[:, 3]) # Get the indices to sort by weight            
             self.particles = self.particles[sorted_indices] # sort
@@ -135,7 +139,8 @@ class ParticleFilter():
 
         if (self_localize):
             #increase number of particles temporarily
-            pass
+            self.add_n_particles(n = 10000)
+
 
         for _ in range(n):
 
@@ -158,3 +163,8 @@ class ParticleFilter():
                 self.add_uncertainty(0.1,0.1)
 
                 #maybe return here, deends on the definition of the MCL algoritm
+
+        if (self_localize):
+            # restore number of particles
+            self.remove_n_particles(n = 10000)
+

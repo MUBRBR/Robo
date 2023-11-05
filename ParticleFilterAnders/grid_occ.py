@@ -50,7 +50,7 @@ class GridOccupancyMap(object):
                         self.grid[i, j] = 1
                         break
 
-    def register_obstacle(self,posLst,radius=0.56): #raidus provided in meters 
+    def register_obstacle(self,pos,radius=0.56): #raidus provided in meters 
         ####
         #### must register box number in grid
         ####
@@ -59,9 +59,9 @@ class GridOccupancyMap(object):
                 centroid = np.array([self.map_area[0][0] + self.resolution * (i+0.5), 
                                      self.map_area[0][1] + self.resolution * (j+0.5)])
 
-                for pos in posLst:
-                    if np.linalg.norm(centroid - pos) <= radius:
-                        self.grid[i, j] = 1
+                if np.linalg.norm(centroid - pos) <= radius:
+                    self.grid[i, j] = 1
+
     
     def draw_map(self):
         #note the x-y axes difference between imshow and plot

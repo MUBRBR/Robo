@@ -35,11 +35,11 @@ class RRT:
             return d
         
     def __init__(self,
-                 start,
-                 goal,
-                 map,           #map should allow the algorithm to query if the path in a node is in collision. note this will ignore the robot geom
+                 map,           
                  cam,
-                 expand_dis=0.2,
+                 start=[0.0,0.0],
+                 goal=[0.0,0.0],                 
+                 expand_dis=0.1,
                  path_resolution=0.05,
                  goal_sample_rate=5,
                  max_iter=500,
@@ -229,7 +229,7 @@ class RRT:
                 return False
         return True
     
-    def get_path(self, current_pose, target, draw_map = True):
+    def get_path(self, current_landmark, current_pose, target, draw_map = True):
         
         pos = np.array(current_pose)[:2]/100
         goal = np.array([abs(target[0]-24),abs(target[1]-18)])/100 #subtracting 24 and 18 shifts the target destination 30 cm towards the center of the course
@@ -248,15 +248,17 @@ class RRT:
         if isinstance(IDs, type(None)): #should never happen, but at least we can check
             return None
 
-        targets = []
         for id, dist, angle in zip(IDs, dists,angles):
             new_vector = np.array(polar_to_cartesian(dist/100,angle+theta)) + pos
             print(f"{id} found: {new_vector}, relative angle: {angle}")
-            targets.append(new_vector)
 
-        # print(targets)
-        #Add obstacles 
-        self.map.register_obstacle(targets)
+            if (id == current_landmark): # if its our current target don't block it
+                break
+            elif (id in [1,2,3,4]): # if its a landmark we need to go oruond in a wider radius
+                self.map.register_obstacle(new_vector, radius = .50)
+            else: #else its just an obstacle
+                self.map.register_obstacle(new_vector, radius = .30)
+                
         path, optimized_path = self.planning() # optimized should be used by robot
 
         # if we want to, draw
@@ -284,21 +286,18 @@ def main():
     # just needs to be pasted into arlo
 
     # Map gets made here
-    path_res = 0.05
-    map = GridOccupancyMap(low=(0, 0), high=(4, 3), res=path_res)
+    map = GridOccupancyMap(low=(0, 0), high=(4, 3), res=0.05)
+
     camera = Camera(0, 'macbookpro', useCaptureThread = False)
 
     #RRT is initialized here
     rrt = RRT(
-        start=[0.0,0.0],
-        goal=[0.0,0.0],
         map=map,
         cam = camera,
-        expand_dis=0.1,
-        path_resolution=path_res
         )
     
-    print(f"{rrt.get_path([0.0,0.0,1.5*math.pi], [400.0,0.0]) = }")
+    print(f"{rrt.get_path(2,[0.0,0.0,.25*math.pi], [400.0,0.0]) = }")
+
 
 if __name__ == '__main__':
     main()
