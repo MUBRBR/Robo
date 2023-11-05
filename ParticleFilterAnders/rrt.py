@@ -1,5 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from camera import Camera
+from grid_occ import GridOccupancyMap
+import math
+
+def polar_to_cartesian(magnitude, angle_in_radians):
+    # Calculate the horizontal and vertical components
+    x = magnitude * math.cos(angle_in_radians)
+    y = magnitude * math.sin(angle_in_radians)
+    
+    # Return a tuple (x, y) representing the vector components
+    return x, y
+
 
 class RRT:
     """
@@ -23,10 +35,11 @@ class RRT:
             return d
         
     def __init__(self,
-                 start,
-                 goal,
-                 map,           #map should allow the algorithm to query if the path in a node is in collision. note this will ignore the robot geom
-                 expand_dis=0.2,
+                 map,           
+                 cam,
+                 start=[0.0,0.0],
+                 goal=[0.0,0.0],                 
+                 expand_dis=0.1,
                  path_resolution=0.05,
                  goal_sample_rate=5,
                  max_iter=500,
@@ -46,6 +59,8 @@ class RRT:
 
         self.node_list = []
         self.edges = []
+
+        self.cam = cam
 
     def planning(self):
         """
@@ -213,6 +228,53 @@ class RRT:
             if self.map.in_collision(np.array(p)):
                 return False
         return True
+    
+    def get_path(self, current_landmark, current_pose, target, draw_map = True):
+        
+        pos = np.array(current_pose)[:2]/100
+        goal = np.array([abs(target[0]-24),abs(target[1]-18)])/100 #subtracting 24 and 18 shifts the target destination 30 cm towards the center of the course
+        theta = current_pose[2]
+
+        print(f"{pos = }, {goal = }, {theta =}")
+
+        # Fist set start and goal (current position, goal)
+        self.start = self.Node(pos)
+        self.end = self.Node(goal)
+
+        #Get frame and estblish position of obstacles
+        colour = self.cam.get_next_frame()
+        IDs, dists, angles = self.cam.detect_aruco_objects(colour)
+
+        if isinstance(IDs, type(None)): #should never happen, but at least we can check
+            return None
+
+        for id, dist, angle in zip(IDs, dists,angles):
+            new_vector = np.array(polar_to_cartesian(dist/100,angle+theta)) + pos
+            print(f"{id} found: {new_vector}, relative angle: {angle}")
+
+            if (id == current_landmark): # if its our current target don't block it
+                break
+            elif (id in [1,2,3,4]): # if its a landmark we need to go oruond in a wider radius
+                self.map.register_obstacle(new_vector, radius = .50)
+            else: #else its just an obstacle
+                self.map.register_obstacle(new_vector, radius = .30)
+                
+
+        # print(targets)
+        #Add obstacles 
+        path, optimized_path = self.planning() # optimized should be used by robot
+
+        # if we want to, draw
+        if (draw_map):
+            self.map.draw_map()
+            # plt.show()
+            
+            # print(f"Path:\n{path}\n")
+            # print(f"Optimized path:\n{optimized_path}\n")
+            self.draw_graph(path, optimized_path)
+
+        return [pos * 100 for pos in optimized_path] # back to using cm as unit
+
 
     @staticmethod
     def get_nearest_node_index(node_list, rnd_node):
@@ -222,29 +284,21 @@ class RRT:
 
         return minind
 
-import grid_occ
-
 def main():
 
+    # just needs to be pasted into arlo
+
     # Map gets made here
-    path_res = 0.05
-    map = grid_occ.GridOccupancyMap(low=(0, 0), high=(3, 4), res=path_res)
-    map.populate()
-    # map.register_obstacle([np.array([2,2]),np.array([1.5,2]),np.array([1,3])])
+    map = GridOccupancyMap(low=(0, 0), high=(4, 3), res=0.05)
+    camera = Camera(0, 'macbookpro', useCaptureThread = False)
 
     #RRT is initialized here
     rrt = RRT(
-        start=[1.5,0.0],
-        goal=[1.5,3.5],
         map=map,
-        expand_dis=0.1,
-        path_resolution=path_res
+        cam = camera,
         )
     
-    path, optimized_path = rrt.planning() # optimized should be used by robot
-    print(f"Path:\n{path}\n")
-    print(f"Optimized path:\n{optimized_path}\n")
-    rrt.draw_graph(path, optimized_path) #path should be saved so it can be viewed afterwards
+    print(f"{rrt.get_path(2,[0.0,0.0,.25*math.pi], [400.0,0.0]) = }")
 
 if __name__ == '__main__':
     main()

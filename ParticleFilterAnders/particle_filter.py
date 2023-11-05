@@ -1,30 +1,38 @@
 import numpy as np
 
 class ParticleFilter():
-    def __init__(self, landmarks, n = 1000):
+    def __init__(self, landmarks, cam, n = 1000):
 
-        #Set 
+        #Set cam
+        self.cam = cam
+
+        #Set landmarks dict
         self.landmarks = landmarks
 
         #Get bounds for the particles
         landmarks_array = np.array([[x,y] for (x,y) in landmarks.values()])
-        self.min_x, self.max_x = np.min(landmarks_array[:,1]), np.max(landmarks_array[:,1])
-        self.min_y, self.max_y = np.min(landmarks_array[:,2]), np.max(landmarks_array[:,2])
+        self.min_x, self.max_x = np.min(landmarks_array[:,0]), np.max(landmarks_array[:,0])
+        self.min_y, self.max_y = np.min(landmarks_array[:,1]), np.max(landmarks_array[:,1])
 
         self.particles = self.create_random_particles(n)
 
-    def hardcode_init_pos(self):
-        self.particles = np.array([150.0,0.0,np.pi(),0.0])
-
     def create_random_particles(self, n): 
         particles = np.empty([n, 4])
-        particles[:,0] = np.random.uniform(self.min_x-50, self.max_x+50, n)
-        particles[:,1] = np.random.uniform(self.min_y-50, self.max_y+50, n)
+        particles[:,0] = np.random.uniform(self.min_x-100, self.max_x+100, n)
+        particles[:,1] = np.random.uniform(self.min_y-100, self.max_y+100, n)
         particles[:,2] = np.mod(2.0*np.pi*np.random.rand(n), 2.0*np.pi)
         particles[:,3] = 1/n
 
         return particles
+    
+    def add_n_particles(self, n):
+        #Adds n random particles to the filter
+        self.particles = np.append(self.particles, self.create_random_particles(n),axis=0)
 
+    def remove_n_particles(self, n):
+        #removes n random particles from our filter
+        np.random.shuffle(self.particles)
+        self.particles = self.particles[:-n]
 
     def move_particles(self, delta_x, delta_y, delta_theta):
         self.particles[:,0] += delta_x
@@ -83,8 +91,8 @@ class ParticleFilter():
             curr_landmark, curr_dist, curr_angle = objectIDs[i], dists[i], angles[i]
 
             # Get sigma_d and sigma_theta
-            sigma_d = 2 * np.std(np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1)))
-            sigma_theta = 1 * np.std(self.particles[:, 2])
+            sigma_d = 3 * np.std(np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1)))
+            sigma_theta = 2 * np.std(self.particles[:, 2])
 
             # Distance-part of weight
             measured_dists = np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1))
@@ -107,15 +115,8 @@ class ParticleFilter():
             weights = weights_d * weights_theta + epsilon
             self.particles[:, 3] *= weights  # Weight is multiplied onto existing weight, as we consider multiple landmarks
 
-        # Give a very low weight to any particles outside of bounds, when we are initially selvlocalizing - as here we´ll always be on an edge on the map. This is semi-hardocding and could be further harcoded so that only points on an edge (or close) are valid. may work really well.
-        if (self_localize): 
-            condition_x = (self.particles[:, 0] < self.min_x) | (self.particles[:, 0] > self.max_x)
-            condition_y = (self.particles[:, 1] < self.min_y) | (self.particles[:, 1] > self.max_y)
-            self.particles[(condition_x | condition_y), 3] *= 0.9
-        
         #"Histogramize" the top 10%. Reasonning: We want the top x% to be evenly weighted in the probability distribution, in order to slow down the convergence on a single point. This creates the circle when looking at only one point
-        # If we are -very unsure- (very large variance), then we must remain open to multiple good options. When sufficently low, we can skip this and focus onto a point.
-        if (self.evaluate_pose() > 20):
+        if (self_localize): 
             sorted_indices = np.argsort(self.particles[:, 3]) # Get the indices to sort by weight            
             self.particles = self.particles[sorted_indices] # sort
             rows_to_change = int(len(self.particles) * 0.1) #10%
@@ -129,3 +130,36 @@ class ParticleFilter():
 
         # Update the particles array with the resampled particles
         self.particles = self.particles[selected_indices]
+
+
+    def perform_MCL(self, n, self_localize = False):
+
+        if (self_localize):
+            #increase number of particles temporarily
+            self.add_n_particles(n = 10000)
+
+        for _ in range(n):
+
+            # Fetch next frame
+            colour = self.cam.get_next_frame()
+            
+            # Detect objects
+            objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
+
+            if not isinstance(objectIDs, type(None)): # if there is actually work to do..
+
+                self.MCL(objectIDs, dists, angles, self_localize)
+
+                self.add_uncertainty(0.5,0.1)
+
+            else:
+                # No observation - reset weights to uniform distribution
+                self.reset_weights()
+
+                self.add_uncertainty(0.1,0.1)
+
+                #maybe return here, deends on the definition of the MCL algoritm
+
+        if (self_localize):
+            # restore number of particles
+            self.remove_n_particles(n = 10000)

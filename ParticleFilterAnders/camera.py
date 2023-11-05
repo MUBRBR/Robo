@@ -3,37 +3,22 @@ import numpy as np
 import time
 import sys
 import threading
-import framebuffer as framebuffer
+import framebuffer
 from pkg_resources import parse_version
 
 
 gstreamerCameraFound = False
 piCameraFound = False
-piCamera2Found = False
 try:
     import picamera
     from picamera.array import PiRGBArray
     piCameraFound = True
-    print("Camera.py: Using picamera module")
 except ImportError:
-    print("Camera.py: picamera module not available")
-
-try:
-    import picamera2
-    piCamera2Found = True
-    print("Camera.py: Using picamera2 module")
-except ImportError:
-    print("Camera.py: picamera2 module not available")
-
-if not piCameraFound and not piCamera2Found:
-    print("Camera.py: Using OpenCV interface instead")
-
+    print("Camera.py: picamera module not available - using OpenCV interface instead")
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False."""
-    # TODO: Problematic that gstreamerCameraFound is first set after
-    #  instantiation of a Camera object
-    return piCameraFound or piCamera2Found or gstreamerCameraFound
+    return piCameraFound or gstreamerCameraFound
 
 # Black magic in order to handle differences in namespace names in OpenCV 2.4 and 3.0
 OPCV3 = parse_version(cv2.__version__) >= parse_version('3')
@@ -59,8 +44,6 @@ def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=30):
             framerate,
         )
     )
-
-
 
 class CaptureThread(threading.Thread):
     """Internal worker thread that captures frames from the camera"""
@@ -96,11 +79,6 @@ class CaptureThread(threading.Thread):
                     # Python 2.x
                     image = image.reshape((self.cam.resolution[1], self.cam.resolution[0], 3))
 
-
-            elif piCamera2Found:
-                # TODO: Add support for pycamera2
-                image = self.cam.capture_array("main")
-
             else:  # Use OpenCV
                 retval, image = self.cam.read()  # Read frame
 
@@ -121,62 +99,29 @@ class Camera(object):
     """This class is responsible for doing the image processing. It detects known landmarks and 
     measures distances and orientations to these."""
     
-    def __init__(self, camidx, robottype='arlo', useCaptureThread=False):
+    def __init__(self, camidx, robottype='arlo', useCaptureThread = False):
         """Constructor:
              camidx - index of camera
              robottype - specify which robot you are using in order to use the correct camera calibration. 
                          Supported types: arlo, frindo, scribbler, macbookpro"""
 
-        print("robottype =", robottype)
         self.useCaptureThread = useCaptureThread
-
-        # TODO: Use this in the different camera configurations
-        self.FPS = 5 # Framerate
 
         # Set camera calibration info
         if robottype == 'arlo':
-            self.imageSize = (800, 600)                                                                     # ændret format til det gamle
-            #self.intrinsic_matrix = np.asarray([ 7.1305391967046853e+02, 0., 3.1172820723774367e+02, 0.,
-            #       7.0564929862291285e+02, 2.5634470978315028e+02, 0., 0., 1. ], dtype = np.float64)
-            #self.intrinsic_matrix = np.asarray([ 6.0727040957659040e+02, 0., 3.0757300398967601e+02, 0.,
-            #       6.0768864690145904e+02, 2.8935674612358201e+02, 0., 0., 1. ], dtype = np.float64)
-            self.intrinsic_matrix = np.asarray([629.8, 0., self.imageSize[0] / 2.0, 0.,                     # ændret focal length til vores f værdi
-                   629.8, self.imageSize[1] / 2.0, 0., 0., 1.], dtype = np.float64)
+            self.imageSize = (1280, 720)
+            self.intrinsic_matrix = np.asarray([500, 0., self.imageSize[0] / 2.0, 0.,
+                   500, self.imageSize[1] / 2.0, 0., 0., 1.], dtype = np.float64)
             self.intrinsic_matrix.shape = (3, 3)
-            #self.distortion_coeffs = np.asarray([ 1.1911006165076067e-01, -1.0003366233413549e+00,
-            #       1.9287903277399834e-02, -2.3728201444308114e-03, -2.8137265581326476e-01 ], dtype = np.float64)
             self.distortion_coeffs = np.asarray([0., 0., 2.0546093607192093e-02, -3.5538453075048249e-03, 0.], dtype = np.float64)
-        elif robottype == 'frindo':
-            self.imageSize = (640, 480)
-            #self.intrinsic_matrix = np.asarray([ 7.1305391967046853e+02, 0., 3.1172820723774367e+02, 0.,
-            #       7.0564929862291285e+02, 2.5634470978315028e+02, 0., 0., 1. ], dtype = np.float64)
-            #self.intrinsic_matrix = np.asarray([ 6.0727040957659040e+02, 0., 3.0757300398967601e+02, 0.,
-            #       6.0768864690145904e+02, 2.8935674612358201e+02, 0., 0., 1. ], dtype = np.float64)
-            self.intrinsic_matrix = np.asarray([500, 0., 3.0757300398967601e+02, 0.,
-                   500, 2.8935674612358201e+02, 0., 0., 1.], dtype = np.float64)
-            self.intrinsic_matrix.shape = (3, 3)
-            #self.distortion_coeffs = np.asarray([ 1.1911006165076067e-01, -1.0003366233413549e+00,
-            #       1.9287903277399834e-02, -2.3728201444308114e-03, -2.8137265581326476e-01 ], dtype = np.float64)
-            self.distortion_coeffs = np.asarray([0., 0., 2.0546093607192093e-02, -3.5538453075048249e-03, 0.], dtype = np.float64)
-        elif robottype == 'scribbler':
-            # Unknown calibration - just using the Frindo calibration
-            self.imageSize = (640, 480)
-            self.intrinsic_matrix = np.asarray([7.1305391967046853e+02, 0., 3.1172820723774367e+02, 0.,
-                   7.0564929862291285e+02, 2.5634470978315028e+02, 0., 0., 1.], dtype = np.float64)
-            self.intrinsic_matrix.shape = (3, 3)
-            self.distortion_coeffs = np.asarray([1.1911006165076067e-01, -1.0003366233413549e+00,
-                   1.9287903277399834e-02, -2.3728201444308114e-03, -2.8137265581326476e-01], dtype = np.float64)
+
         elif robottype == 'macbookpro':
             self.imageSize = (1280, 720)
-            #self.imageSize = (1080, 720)
-            #self.intrinsic_matrix = np.asarray([ 8.6955302212233869e+02, 0., 5.2076864848745902e+02, 0.,
-            #       8.7317664932843684e+02, 4.0331768178896669e+02, 0., 0., 1. ], dtype = np.float64)
             self.intrinsic_matrix = np.asarray([9.4328095162920715e+02, 0., self.imageSize[0] / 2.0, 0.,
                    9.4946668595979077e+02, self.imageSize[1] / 2.0, 0., 0., 1.], dtype = np.float64)
             self.intrinsic_matrix.shape = (3, 3)
-            #self.distortion_coeffs = np.asarray([ -1.2844325433988565e-01, -1.3646926538980573e+00,
-            #       -5.7263071423202944e-03, 5.7422957803983802e-03, 5.9722099836744738e+00 ], dtype = np.float64)
             self.distortion_coeffs = np.asarray([0., 0., -1.6169374082976234e-02, 8.7657653170062459e-03, 0.], dtype = np.float64)
+        
         else:
             print("Camera.__init__: Unknown robot type")
             exit(-1)
@@ -212,19 +157,6 @@ class Camera(object):
             print("Camera height = ", self.cam.resolution[1])
             print("Camera FPS = ", self.cam.framerate)
 
-        elif piCamera2Found:
-            # TODO: Add support for pycamera2
-            self.cam = picamera2.Picamera2()
-            #self.picam2_config = self.cam.create_still_configuration()
-            frame_duration_limit = int(1/self.FPS * 1000000) # Microseconds
-            # TODO: Change configuration to set resolution, framerate
-            self.picam2_config = self.cam.create_video_configuration({"size": self.imageSize, "format": 'RGB888'},
-                                                                     controls={"FrameDurationLimits": (frame_duration_limit, frame_duration_limit)},
-                                                                     queue=False)
-            self.cam.configure(self.picam2_config) # Not really necessary
-            self.cam.start(show_preview=False)
-
-            time.sleep(1)  # wait for camera to setup
 
         else:  # Use OpenCV interface
 
@@ -261,10 +193,6 @@ class Camera(object):
             print("Camera height = ", int(self.cam.get(capPropId("FRAME_HEIGHT"))))
             print("Camera FPS = ", int(self.cam.get(capPropId("FPS"))))
         
-        # Initializing the camera distortion maps
-        #self.mapx, self.mapy = cv2.initUndistortRectifyMap(self.intrinsic_matrix, self.distortion_coeffs, np.eye(3,3), np.eye(3,3), self.imageSize, cv2.CV_32FC1)
-        # Not needed we use the cv2.undistort function instead
-        
         # Initialize chessboard pattern parameters
         self.patternFound = False
         self.patternSize = (3,4)
@@ -279,31 +207,20 @@ class Camera(object):
         # Initialize worker thread and framebuffer
         if self.useCaptureThread:
             print("Using capture thread")
-            self.framebuffer = framebuffer.FrameBuffer((self.imageSize[1], self.imageSize[0], 3))
+            self.framebuffer = framebuffer.FrameBuffer()
             self.capturethread = CaptureThread(self.cam, self.framebuffer)
             self.capturethread.start()
             time.sleep(0.75)
 
     def __del__(self):
-
-        # TODO: Add support for pycamera2
-        if piCameraFound or piCamera2Found:
+        if piCameraFound:
             self.cam.close()
-
         
     def terminateCaptureThread(self):
         if self.useCaptureThread:
             self.capturethread.stop()
             self.capturethread.join()
-        
-    def get_capture(self):
-        """Access to the internal camera object for advanced control of the camera."""
-        return self.cam
 
-    def get_colour(self):
-        """OBSOLETE - use instead get_next_frame"""
-        print("OBSOLETE get_colour - use instead get_next_frame")
-        return self.get_next_frame()
 
     def get_next_frame(self):
         """Gets the next available image frame from the camera."""
@@ -314,20 +231,15 @@ class Camera(object):
                 img = np.array((self.imageSize[0], self.imageSize[1], 3), dtype=np.uint8)
                         
         else:
-
             if piCameraFound:
-                # Use picamera module
+                # Use piCamera
             
                 self.cam.capture(self.rawCapture, format="bgr", use_video_port=True)
                 img = self.rawCapture.array
             
                 # clear the stream in preparation for the next frame
                 self.rawCapture.truncate(0)
-
-            elif piCamera2Found:
-                # Use pycamera2 module
-                img = self.cam.capture_array("main")
-
+            
             else: # Use OpenCV
                 retval, img = self.cam.read()  # Read frame
 
@@ -351,6 +263,18 @@ class Camera(object):
 
 
         if not isinstance(self.ids, type(None)):
+
+            for i in range(self.rvecs.shape[1]):
+
+                # get rotation on y-axis from the rotation vector
+                _, ry, _ = self.rvecs[0, i]
+
+                # Define a vector with length 20, angle 45, and then rotate it further by the y-axis rotation:
+                translation_vector = np.array([[np.cos(np.pi*0.25-ry), 0, np.sin(np.pi*0.25-ry)]]) * .20
+
+                # Extend each tvec by the translation_vector
+                self.tvecs[0, i] += translation_vector.ravel()
+
             dists = np.linalg.norm(self.tvecs, axis=len(self.tvecs.shape) - 1) * 100
             # Make sure we always return properly shaped arrays
             dists = dists.reshape((dists.shape[0],))
@@ -391,121 +315,12 @@ class Camera(object):
 
         return outimg
 
-    # Chessboard object detector
-    def get_object(self, img):
-        """Detect object and return object type, distance (in cm), angle (in radians) and 
-        colour probability table in the order (R,G,B)"""
-        objectType = 'none'
-        colourProb = np.ones((3,)) / 3.0
-        distance = 0.0
-        angle = 0.0
-        self.patternFound = False
-        
-        #patternFound, corners = self.get_corners(img)
-        self.get_corners(img)
-        
-        if (self.patternFound):
-            
-            # Determine if the object is horizontal or vertical
-            delta_x = abs(self.corners[0, 0, 0] - self.corners[2, 0, 0])
-            delta_y = abs(self.corners[0, 0, 1] - self.corners[2, 0, 1])
-            horizontal = (delta_y > delta_x)
-            if (horizontal):
-                objectType = 'horizontal'
-            else:
-                objectType = 'vertical'
-            
-            # Compute distances and angles
-            if (horizontal):
-                height = ((abs (self.corners[0, 0, 1] - self.corners[2, 0, 1]) +
-                          abs (self.corners[9, 0, 1] - self.corners[11, 0, 1])) / 2.0)
-                          
-                patternHeight = (self.patternSize[0]-1.0) * self.patternUnit
-                
-            else:
-                height = (abs (self.corners[0, 0, 1] - self.corners[9, 0, 1]) +
-                              abs (self.corners[2, 0, 1] - self.corners[11, 0, 1])) / 2.0
-                              
-                patternHeight = (self.patternSize[1]-1.0) * self.patternUnit
-            
-            #distance = 1.0 / (0.0001 * height);
-            distance = self.intrinsic_matrix[1, 1] * patternHeight / (height * 10.0)
-
-            center = (self.corners[0, 0, 0] + self.corners[2, 0, 0] +
-                                         self.corners[9, 0, 0] + self.corners[11, 0, 0]) / 4.0
-            
-            #angle = 0.0018 * center - 0.6425;
-            #angle *= -1.0;
-            angle = -np.arctan2(center - self.intrinsic_matrix[0, 2], self.intrinsic_matrix[0, 0])
-            
-            
-            #### Classify object by colour
-            
-            # Extract rectangle corners
-            points = np.array(
-                        [
-                         self.corners[0],
-                         self.corners[2],
-                         self.corners[9],
-                         self.corners[11]
-                        ]
-                      )
-                    
-            points.shape = (4, 2)
-            points = np.int32(points)
-
-            # Compute region of interest
-            mask = np.zeros((self.imageSize[1], self.imageSize[0]), dtype = np.uint8) 
-            #cv2.fillConvexPoly (mask, points, (255, 255, 255))
-            cv2.fillConvexPoly (mask, points, 255)    
-    
-            # Compute mean colour inside region of interest
-            mean_colour = cv2.mean(img, mask)  # There is a bug here in Python 3 - it produces a segfault
-            
-            red = mean_colour[2]
-            green = mean_colour[1]
-            blue = mean_colour[0]
-            sum = red + green + blue
-
-            colourProb[0] = red / sum
-            colourProb[1] = green / sum
-            colourProb[2] = blue / sum
-            
-            
-        return objectType, distance, angle, colourProb
-        
-        
-    def get_corners(self, img):
-        """Detect corners - this is an auxillary method and should not be used directly"""
-        
-        # Convert to gray scale
-        gray = cv2.cvtColor( img, cv2.COLOR_BGR2GRAY )
-        loggray = cv2.log(gray + 1.0)
-        cv2.normalize(loggray,loggray,0,255,cv2.NORM_MINMAX)
-        gray = cv2.convertScaleAbs(loggray)
-        
-        #retval, self.corners = cv2.findChessboardCorners(gray, self.patternSize, cv2.CALIB_CB_NORMALIZE_IMAGE | cv2.CALIB_CB_ADAPTIVE_THRESH | cv2.CALIB_CB_FAST_CHECK)
-        retval, self.corners = cv2.findChessboardCorners(gray, self.patternSize, cv2.CALIB_CB_FAST_CHECK)
-        if (retval > 0):
-            self.patternFound = True
-            #cv2.cornerSubPix(gray, self.corners, (5,5), (-1,-1), (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 3, 0.0))
-            
-        return self.patternFound, self.corners
-        
-        
-    def draw_object(self, img):
-        """Draw the object if found into img"""
-        cv2.drawChessboardCorners(img, self.patternSize, self.corners, self.patternFound)
-        
-
-
 if (__name__=='__main__'):
     print("Opening and initializing camera")
     
-    #cam = Camera(0, 'macbookpro', useCaptureThread=True)
+    cam = Camera(0, 'macbookpro', useCaptureThread = True)
     #cam = Camera(0, 'macbookpro', useCaptureThread = False)
-    #cam = Camera(0, robottype='arlo', useCaptureThread=True)
-    cam = Camera(0, robottype='arlo', useCaptureThread=False)
+    #cam = Camera(0, 'arlo', useCaptureThread = True)
     
     # Open a window
     WIN_RF1 = "Camera view"
@@ -534,12 +349,12 @@ if (__name__=='__main__'):
         #gray = cv2.convertScaleAbs(loggray)
         
         # Detect objects
-        #objectType, distance, angle, colourProb = cam.get_object(colour)
-        #if objectType != 'none':
-        #    print("Object type = ", objectType, ", distance = ", distance, ", angle = ", angle, ", colourProb = ", colourProb)
+        objectType, distance, angle, colourProb = cam.get_object(colour)
+        if objectType != 'none':
+            print("Object type = ", objectType, ", distance = ", distance, ", angle = ", angle, ", colourProb = ", colourProb)
 
         # Draw detected pattern
-        #cam.draw_object(colour)
+        cam.draw_object(colour)
 
         IDs, dists, angles = cam.detect_aruco_objects(colour)
         if not isinstance(IDs, type(None)):
@@ -562,3 +377,4 @@ if (__name__=='__main__'):
 
     # Clean-up capture thread
     cam.terminateCaptureThread()
+
