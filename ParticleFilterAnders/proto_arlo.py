@@ -72,43 +72,78 @@ class proto_arlo():
     def boot_and_rally(self):
         currLm = 1
         while True:
-            match self.state:
-                case "LOCALIZE":
+            if self.state == "LOCALIZE":
+                # Here we'll call self_localize()
+                # Reset queue, perform MCL with *10 particles while rotating
+                self.currentRoute = q.Queue()
+                self.observe360Degrees()
+                self.state = "GET_PATH"
+
+            elif self.state == "GET_PATH":
+                # Estimate pose and then perform RRT to get a route to curr LM
+                self.currPos = self.particle_filter.estimate_pose()
+                dest = self.landmarks[currLm]
+                angleToTarget = self.CalcTheta_target(self.currPos, dest)
+                self.RotateAngle(angleToTarget)
+                optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map=False)
+                self.state = "FOLLOW_PATH"
+
+            elif self.state == "FOLLOW_PATH":
+                # Here we'll call follow_path()
+                for i in range(1, len(optimal_path)):
+                    betterArlo.AddDest(optimal_path[i])
+                betterArlo.FollowRoute(1)
+                # end with updating the currLm
+                if currLm != 4:
+                    currLm += 1
+                else:
+                    currLm = 1
+
+            elif self.state == "FINISHED":
+                self.Log("ProtoArlo has completed the Rally!")
+                return
+
+            else:
+                # Should never be matched, but I do not like not having a default
+                self.Log(f"Unexpected state: {self.state}")
+                self.state = "LOCALIZE"
+            # match self.state:
+                # case "LOCALIZE":
                     
-                # Here we''l call self_localize()
-                #   Reset queue, perform MCL with *10 parti while rotating
-                    self.currentRoute = q.Queue()
-                    self.observe360Degrees()
-                    self.state = "GET_PATH"
+                # # Here we''l call self_localize()
+                # #   Reset queue, perform MCL with *10 parti while rotating
+                #     self.currentRoute = q.Queue()
+                #     self.observe360Degrees()
+                #     self.state = "GET_PATH"
 
-                case "GET_PATH":
-                    # Estimate pose and then perform RRT to get a route to curr LM
-                    self.currPos = self.particle_filter.estimate_pose()
-                    dest = self.landmarks[currLm]
-                    angleToTarget = self.CalcTheta_target(self.currPos, dest)
-                    self.RotateAngle(angleToTarget)
-                    optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map= False)
-                    self.state = "FOLLOW_PATH" 
+                # case "GET_PATH":
+                #     # Estimate pose and then perform RRT to get a route to curr LM
+                #     self.currPos = self.particle_filter.estimate_pose()
+                #     dest = self.landmarks[currLm]
+                #     angleToTarget = self.CalcTheta_target(self.currPos, dest)
+                #     self.RotateAngle(angleToTarget)
+                #     optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map= False)
+                #     self.state = "FOLLOW_PATH" 
 
-                case "FOLLOW_PATH":
-                    # Here we'll call follow_path()
-                    for i in range(1,len(optimal_path)):
-                        betterArlo.AddDest(optimal_path[i])
-                    betterArlo.FollowRoute(1)
-                    # end with updating the currLm
-                    if currLm != 4:
-                        currLm += 1
-                    else:
-                        currLm = 1
+                # case "FOLLOW_PATH":
+                #     # Here we'll call follow_path()
+                #     for i in range(1,len(optimal_path)):
+                #         betterArlo.AddDest(optimal_path[i])
+                #     betterArlo.FollowRoute(1)
+                #     # end with updating the currLm
+                #     if currLm != 4:
+                #         currLm += 1
+                #     else:
+                #         currLm = 1
                     
 
-                case "FINISHED":
-                    self.Log("ProtoArlo has completed the Rally!")
-                    return                                
+                # case "FINISHED":
+                #     self.Log("ProtoArlo has completed the Rally!")
+                #     return                                
                                         
-                case _: # Should never be matched, but I do not like not having a default
-                    self.Log(f"Unexpected state: {self.state = }")
-                    self.state = "LOCALIZE"
+                # case _: # Should never be matched, but I do not like not having a default
+                #     self.Log(f"Unexpected state: {self.state = }")
+                #     self.state = "LOCALIZE"
 
 
 
