@@ -72,8 +72,8 @@ class proto_arlo():
     def boot_and_rally(self):
         currLm = 1
         while True:
-            
-            match betterArlo.state:
+            print(f"self.state: {self.state}")
+            match self.state():
                 case "LOCALIZE":
                     
                 # Here we''l call self_localize()
