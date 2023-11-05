@@ -66,7 +66,7 @@ class proto_arlo():
             self.RotateAngle(np.deg2rad(20))
             print(f"iter{_}")
             sleep(0.5)
-            
+            print(f"has slept{_}")
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
             
             
@@ -84,7 +84,7 @@ class proto_arlo():
             # if (len(valid_indices > 0)):
 
                 self.particle_filter.perform_MCL(int (20), self_localize= True)
-                print(f"has slept{_}")
+                
 
 
 
