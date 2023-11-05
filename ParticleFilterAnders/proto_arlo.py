@@ -272,7 +272,7 @@ class proto_arlo():
 
 
         distance = (dest[0] - self.currPos[0], dest[1] - self.currPos[1])
-
+        print(f"distance we give to drivevector: {distance}")
         self.Log("Moving forward")
 
         
