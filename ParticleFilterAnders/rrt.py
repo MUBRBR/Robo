@@ -229,7 +229,10 @@ class RRT:
                 return False
         return True
     
-    def get_path(self, current_landmark, current_pose, target, draw_map = True):
+    def get_path(self, current_landmark, current_pose, target, clear_map = True, draw_map = False):
+        
+        if (clear_map):
+            self.map.clear()
         
         pos = np.array(current_pose)[:2]/100
         goal = np.array([abs(target[0]-24),abs(target[1]-18)])/100 #subtracting 24 and 18 shifts the target destination 30 cm towards the center of the course
@@ -259,6 +262,9 @@ class RRT:
             else: #else its just an obstacle
                 self.map.register_obstacle(new_vector, radius = .30)
                 
+
+        # print(targets)
+        #Add obstacles 
         path, optimized_path = self.planning() # optimized should be used by robot
 
         # if we want to, draw
@@ -287,7 +293,6 @@ def main():
 
     # Map gets made here
     map = GridOccupancyMap(low=(0, 0), high=(4, 3), res=0.05)
-
     camera = Camera(0, 'macbookpro', useCaptureThread = False)
 
     #RRT is initialized here
@@ -297,7 +302,6 @@ def main():
         )
     
     print(f"{rrt.get_path(2,[0.0,0.0,.25*math.pi], [400.0,0.0]) = }")
-
 
 if __name__ == '__main__':
     main()
