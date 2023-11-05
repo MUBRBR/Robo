@@ -88,7 +88,7 @@ class RRT:
                 if self.check_collision_free(final_node):
                     return self.generate_final_course(len(self.node_list) - 1)
 
-        return None  # cannot find path
+        return None, None  # cannot find path
     
     def forward_dyn(self, x, u, T):
         path = [x]
@@ -275,8 +275,9 @@ class RRT:
             # print(f"Path:\n{path}\n")
             # print(f"Optimized path:\n{optimized_path}\n")
             self.draw_graph(path, optimized_path)
-
-        return [pos * 100 for pos in optimized_path] # back to using cm as unit
+            
+        if not isinstance(optimized_path, type(None)):
+            return [pos * 100 for pos in optimized_path] # back to using cm as unit
 
 
     @staticmethod
