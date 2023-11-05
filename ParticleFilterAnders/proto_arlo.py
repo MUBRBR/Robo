@@ -18,8 +18,8 @@ class proto_arlo():
     def __init__(self, landmarks):
         self.arlo = robot.Robot()
 
-        self.initPos = Vec(0.0,0.0)
-        self.currPos = Vec(0.0,0.0)
+        # self.initPos = Vec(0.0,0.0, 0.0) # not used
+        self.currPos = Vec(0.0, 0.0, 0.0)
         
         # self.initDir = Vec(0.0,1.0)
         # self.currDir = Vec(0.0,1.0)
@@ -66,7 +66,7 @@ class proto_arlo():
             self.RotateAngle(np.deg2rad(20))
             print(f"iter{_}")
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
-            self.particle_filter.perform_MCL(int (1000/iterations), self_localize= True)
+            self.particle_filter.perform_MCL(int (500/iterations), self_localize= True)
             sleep(0.5)
             print(f"has slept{_}")
             
