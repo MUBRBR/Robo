@@ -111,7 +111,7 @@ class proto_arlo():
                 angleToTarget = self.CalcTheta_target(self.currPos, dest)
                 print(f"AngleToTarget: {np.degrees(angleToTarget)}")
                 self.RotateAngle(angleToTarget)
-                optimal_path = self.RRT.get_path(currLm, self.currPos, dest)
+                optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map= True)
                 print(f"Optimal path: {optimal_path}")
                 self.state = "FOLLOW_PATH"
 
