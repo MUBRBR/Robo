@@ -19,7 +19,7 @@ class proto_arlo():
         self.arlo = robot.Robot()
 
         # self.initPos = Vec(0.0,0.0, 0.0) # not used
-        self.currPos = Vec(0.0, 0.0, 0.0)
+        self.currPos = Vec3(0.0, 0.0, 0.0)
         
         # self.initDir = Vec(0.0,1.0)
         # self.currDir = Vec(0.0,1.0)
@@ -371,6 +371,9 @@ class proto_arlo():
 
 def Vec(x,y):
     return np.array([x,y])
+
+def Vec3(x,y,z):
+    return np.array([x,y,z])
 
 def angle_between_vectors(vector1, vector2):
     # Calculate the dot product of the two vectors
