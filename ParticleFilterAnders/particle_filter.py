@@ -7,12 +7,15 @@ class ParticleFilter():
         self.cam = cam
 
         #Set landmarks dict
+
         self.landmarks = landmarks
 
         #Get bounds for the particles
         landmarks_array = np.array([[x,y] for (x,y) in landmarks.values()])
+
         self.min_x, self.max_x = np.min(landmarks_array[:,0]), np.max(landmarks_array[:,0])
         self.min_y, self.max_y = np.min(landmarks_array[:,1]), np.max(landmarks_array[:,1])
+
 
         self.particles = self.create_random_particles(n)
 
@@ -138,6 +141,7 @@ class ParticleFilter():
             #increase number of particles temporarily
             self.add_n_particles(n = 10000)
 
+
         for _ in range(n):
 
             # Fetch next frame
@@ -163,3 +167,4 @@ class ParticleFilter():
         if (self_localize):
             # restore number of particles
             self.remove_n_particles(n = 10000)
+

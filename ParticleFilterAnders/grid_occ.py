@@ -61,6 +61,7 @@ class GridOccupancyMap(object):
 
                 if np.linalg.norm(centroid - pos) <= radius:
                     self.grid[i, j] = 1
+
     
     def draw_map(self):
         #note the x-y axes difference between imshow and plot

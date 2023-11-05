@@ -25,6 +25,7 @@ class proto_arlo():
 
         self.speed = 50
 
+        self.cam = camera.Camera(0, 'arlo', useCaptureThread = True)
         self.currentRoute = q.Queue()
 
         self.state = "LOCALIZE"
@@ -38,7 +39,7 @@ class proto_arlo():
             3: (400.0, 0.0),
             4: (400.0, 300.0)
         }
-        self.particle_filter = particle_filter.ParticleFilter(self.landmarks)
+        self.particle_filter = particle_filter.ParticleFilter(self.landmarks, self.cam)
 
         self.next_landmark_target = 1 # so we can +=1 at some point
 
@@ -46,11 +47,10 @@ class proto_arlo():
 
         self.Radar = radar.Radar(self.arlo)
 
-        self.cam = camera.Camera(0, 'arlo', useCaptureThread = True)
 
         # self.RRT = rrt.RRT()
 
-        self.est_pose = np.array([150.0, 0.0, np.pi()])
+        self.est_pose = np.array([150.0, 0.0, np.pi])
 
     def __del__(self):
         #Clean-up capture thread
@@ -86,28 +86,28 @@ class proto_arlo():
         #             self.state = "LOCALIZE"
 
 
-    # def DriveVector(self, vector): # drives forward at the length of the given Vector. Keeps track of pos from Vector
+    def DriveVector(self, vector): # drives forward at the length of the given Vector. Keeps track of pos from Vector
         
-    #     self.currPos += vector
+        self.currPos += vector
         
-    #     length = np.linalg.norm(vector)
+        length = np.linalg.norm(vector)
+        n = 2
+        for _ in range(n):
+            self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0)
+            # self.particle_filter.perform_MCL()
+            # self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
+            self.DriveLength(length/n)
 
-    #     self.DriveLength(length)
+
+
 
     def DriveLength(self, dist): #Goes for4ward for dist length, does not stop on its own, does not update any fields
         self.Log(f"I drive {dist} centimers")
         #makes centimeters to meters (Drives in meters)
-        dist /= 100
-        n = 2
-        for _ in range(n):
-            self.particle_filter.move_particles(dist[0] / n, dist[1] / n , 0.0)
-            # self.particle_filter.perform_MCL()
-            # self.particle_filter.ParticleFilter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
-
-
-            self.arlo.go_diff(self.speed, self.speed, 1, 1)
+        dist /= 100 
             
-            sleep((dist * 3) / n)
+        self.arlo.go_diff(self.speed, self.speed, 1, 1)
+        sleep(dist * 3)
 
 
     def Stop(self):
@@ -137,9 +137,10 @@ class proto_arlo():
 
         n = 2
         for _ in range(n):
-            self.particle_filter.ParticleFilter.move_particles(0.0, 0.0, np.degrees(angle) / n)
+            self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
             # self.particle_filter.perform_MCL()
-            # self.particle_filter.ParticleFilter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
+            
+            # self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
 
             if (angle < 0):
                 self.arlo.go_diff(turn_speed, turn_speed, 1, 0)
@@ -173,7 +174,7 @@ class proto_arlo():
         clear_path_length = step_length * 2.5
 
 
-        norm_distance = np.linalg.norm(dest[0] - self.est_pose[0], dest[1] - self.est_pose[1])
+        distance = (dest[0] - self.est_pose[0], dest[1] - self.est_pose[1])
 
         # while (norm_distance > step_length): # while there is still some way to go, go!
         # while (np.linalg.norm(dest - self.currPos) > step_length): # while there is still some way to go, go!
@@ -185,11 +186,11 @@ class proto_arlo():
 
         # Calculating target angle as arctan2(y_2 - y_1, x_2 - x_1) - Theta (Robots current angle)
         theta_target = np.arctan2(dest[1] - self.est_pose[1], dest[0] - self.est_pose[0]) - self.est_pose[2]
-
+        print(f"Theta: {np.degrees(theta_target)}")
         
         
         self.RotateAngle(theta_target)
-
+        self.est_pose = (self.est_pose[0], self.est_pose[1], self.est_pose[2]+theta_target)
 
         # angle = angle_between_vectors(dest, (self.est_pose[0], self.est_pose[1]))
 
@@ -243,8 +244,11 @@ class proto_arlo():
         # self.RotateVector(dest - self.currPos)
 
         # self.DriveVector(dest - self.currPos)
-
-        self.DriveLength(norm_distance)
+        
+        self.DriveVector(distance)
+        self.est_pose = (dest[0], dest[1], self.est_pose[2])
+        print(f"Est_pose: {self.est_pose}")
+        # self.DriveLength(norm_distance)
 
         self.Stop()
     
@@ -254,8 +258,8 @@ class proto_arlo():
 
     def FollowRoute(self, reset):
         
-        while (not self.destQ.empty()):
-            self.GoToDest(self.destQ.get())
+        while (not self.currentRoute.empty()):
+            self.GoToDest(self.currentRoute.get())
 
         # if ("dsitance to target" < 40):
             
@@ -298,7 +302,7 @@ class proto_arlo():
         #     angle = angle_between_vectors([0,1], self.currDir)
             
 
-        #     print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
+            # print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
         
         print('\033[0m', end='')
 
@@ -347,9 +351,9 @@ def angle_between_vectors(vector1, vector2):
 # test
 # BetterArlo starts in (150, 0, pi)
 betterArlo = proto_arlo((1))
-betterArlo.AddDest((0,100))
-betterArlo.AddDest((200,150))
-betterArlo.AddDest((400,200))
+betterArlo.AddDest(Vec(0.0, 100.0))
+betterArlo.AddDest(Vec(200.0, 100.0))
+betterArlo.AddDest(Vec(400.0, 200.0))
 betterArlo.FollowRoute(1)
 
 
