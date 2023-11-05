@@ -82,7 +82,7 @@ class proto_arlo():
                 self.currentRoute = q.Queue()
                 self.observe360Degrees()
                 self.state = "GET_PATH"
-
+            
             elif self.state == "GET_PATH":
                 # Estimate pose and then perform RRT to get a route to curr LM
                 self.currPos = self.particle_filter.estimate_pose()
@@ -158,7 +158,7 @@ class proto_arlo():
         length = np.linalg.norm(vector)
         n = 2
         for _ in range(n):
-            self.particle_filter.perform_MCL(int (1000 / n))
+            self.particle_filter.perform_MCL(int (20 / n))
             self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0)
             self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
             self.DriveLength(length/n)
@@ -200,10 +200,10 @@ class proto_arlo():
         turn_speed = 40
 
         self.Log(f"I turn {angle} degrees")
-
+        print(f"Rotating angle: {np.degrees(angle)} | Turntime: {turn_time}")
         n = 2
         for _ in range(n):
-            self.particle_filter.perform_MCL(int (1000 / n))
+            self.particle_filter.perform_MCL(int (20 / n))
             self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
             self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
             if (angle < 0):
@@ -215,7 +215,7 @@ class proto_arlo():
 
             self.currPos = self.particle_filter.estimate_pose()
 
-        self.arlo.stop()
+            self.arlo.stop()
 
     def RotateTime(self,time):
 
