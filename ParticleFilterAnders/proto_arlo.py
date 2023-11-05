@@ -107,9 +107,9 @@ class proto_arlo():
                 self.currPos = self.particle_filter.estimate_pose()
                 print(f"Estimated current pose: {self.currPos}")
                 dest = self.landmarks[currLm]
-                print(f"Dest: {dest}")
+                print(f"Dest: {dest} | currLM: {currLm}")
                 angleToTarget = self.CalcTheta_target(self.currPos, dest)
-                print(f"AngleToTarget: {angleToTarget}")
+                print(f"AngleToTarget: {np.degrees(angleToTarget)}")
                 self.RotateAngle(angleToTarget)
                 optimal_path = self.RRT.get_path(currLm, self.currPos, dest)
                 print(f"Optimal path: {optimal_path}")
@@ -289,7 +289,7 @@ class proto_arlo():
         self.Radar.Update() 
 
         print("Before IF1")
-        print(f"radar.DistW: {self.Radar.DistW} | clearPathLength: {clear_path_length}")
+        print(f"radar.DistW: {self.Radar.DistW()} | clearPathLength: {clear_path_length}")
         if (self.Radar.DistW() < clear_path_length): # something is in the way, need to avoid it. So stop, look, drive around.
 
             self.Log("Encountered obstacle", "r")
