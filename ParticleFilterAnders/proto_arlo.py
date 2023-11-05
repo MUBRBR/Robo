@@ -101,8 +101,6 @@ class proto_arlo():
                         currLm += 1
                     else:
                         currLm = 1
-                      
-                    
                     
 
                 case "FINISHED":
@@ -368,9 +366,6 @@ def angle_between_vectors(vector1, vector2):
 # try/finally to properly stop the program when using 'CTRL+C' to terminate program
 try:
     betterArlo = proto_arlo((1))
-    betterArlo.AddDest(Vec(0.0, 100.0))
-    betterArlo.AddDest(Vec(200.0, 100.0))
-    betterArlo.AddDest(Vec(400.0, 200.0))
-    betterArlo.FollowRoute(1)
+    betterArlo.boot_and_rally()
 finally:
     betterArlo.__del__()
