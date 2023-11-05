@@ -64,17 +64,18 @@ class proto_arlo():
         iterations = 18
         for _ in range(iterations):
             self.RotateAngle(np.deg2rad(20))
-            print(f"iter{iterations}")
+            print(f"iter{_}")
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
             self.particle_filter.perform_MCL(int (1000/iterations), self_localize= True)
             sleep(0.5)
-            print(f"has slept{iterations}")
+            print(f"has slept{_}")
             
             
 
     def boot_and_rally(self):
         currLm = 1
         while True:
+            print(f"State: {self.state}")
             if self.state == "LOCALIZE":
                 # Here we'll call self_localize()
                 # Reset queue, perform MCL with *10 particles while rotating
