@@ -61,13 +61,15 @@ class GridOccupancyMap(object):
 
                 if np.linalg.norm(centroid - pos) <= radius:
                     self.grid[i, j] = 1
-
     
     def draw_map(self):
         #note the x-y axes difference between imshow and plot
         plt.clf()
         plt.grid()
         plt.imshow(self.grid.T, cmap="Greys", origin='lower', vmin=0, vmax=1, extent=self.extent, interpolation='none')
+
+    def clear(self):
+        self.grid = np.zeros((self.n_grids[0], self.n_grids[1]), dtype=np.uint8)
 
 if __name__ == '__main__':
     path_res = 0.05
