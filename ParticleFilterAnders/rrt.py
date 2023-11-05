@@ -249,7 +249,7 @@ class RRT:
         IDs, dists, angles = self.cam.detect_aruco_objects(colour)
 
         if isinstance(IDs, type(None)): #should never happen, but at least we can check
-            return None
+            return [target]
 
         for id, dist, angle in zip(IDs, dists,angles):
             new_vector = np.array(polar_to_cartesian(dist/100,angle+theta)) + pos
