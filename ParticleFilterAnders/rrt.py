@@ -265,6 +265,7 @@ class RRT:
 
         # print(targets)
         #Add obstacles 
+        print("error self.planning line 268?")
         path, optimized_path = self.planning() # optimized should be used by robot
 
         # if we want to, draw
