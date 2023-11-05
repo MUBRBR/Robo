@@ -73,7 +73,7 @@ class proto_arlo():
         currLm = 1
         while True:
             
-            match self.state:
+            match betterArlo.state:
                 case "LOCALIZE":
                     
                 # Here we''l call self_localize()
