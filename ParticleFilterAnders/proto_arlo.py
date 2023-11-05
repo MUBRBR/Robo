@@ -178,7 +178,9 @@ class proto_arlo():
 
     def DriveVector(self, vector): # drives forward at the length of the given Vector. Keeps track of pos from Vector
         
-        self.currPos += vector
+        self.currPos[0] += vector[0]
+        self.currPos[1] += vector[1]
+
         
         length = np.linalg.norm(vector)
 
