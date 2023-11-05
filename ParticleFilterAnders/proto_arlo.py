@@ -266,7 +266,7 @@ class proto_arlo():
     
     def GoToDest(self, dest): # dest is a Vector
 
-        step_length = 0.1 # længde den prøver at køre i skridt
+        step_length = 10 # længde den prøver at køre i skridt
 
         clear_path_length = step_length * 2.5
 
@@ -288,7 +288,8 @@ class proto_arlo():
         # before we drive, check for obstacles
         self.Radar.Update() 
 
-
+        print("Before IF1")
+        print(f"radar.DistW: {self.Radar.DistW} | clearPathLength: {clear_path_length}")
         if (self.Radar.DistW() < clear_path_length): # something is in the way, need to avoid it. So stop, look, drive around.
 
             self.Log("Encountered obstacle", "r")
@@ -299,6 +300,8 @@ class proto_arlo():
             self.RotateAngle(-theta_target)
 
             # Drive backwards to plan new route
+            print("Before IF2")
+
             if (self.Radar.backCameraSafe()):
                 self.Log("No obstacle behind us, driving backwards 45cm")
                 self.DriveLength(-45)
@@ -306,7 +309,8 @@ class proto_arlo():
                 self.Log(f"Reset Queue")
                 self.state = "GET PATH"
                 return
-            
+        print("After IF1")
+        
             # TO DO:
             # Implement an 'else'
 
