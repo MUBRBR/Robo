@@ -66,7 +66,7 @@ class proto_arlo():
             self.RotateAngle(np.deg2rad(20))
             print(f"iter{_}")
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
-            self.particle_filter.perform_MCL(int (500/iterations), self_localize= True)
+            self.particle_filter.perform_MCL(int (100/iterations), self_localize= True)
             sleep(0.5)
             print(f"has slept{_}")
             
@@ -232,11 +232,11 @@ class proto_arlo():
 
         self.currentRoute.put(dest)
 
-    def CalcTheta_target(currPos, dest):
+    def CalcTheta_target(self, currPos, dest):
         return np.arctan2(dest[1] - currPos[1], dest[0] - currPos[0]) - currPos[2]
         
     
-    def GoToDest(self,dest): # dest is a Vector
+    def GoToDest(self, dest): # dest is a Vector
 
         step_length = 0.1 # længde den prøver at køre i skridt
 
