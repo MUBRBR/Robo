@@ -105,7 +105,7 @@ class proto_arlo():
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
 
-                betterArlo.RotateAngle(angle)
+                betterArlo.RotateAngle(-angle)
                 # print(f"{np.degrees(angle)}")
                 self.Log("Rotating towards target LM1 with degrees: ")
                 self.particle_filter.perform_MCL(250, self_localize = True, early_stopping = True)
@@ -128,22 +128,22 @@ class proto_arlo():
     def boot_and_rally(self):
         while True:
             self.Log("Main loop")
-            if self.state == "LOCALIZE":
-                self.localize()
-            
-            elif self.state == "INIT_LOCALIZE":
+            if self.state == "INIT_LOCALIZE":
                 self.init_localize()
+
+            elif self.state == "LOCALIZE":
+                self.localize()
                 
             elif self.state == "GET_PATH":
                 # Estimate pose and then perform RRT to get a route to curr LM
                 self.currPos = self.particle_filter.estimate_pose()
                 print(f"Estimated current pose in GET_path: {self.currPos}")
-                dest = self.landmarks[currLm]
-                print(f"Dest: {dest} | currLM: {currLm}")
+                dest = self.landmarks[self.currLm]
+                print(f"Dest: {dest} | currLM: {self.currLm}")
                 angleToTarget = self.CalcTheta_target(self.currPos, dest)
                 print(f"AngleToTarget LM: {np.degrees(angleToTarget)}")
                 self.RotateAngle(angleToTarget)
-                optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map= True)
+                optimal_path = self.RRT.get_path(self.currLm, self.currPos, dest, draw_map= True)
                 print(f"           OPTIMAL PATH: {optimal_path}")
                 self.state = "FOLLOW_PATH"
 
@@ -154,10 +154,10 @@ class proto_arlo():
                         betterArlo.AddDest(optimal_path[i])
                     betterArlo.FollowRoute(1)
                     # end with updating the currLm
-                if currLm != 4:
-                    currLm += 1
+                if self.currLm != 4:
+                    self.currLm += 1
                 else:
-                    currLm = 1
+                    self.currLm = 1
                 self.state = "GET_PATH"
 
             elif self.state == "FINISHED":
