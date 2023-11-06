@@ -102,7 +102,6 @@ class proto_arlo():
 
             sleep(0.8)
         betterArlo.RotateAngle(-np.deg2rad(20))
-        print("\n\nangle before " ,np.degrees(-angle))
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
 
