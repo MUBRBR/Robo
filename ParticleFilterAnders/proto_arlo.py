@@ -105,12 +105,13 @@ class proto_arlo():
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
 
-                # betterArlo.RotateAngle(-angle)
-                theta_target = self.CalcTheta_target(self.currPos, (0.0,0.0))
-                betterArlo.RotateAngle(-theta_target)
+                self.Log("Check angle + 90?", "r")
+                betterArlo.RotateAngle(-angle)
+                # theta_target = self.CalcTheta_target(self.currPos, (0.0,0.0))
+                # betterArlo.RotateAngle(-theta_target)
 
-                s
-                # print(f"{np.degrees(angle)}")
+                
+                
                 self.Log("Rotating towards target LM1 with degrees: ")
                 self.particle_filter.perform_MCL(250, self_localize = True, early_stopping = True)
 
