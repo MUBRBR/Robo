@@ -131,6 +131,8 @@ class proto_arlo():
         
 
     def boot_and_rally(self):
+        betterArlo.RotateAngle(np.deg2rad(20))
+
         while True:
             self.Log("Main loop")
             if self.state == "INIT_LOCALIZE":
