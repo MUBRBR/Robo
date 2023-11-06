@@ -241,10 +241,10 @@ class proto_arlo():
                 self.arlo.go_diff(turn_speed, turn_speed, 0, 1)
                 sleep(turn_time / n)
 
-            sleep(0.5)
             self.currPos = self.particle_filter.estimate_pose()
             print(f"estimated pose while rotating: {self.currPos}")
             self.arlo.stop()
+            sleep(0.5)
 
     def RotateTime(self,time):
 
