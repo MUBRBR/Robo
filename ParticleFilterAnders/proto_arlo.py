@@ -89,8 +89,9 @@ class proto_arlo():
     def init_localize(self):
         # while det cam ser er none  eller objectids indeholde ikke L! 
                 # Detect objects
-        objectIDs, dists, angles = None, None, None
-    
+        colour = self.cam.get_next_frame()
+
+        objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
             #Get all indices that is not a reoccurring objectID. 
         while(isinstance(objectIDs, type(None)) or 1 not in objectIDs): 
             colour = self.cam.get_next_frame()
