@@ -105,7 +105,10 @@ class proto_arlo():
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
 
-                betterArlo.RotateAngle(-angle)
+                # betterArlo.RotateAngle(-angle)
+                theta_target = self.CalcTheta_target(self.currPos, (0.0,0.0))
+                betterArlo.RotateAngle(theta_target)
+
                 print("\n\nangle" ,np.degrees(-angle))
                 # print(f"{np.degrees(angle)}")
                 self.Log("Rotating towards target LM1 with degrees: ")
