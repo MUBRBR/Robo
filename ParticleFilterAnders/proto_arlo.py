@@ -118,10 +118,8 @@ class proto_arlo():
                 self.particle_filter.add_uncertainty(0.0, 0.1) # This is for when MCL is used. Maybe divided by n??
         #                kør mod l1
                 self.DriveVector((dist-50, 0.0))
-                if self.currLm != 4:
-                    self.currLm += 1
-                else:
-                    self.currLm = 1
+               
+                self.incrementLM()
 
                 #NO CHANGE IN STATE, 
                 # self.state = "LOCALIZE"
@@ -171,10 +169,9 @@ class proto_arlo():
 
             elif self.state == "FOLLOW_PATH":
                 betterArlo.FollowRoute(False)
-                if self.currLm != 4:
-                    self.currLm += 1
-                else:
-                    self.currLm = 1
+
+                self.incrementLM()
+
                 self.state = "GET_PATH"
 
             elif self.state == "FINISHED":
@@ -425,6 +422,16 @@ class proto_arlo():
             
         #     if ("is last landmark"):
         #         self.Log("ITS A CELEBRATION", "g")
+
+    def incrementLM(self):
+        if self.currLm == 1:
+            self.currLm = 2
+        if self.currLm == 2:
+            self.currLm = 4
+        if self.currLm == 4:
+            self.currLm = 3            
+        if self.currLm == 3:
+            self.currLm = 1            
 
 
     def Log(self, action: str, color = "None"):
