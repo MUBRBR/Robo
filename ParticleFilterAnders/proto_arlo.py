@@ -98,6 +98,8 @@ class proto_arlo():
             objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
 
             betterArlo.RotateAngle(np.deg2rad(20))
+
+            sleep(0.5)
         
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
@@ -291,7 +293,6 @@ class proto_arlo():
             self.currPos = self.particle_filter.estimate_pose()
             print(f"estimated pose while rotating: {self.currPos}")
             self.arlo.stop()
-            # sleep(0.5)
 
     def RotateTime(self,time):
 
