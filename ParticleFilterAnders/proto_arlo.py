@@ -108,11 +108,10 @@ class proto_arlo():
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
 
-                self.Log(f"Check angle + 90? {angle+0.47}", "r")
-                betterArlo.RotateAngle(angle+0.47)
+                # self.Log(f"Check angle + 90? {angle+0.47}", "r")
+                # betterArlo.RotateAngle(angle+0.47)
+                # self.Log("Rotating towards target LM1 with degrees: ")
                 
-                
-                self.Log("Rotating towards target LM1 with degrees: ")
                 self.particle_filter.perform_MCL(250, self_localize = True, early_stopping = True)
 
                 self.particle_filter.move_particles_forward(dist-50)
