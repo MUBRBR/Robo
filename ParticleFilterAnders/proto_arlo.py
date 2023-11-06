@@ -100,7 +100,7 @@ class proto_arlo():
             sleep(0.8)
         
         betterArlo.RotateAngle(-np.deg2rad(20))
-        
+
         sleep(0.8)
 
         for objectID, dist, angle in zip(objectIDs, dists, angles):
@@ -115,6 +115,8 @@ class proto_arlo():
                 self.DriveVector((dist-40, 0.0))
                
                 self.incrementLM()
+
+                break
 
                 #NO CHANGE IN STATE
                 # self.state = "LOCALIZE"
