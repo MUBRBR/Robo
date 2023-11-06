@@ -349,13 +349,13 @@ if (__name__=='__main__'):
         #gray = cv2.convertScaleAbs(loggray)
         
         # Detect objects
-        objectType, distance, angle, colourProb = cam.get_object(colour)
+        objectType, distance, angle, colourProb = cam.detect_aruco_objects(colour)
         if objectType != 'none':
             print("Object type = ", objectType, ", distance = ", distance, ", angle = ", angle, ", colourProb = ", colourProb)
 
         # Draw detected pattern
-        cam.draw_object(colour)
-
+        # cam.draw_object(colour)
+        cam.draw_aruco_objects(colour)
         IDs, dists, angles = cam.detect_aruco_objects(colour)
         if not isinstance(IDs, type(None)):
             for i in range(len(IDs)):

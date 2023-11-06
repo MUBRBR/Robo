@@ -101,12 +101,15 @@ class proto_arlo():
             betterArlo.RotateAngle(np.deg2rad(20))
 
             sleep(0.8)
+        
         betterArlo.RotateAngle(-np.deg2rad(20))
+        sleep(0.8)
+
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
 
                 self.Log(f"Check angle + 90? {angle+0.47}", "r")
-                betterArlo.RotateAngle(angle+0.47)
+                betterArlo.RotateAngle(-angle+0.47)
                 
                 
                 self.Log("Rotating towards target LM1 with degrees: ")
