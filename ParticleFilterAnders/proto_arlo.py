@@ -137,14 +137,14 @@ class proto_arlo():
             elif self.state == "GET_PATH":
                 # Estimate pose and then perform RRT to get a route to curr LM
                 self.currPos = self.particle_filter.estimate_pose()
-                print(f"Estimated current pose in GET_path: {self.currPos}")
+                self.Log(f"Estimated current pose in GET_path: {self.currPos}")
                 dest = self.landmarks[self.currLm]
-                print(f"Dest: {dest} | currLM: {self.currLm}")
+                self.Log(f"Dest: {dest} | currLM: {self.currLm}")
                 angleToTarget = self.CalcTheta_target(self.currPos, dest)
-                print(f"AngleToTarget LM: {np.degrees(angleToTarget)}")
+                self.Log(f"AngleToTarget LM: {np.degrees(angleToTarget)}")
                 self.RotateAngle(angleToTarget)
                 optimal_path = self.RRT.get_path(self.currLm, self.currPos, dest, draw_map= True)
-                print(f"           OPTIMAL PATH: {optimal_path}")
+                self.Log(f"           OPTIMAL PATH: {optimal_path}")
                 self.state = "FOLLOW_PATH"
 
             elif self.state == "FOLLOW_PATH":
@@ -152,10 +152,12 @@ class proto_arlo():
                 if not isinstance(optimal_path, type(None)):
                     for i in range(1, len(optimal_path)):
                         betterArlo.AddDest(optimal_path[i])
-                    betterArlo.FollowRoute(1)
+                    betterArlo.FollowRoute(False)
                     # end with updating the currLm
-                self.Log("Could not find safe path", "y")
-                betterArlo.FollowRoute(self.landmarks[self.currLm]) 
+                else:
+                    self.Log("Could not find safe path", "y")
+                    betterArlo.FollowRoute(self.landmarks[self.currLm]) 
+                    
                 if self.currLm != 4:
                     self.currLm += 1
                 else:
