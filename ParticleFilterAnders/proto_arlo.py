@@ -108,11 +108,11 @@ class proto_arlo():
 
                 self.particle_filter.perform_MCL(150, self_localize = True, early_stopping = True)
 
-                self.particle_filter.move_particles_forward(dist-50)
+                self.particle_filter.move_particles_forward(dist)
 
                 self.particle_filter.add_uncertainty(0.0, 0.1) 
 
-                self.DriveVector((dist-50, 0.0))
+                self.DriveVector((dist, 0.0))
                 
                 self.incrementLM()
 
