@@ -105,7 +105,7 @@ class proto_arlo():
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
 
-                self.Log("Check angle + 90?", "r")
+                self.Log(f"Check angle + 90? {angle}", "r")
                 betterArlo.RotateAngle(-angle)
                 # theta_target = self.CalcTheta_target(self.currPos, (0.0,0.0))
                 # betterArlo.RotateAngle(-theta_target)
