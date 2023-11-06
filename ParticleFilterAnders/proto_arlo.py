@@ -29,7 +29,7 @@ class proto_arlo():
         self.cam = camera.Camera(0, 'arlo', useCaptureThread = True)
         self.currentRoute = q.Queue()
 
-        self.state = "LOCALIZE"
+        self.state = "INIT_LOCALIZE"
 
 
 
@@ -86,7 +86,34 @@ class proto_arlo():
 
 
 
-            
+    def init_localize(self):
+        # while det cam ser er none  eller objectids indeholde ikke L! 
+                # Detect objects
+        objectIDs, dists, angles = None, None, None
+    
+            #Get all indices that is not a reoccurring objectID. 
+        while(isinstance(objectIDs, type(None)) or 1 not in objectIDs): 
+            colour = self.cam.get_next_frame()
+
+            objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
+
+            betterArlo.RotateAngle(np.deg2rad(20))
+        
+        for objectID, dist, angle in zip(objectIDs, dists, angles):
+            if (objectID == 1):
+
+                betterArlo.RotateAngle(angle)
+                print(f"Rotating towards target LM1 with degrees: {np.degrees(angle)}")
+
+                self.particle_filter.perform_MCL(1000, self_localize = True, early_stopping = True)
+
+                self.particle_filter.move_particles_forward(dist)
+                self.particle_filter.add_uncertainty(0.0, 0.1) # This is for when MCL is used. Maybe divided by n??
+        #                kør mod l1
+                self.DriveVector(dist)
+                self.state = "LOCALIZE"
+                
+    #      
             
 
     def boot_and_rally(self):
@@ -100,6 +127,10 @@ class proto_arlo():
                 self.observe360Degrees()
                 self.state = "GET_PATH"
             
+            elif self.state == "INIT_LOCALIZE":
+                self.init_localize()
+                currLm += 1
+                
             elif self.state == "GET_PATH":
                 # Estimate pose and then perform RRT to get a route to curr LM
                 self.currPos = self.particle_filter.estimate_pose()
@@ -120,10 +151,10 @@ class proto_arlo():
                         betterArlo.AddDest(optimal_path[i])
                     betterArlo.FollowRoute(1)
                     # end with updating the currLm
-                # if currLm != 4:
-                #     currLm += 1
-                # else:
-                #     currLm = 1
+                if currLm != 4:
+                    currLm += 1
+                else:
+                    currLm = 1
                 self.state = "GET_PATH"
 
             elif self.state == "FINISHED":
@@ -185,8 +216,13 @@ class proto_arlo():
         print(f"vector to drive: {vector} | normed vektor: {length}")
         n = 1
         for _ in range(n):
-            self.particle_filter.perform_MCL(int (20 / n))
-            self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0)
+            colour = self.cam.get_next_frame()
+            # Detect objects
+            objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
+            
+            #Get all indices that is not a reoccurring objectID. 
+            # self.particle_filter.perform_MCL(int (20 / n))
+            self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0) # mover ikke particles rigtigt her?
             self.particle_filter.add_uncertainty(0.5 / n, 0.0) # This is for when MCL is used. Maybe divided by n??
             self.DriveLength(length/n)
             self.currPos = self.particle_filter.estimate_pose()
@@ -231,9 +267,20 @@ class proto_arlo():
         print(f"Rotating angle: {np.degrees(angle)} | Turntime: {turn_time}")
         n = 1
         for _ in range(n):
-            self.particle_filter.perform_MCL(int (20 / n))
-            self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
-            self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
+            colour = self.cam.get_next_frame()
+            # Detect objects
+            objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
+            
+            #Get all indices that is not a reoccurring objectID. 
+            if not isinstance(objectIDs, type(None)): 
+                valid_indices = [i for i in range(len(objectIDs)) if 
+                    (i == 0 and objectIDs[i] in self.landmarks.keys()) or # First ID is always valid unless it is not in landmarks
+                    (objectIDs[i - 1] != objectIDs[i] and objectIDs[i] in self.landmarks.keys())] # If ID is new it is valid unless it is not in landmarks
+                if not isinstance(valid_indices, type(None)):
+                    self.particle_filter.perform_MCL(int (20 / n))
+                    self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n) 
+                    self.particle_filter.add_uncertainty(0.0, 0.1 / n) # This is for when MCL is used. Maybe divided by n??
+            
             if (angle < 0):
                 self.arlo.go_diff(turn_speed, turn_speed, 1, 0)
                 sleep(turn_time / n)

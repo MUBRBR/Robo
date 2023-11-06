@@ -43,6 +43,18 @@ class ParticleFilter():
         self.particles[:,2] += delta_theta
 
 
+    def move_particles_forward(self, dist):
+        x = self.particles[:, 0]
+        y = self.particles[:, 1]
+        theta = self.particles[:, 2]
+
+        new_x = x + dist * np.cos(theta)
+        new_y = y + dist * np.sin(theta)
+
+        self.particles[:, 0] = new_x
+        self.particles[:, 1] = new_y
+
+
     def add_uncertainty(self, sigma, sigma_theta): 
         self.particles[:,0] += np.random.randn(self.particles.shape[0])*sigma
         self.particles[:,1] += np.random.randn(self.particles.shape[0])*sigma
@@ -135,7 +147,7 @@ class ParticleFilter():
         self.particles = self.particles[selected_indices]
 
 
-    def perform_MCL(self, n, self_localize = False):
+    def perform_MCL(self, n, self_localize = False, early_stopping = False):
 
         if (self_localize):
             #increase number of particles temporarily
@@ -164,6 +176,11 @@ class ParticleFilter():
                 self.add_uncertainty(0.1,0.1)
 
                 #maybe return here, deends on the definition of the MCL algoritm
+
+            if (early_stopping and self.evaluate_pose < 3):
+                break
+
+            
 
         if (self_localize):
             # restore number of particles

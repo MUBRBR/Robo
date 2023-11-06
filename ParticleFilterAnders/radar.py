@@ -18,6 +18,10 @@ class Radar(): #Will eventually house maped objects
     
     def backCameraSafe(self):
         return True
+    
+    def detect_collision(self):
+        if (self.DistW() < 40):
+            return True
 
     def Update(self):
         
