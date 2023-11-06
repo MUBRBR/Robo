@@ -82,7 +82,7 @@ class proto_arlo():
                 if not isinstance(valid_indices, type(None)):
                 # if (len(valid_indices > 0)):
 
-                    self.particle_filter.perform_MCL(int (20), self_localize= True)
+                    self.particle_filter.perform_MCL(int (200), self_localize= True)
                 
 
 
@@ -121,10 +121,10 @@ class proto_arlo():
                         betterArlo.AddDest(optimal_path[i])
                     betterArlo.FollowRoute(1)
                     # end with updating the currLm
-                if currLm != 4:
-                    currLm += 1
-                else:
-                    currLm = 1
+                # if currLm != 4:
+                #     currLm += 1
+                # else:
+                #     currLm = 1
                 self.state = "GET_PATH"
 
             elif self.state == "FINISHED":
