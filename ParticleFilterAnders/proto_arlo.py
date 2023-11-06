@@ -30,7 +30,7 @@ class proto_arlo():
         self.currentRoute = q.Queue()
 
         self.state = "INIT_LOCALIZE"
-
+        self.currLm = 1
 
 
         # self.landmarks = [[1, 0.0, 0.0],[2, 0.0, 300.0], [3, 400.0, 0.0], [4, 400.0, 300.0]]
@@ -114,7 +114,7 @@ class proto_arlo():
                 self.particle_filter.add_uncertainty(0.0, 0.1) # This is for when MCL is used. Maybe divided by n??
         #                kør mod l1
                 self.DriveVector((dist-50, 0.0))
-                currLm += 1
+                self.currLm += 1
                 self.state = "LOCALIZE"
                 
     def localize(self):   
@@ -126,7 +126,6 @@ class proto_arlo():
         
 
     def boot_and_rally(self):
-        currLm = 1
         while True:
             self.Log("Main loop")
             if self.state == "LOCALIZE":
