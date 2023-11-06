@@ -119,7 +119,9 @@ class proto_arlo():
         #                kør mod l1
                 self.DriveVector((dist-50, 0.0))
                 self.currLm += 1
-                self.state = "LOCALIZE"
+
+                #NO CHANGE IN STATE, 
+                # self.state = "LOCALIZE"
                 
     def localize(self):   
         # Here we'll call self_localize()
