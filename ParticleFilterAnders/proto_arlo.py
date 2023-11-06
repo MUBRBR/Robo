@@ -357,11 +357,11 @@ class proto_arlo():
     def incrementLM(self):
         if self.currLm == 1:
             self.currLm = 2
-        if self.currLm == 2:
+        elif self.currLm == 2:
             self.currLm = 4
-        if self.currLm == 4:
+        elif self.currLm == 4:
             self.currLm = 3            
-        if self.currLm == 3:
+        elif self.currLm == 3:
             self.currLm = 1            
 
 
