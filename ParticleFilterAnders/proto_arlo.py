@@ -16,17 +16,11 @@ os.system("clear && printf '\e[3J'")
 
 class proto_arlo():
     def __init__(self, landmarks):
-        self.arlo = robot.Robot()
 
-        # self.initPos = Vec(0.0,0.0, 0.0) # not used
         self.currPos = Vec3(0.0, 0.0, 0.0)
         
-        # self.initDir = Vec(0.0,1.0)
-        # self.currDir = Vec(0.0,1.0)
-
         self.speed = 50
 
-        self.cam = camera.Camera(0, 'arlo', useCaptureThread = True)
         self.currentRoute = q.Queue()
 
         self.state = "INIT_LOCALIZE"
@@ -40,11 +34,16 @@ class proto_arlo():
             3: (400.0, 0.0),
             4: (400.0, 300.0)
         }
-        self.particle_filter = particle_filter.ParticleFilter(self.landmarks, self.cam)
 
         self.next_landmark_target = 1 # so we can +=1 at some point
 
         # initialize helper classes
+
+        self.arlo = robot.Robot()
+
+        self.cam = camera.Camera(0, 'arlo', useCaptureThread = True)
+        
+        self.particle_filter = particle_filter.ParticleFilter(self.landmarks, self.cam)
 
         self.Radar = radar.Radar(self.arlo)
 
@@ -84,8 +83,6 @@ class proto_arlo():
                     self.particle_filter.perform_MCL(int (200), self_localize= True)
                 
 
-
-
     def init_localize(self):
         # while det cam ser er none  eller objectids indeholde ikke L! 
                 # Detect objects
@@ -103,25 +100,23 @@ class proto_arlo():
             sleep(0.8)
         
         betterArlo.RotateAngle(-np.deg2rad(20))
+        
         sleep(0.8)
 
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == self.currLm):
 
-                # self.Log(f"Check angle + 90? {angle+0.47}", "r")
-                # betterArlo.RotateAngle(angle+0.47)
-                # self.Log("Rotating towards target LM1 with degrees: ")
-                
                 self.particle_filter.perform_MCL(250, self_localize = True, early_stopping = True)
 
-                self.particle_filter.move_particles_forward(dist-50)
-                self.particle_filter.add_uncertainty(0.0, 0.1) # This is for when MCL is used. Maybe divided by n??
-        #                kør mod l1
-                self.DriveVector((dist-50, 0.0))
+                self.particle_filter.move_particles_forward(dist-40)
+
+                self.particle_filter.add_uncertainty(0.0, 0.1) 
+
+                self.DriveVector((dist-40, 0.0))
                
                 self.incrementLM()
 
-                #NO CHANGE IN STATE, 
+                #NO CHANGE IN STATE
                 # self.state = "LOCALIZE"
                 
     def localize(self):   
@@ -182,44 +177,6 @@ class proto_arlo():
                 # Should never be matched, but I do not like not having a default
                 self.Log(f"Unexpected state: {self.state}")
                 self.state = "LOCALIZE"
-            # match self.state:
-                # case "LOCALIZE":
-                    
-                # # Here we''l call self_localize()
-                # #   Reset queue, perform MCL with *10 parti while rotating
-                #     self.currentRoute = q.Queue()
-                #     self.observe360Degrees()
-                #     self.state = "GET_PATH"
-
-                # case "GET_PATH":
-                #     # Estimate pose and then perform RRT to get a route to curr LM
-                #     self.currPos = self.particle_filter.estimate_pose()
-                #     dest = self.landmarks[currLm]
-                #     angleToTarget = self.CalcTheta_target(self.currPos, dest)
-                #     self.RotateAngle(angleToTarget)
-                #     optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map= False)
-                #     self.state = "FOLLOW_PATH" 
-
-                # case "FOLLOW_PATH":
-                #     # Here we'll call follow_path()
-                #     for i in range(1,len(optimal_path)):
-                #         betterArlo.AddDest(optimal_path[i])
-                #     betterArlo.FollowRoute(1)
-                #     # end with updating the currLm
-                #     if currLm != 4:
-                #         currLm += 1
-                #     else:
-                #         currLm = 1
-                    
-
-                # case "FINISHED":
-                #     self.Log("ProtoArlo has completed the Rally!")
-                #     return                                
-                                        
-                # case _: # Should never be matched, but I do not like not having a default
-                #     self.Log(f"Unexpected state: {self.state = }")
-                #     self.state = "LOCALIZE"
-
 
 
     def DriveVector(self, vector): # drives forward at the length of the given Vector. Keeps track of pos from Vector
@@ -262,18 +219,6 @@ class proto_arlo():
         self.arlo.stop()
 
 
-    # def RotateVector(self, vector):  # Turns the robot according point in the direction of the given Vector. Keeps track of direction from Vector.
-        
-    #     # angle = np.degrees(np.arccos(np.dot(vector, self.currDir / (np.linalg.norm(vector) * np.linalg.norm(self.currDir)))))
-    #     angle = angle_between_vectors(self.currDir, vector)
-
-    #     self.currDir = vector
-
-    #     if (abs(angle) > 0.0001):
-
-    #         self.Log(f"I rotate {angle} degrees")
-    #         self.RotateAngle(angle)
-        
     def RotateAngle(self, angle): #turns by angle, does not update any fields
         # OBS RotateAngle uses degrees
         turn_time = abs(0.01417*np.degrees(angle) + 0.01667)
