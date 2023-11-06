@@ -183,7 +183,7 @@ class proto_arlo():
         length = np.linalg.norm(vector)
 
         print(f"vector to drive: {vector} | normed vektor: {length}")
-        n = 2
+        n = 1
         for _ in range(n):
             self.particle_filter.perform_MCL(int (20 / n))
             self.particle_filter.move_particles(vector[0] / n, vector[1] / n, 0.0)
@@ -229,7 +229,7 @@ class proto_arlo():
 
         self.Log(f"I turn {angle} degrees")
         print(f"Rotating angle: {np.degrees(angle)} | Turntime: {turn_time}")
-        n = 2
+        n = 1
         for _ in range(n):
             self.particle_filter.perform_MCL(int (20 / n))
             self.particle_filter.move_particles(0.0, 0.0, np.degrees(angle) / n)
@@ -244,7 +244,7 @@ class proto_arlo():
             self.currPos = self.particle_filter.estimate_pose()
             print(f"estimated pose while rotating: {self.currPos}")
             self.arlo.stop()
-            sleep(0.5)
+            # sleep(0.5)
 
     def RotateTime(self,time):
 
