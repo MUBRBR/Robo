@@ -349,7 +349,7 @@ if (__name__=='__main__'):
         #gray = cv2.convertScaleAbs(loggray)
         
         # Detect objects
-        objectType, distance, angle, colourProb = cam.detect_aruco_objects(colour)
+        objectType, distance, angle = cam.detect_aruco_objects(colour)
         if objectType != 'none':
             print("Object type = ", objectType, ", distance = ", distance, ", angle = ", angle, ", colourProb = ", colourProb)
 
