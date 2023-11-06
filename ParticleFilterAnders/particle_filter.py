@@ -157,6 +157,7 @@ class ParticleFilter():
         for i in range(n):
             if (i % 100 == 0):
                 print(i)
+                print(self.evaluate_pose())
 
             # Fetch next frame
             colour = self.cam.get_next_frame()

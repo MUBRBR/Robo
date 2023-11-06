@@ -110,7 +110,7 @@ class proto_arlo():
                 self.particle_filter.move_particles_forward(dist)
                 self.particle_filter.add_uncertainty(0.0, 0.1) # This is for when MCL is used. Maybe divided by n??
         #                kør mod l1
-                self.DriveVector(dist)
+                self.DriveVector((dist, 0.0))
                 self.state = "LOCALIZE"
                 
     #      
