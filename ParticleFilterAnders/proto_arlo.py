@@ -154,6 +154,8 @@ class proto_arlo():
                         betterArlo.AddDest(optimal_path[i])
                     betterArlo.FollowRoute(1)
                     # end with updating the currLm
+                self.Log("Could not find safe path", "y")
+                betterArlo.FollowRoute(self.landmarks[self.currLm]) 
                 if self.currLm != 4:
                     self.currLm += 1
                 else:
