@@ -107,9 +107,9 @@ class proto_arlo():
 
                 # betterArlo.RotateAngle(-angle)
                 theta_target = self.CalcTheta_target(self.currPos, (0.0,0.0))
-                betterArlo.RotateAngle(theta_target)
+                betterArlo.RotateAngle(-theta_target)
 
-                print("\n\nangle" ,np.degrees(-angle))
+                s
                 # print(f"{np.degrees(angle)}")
                 self.Log("Rotating towards target LM1 with degrees: ")
                 self.particle_filter.perform_MCL(250, self_localize = True, early_stopping = True)
