@@ -150,7 +150,8 @@ class proto_arlo():
                 self.Log(f"           OPTIMAL PATH: {optimal_path}")
 
                 # Here we'll call follow_path()
-                if not isinstance(optimal_path, type(None)):
+                #if not isinstance(optimal_path, type(None)):
+                if (1+1==4):
                     self.Log("Found safe path", "y")
                     self.currentRoute = q.Queue()
                     for i in range(1, len(optimal_path)):
