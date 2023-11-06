@@ -100,7 +100,7 @@ class proto_arlo():
             self.Log(f"{objectIDs = }, {dists = }, {angles = }")
             betterArlo.RotateAngle(np.deg2rad(20))
 
-            sleep(0.7)
+            sleep(0.8)
         betterArlo.RotateAngle(-np.deg2rad(20))
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == 1):
@@ -120,7 +120,6 @@ class proto_arlo():
     def localize(self):   
         # Here we'll call self_localize()
         # Reset queue, perform MCL with *10 particles while rotating
-        self.currentRoute = q.Queue()
         self.observe360Degrees()
         self.state = "GET_PATH"
         
@@ -145,19 +144,23 @@ class proto_arlo():
                 self.RotateAngle(angleToTarget)
                 optimal_path = self.RRT.get_path(self.currLm, self.currPos, dest, draw_map= True)
                 self.Log(f"           OPTIMAL PATH: {optimal_path}")
-                self.state = "FOLLOW_PATH"
 
-            elif self.state == "FOLLOW_PATH":
                 # Here we'll call follow_path()
                 if not isinstance(optimal_path, type(None)):
+                    self.Log("Found safe path", "y")
+                    self.currentRoute = q.Queue()
                     for i in range(1, len(optimal_path)):
                         betterArlo.AddDest(optimal_path[i])
-                    betterArlo.FollowRoute(False)
                     # end with updating the currLm
                 else:
                     self.Log("Could not find safe path", "y")
-                    betterArlo.FollowRoute(self.landmarks[self.currLm]) 
-                    
+                    self.currentRoute = q.Queue()
+                    betterArlo.AddDest(self.landmarks[self.currLm]) 
+                self.state = "FOLLOW_PATH"
+
+
+            elif self.state == "FOLLOW_PATH":
+                betterArlo.FollowRoute(False)
                 if self.currLm != 4:
                     self.currLm += 1
                 else:
@@ -220,7 +223,7 @@ class proto_arlo():
         
         length = np.linalg.norm(vector)
 
-        print(f"vector to drive: {vector} | normed vektor: {length}")
+        self.Log(f"vector to drive: {vector} | normed vektor: {length}")
         n = 1
         for _ in range(n):
             colour = self.cam.get_next_frame()
@@ -271,7 +274,7 @@ class proto_arlo():
         turn_speed = 40
 
         self.Log(f"I turn {angle} degrees")
-        print(f"Rotating angle: {np.degrees(angle)} | Turntime: {turn_time}")
+        self.Log(f"Rotating angle: {np.degrees(angle)} | Turntime: {turn_time}")
         n = 1
         for _ in range(n):
             colour = self.cam.get_next_frame()
