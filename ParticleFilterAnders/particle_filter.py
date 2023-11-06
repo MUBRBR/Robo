@@ -151,10 +151,12 @@ class ParticleFilter():
 
         if (self_localize):
             #increase number of particles temporarily
-            self.add_n_particles(n = 10000)
+            self.add_n_particles(n = 5000)
 
 
-        for _ in range(n):
+        for i in range(n):
+            if (i % 100 == 0):
+                print(i)
 
             # Fetch next frame
             colour = self.cam.get_next_frame()
@@ -184,5 +186,5 @@ class ParticleFilter():
 
         if (self_localize):
             # restore number of particles
-            self.remove_n_particles(n = 10000)
+            self.remove_n_particles(n = 5000)
 
