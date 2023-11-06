@@ -378,7 +378,7 @@ class proto_arlo():
 
             
         pose = self.particle_filter.estimate_pose()
-        print(f"POS X: {pose[0]}, POS Y: {pose[1]}, θ: {pose[2]}, State: {self.state} -> " + action)
+        print(f"POS X: {pose[0]}, POS Y: {pose[1]}, θ: {pose[2]}, State: {self.state}, LM = {self.currLm} -> " + action)
         # with np.printoptions(sign='+'):
             
         # # with np.printoptions(floatmode="fixed", precision=1):
