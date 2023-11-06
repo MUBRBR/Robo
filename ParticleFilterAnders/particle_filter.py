@@ -95,7 +95,7 @@ class ParticleFilter():
 
             # Get sigma_d and sigma_theta
             sigma_d = 3 * np.std(np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1)))
-            sigma_theta = 2 * np.std(self.particles[:, 2])
+            sigma_theta = 0.5 * np.std(self.particles[:, 2]) #was 2
 
             # Distance-part of weight
             measured_dists = np.sqrt(np.sum((self.landmarks[curr_landmark] - self.particles[:, :2])**2, axis=1))
