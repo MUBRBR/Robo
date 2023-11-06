@@ -180,7 +180,7 @@ class ParticleFilter():
 
                 #maybe return here, deends on the definition of the MCL algoritm
 
-            if (early_stopping and self.evaluate_pose() < 5):
+            if (early_stopping and self.evaluate_pose() < 10):
                 break
 
             

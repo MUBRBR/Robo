@@ -105,7 +105,7 @@ class proto_arlo():
                 betterArlo.RotateAngle(angle)
                 print(f"Rotating towards target LM1 with degrees: {np.degrees(angle)}")
     
-                self.particle_filter.perform_MCL(1000, self_localize = True, early_stopping = True)
+                self.particle_filter.perform_MCL(750, self_localize = True, early_stopping = True)
 
                 self.particle_filter.move_particles_forward(dist)
                 self.particle_filter.add_uncertainty(0.0, 0.1) # This is for when MCL is used. Maybe divided by n??
