@@ -61,11 +61,11 @@ class proto_arlo():
     # spin 360 degrees and find unique landmarks and perform MCL with Self_localization
     def observe360Degrees(self):
         # rotating 20 degrees 18 times (360 degrees) and storing landmarks seen
-        iterations = 18
+        iterations = 15 # should be 18 but it over drives by 45degrees, 15 iterations = 360degrees
         for _ in range(iterations):
             self.RotateAngle(np.deg2rad(20))
-            print(f"iter{_}")
             sleep(0.5)
+            print(f"iter{_}")
             print(f"has slept{_}")
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
             
@@ -93,7 +93,7 @@ class proto_arlo():
     def boot_and_rally(self):
         currLm = 1
         while True:
-            print(f"State: {self.state}")
+            print(f"\n\nState: {self.state}")
             if self.state == "LOCALIZE":
                 # Here we'll call self_localize()
                 # Reset queue, perform MCL with *10 particles while rotating
@@ -104,14 +104,14 @@ class proto_arlo():
             elif self.state == "GET_PATH":
                 # Estimate pose and then perform RRT to get a route to curr LM
                 self.currPos = self.particle_filter.estimate_pose()
-                print(f"Estimated current pose: {self.currPos}")
+                print(f"Estimated current pose in GET_path: {self.currPos}")
                 dest = self.landmarks[currLm]
                 print(f"Dest: {dest} | currLM: {currLm}")
                 angleToTarget = self.CalcTheta_target(self.currPos, dest)
-                print(f"AngleToTarget: {np.degrees(angleToTarget)}")
+                print(f"AngleToTarget LM: {np.degrees(angleToTarget)}")
                 self.RotateAngle(angleToTarget)
                 optimal_path = self.RRT.get_path(currLm, self.currPos, dest, draw_map= True)
-                print(f"Optimal path: {optimal_path}")
+                print(f"           OPTIMAL PATH: {optimal_path}")
                 self.state = "FOLLOW_PATH"
 
             elif self.state == "FOLLOW_PATH":
