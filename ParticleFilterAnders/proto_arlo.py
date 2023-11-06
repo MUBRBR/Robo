@@ -80,7 +80,7 @@ class proto_arlo():
                 if not isinstance(valid_indices, type(None)):
                 # if (len(valid_indices > 0)):
 
-                    self.particle_filter.perform_MCL(int (200), self_localize= True)
+                    self.particle_filter.perform_MCL(int (150), self_localize= True)
                 
 
     def init_localize(self):
@@ -106,17 +106,18 @@ class proto_arlo():
         for objectID, dist, angle in zip(objectIDs, dists, angles):
             if (objectID == self.currLm):
 
-                self.particle_filter.perform_MCL(250, self_localize = True, early_stopping = True)
+                self.particle_filter.perform_MCL(150, self_localize = True, early_stopping = True)
 
                 self.particle_filter.move_particles_forward(dist-40)
 
                 self.particle_filter.add_uncertainty(0.0, 0.1) 
 
                 self.DriveVector((dist-40, 0.0))
+                
+                break
                
                 self.incrementLM()
 
-                break
 
                 #NO CHANGE IN STATE
                 # self.state = "LOCALIZE"
@@ -322,27 +323,7 @@ class proto_arlo():
                 return
         print("After IF1")
         
-            # TO DO:
-            # Implement an 'else'
-
-            # self.Log(f"Drive vect {(self.currDir / np.linalg.norm(self.currDir))*2}")
-
-            # self.DriveVector((self.currDir / np.linalg.norm(self.currDir))*2) 
-
-            # self.Log("after driving to get around obstacle")
-
-            # self.Stop()
-
-        # else: # nothing in the way, no need to stop - drive or keep driving
-
-        #     self.DriveVector(step)
-
-        # self.RotateVector(dest - self.currPos)
-
-        # self.DriveVector(dest - self.currPos)
-        
         self.DriveVector(distance)
-        # self.DriveLength(norm_distance)
 
         self.Stop()
     
