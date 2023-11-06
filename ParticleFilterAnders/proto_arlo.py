@@ -114,9 +114,10 @@ class proto_arlo():
 
                 self.DriveVector((dist-40, 0.0))
                 
+                self.incrementLM()
+                
                 break
                
-                self.incrementLM()
 
 
                 #NO CHANGE IN STATE
