@@ -114,25 +114,26 @@ class proto_arlo():
                 self.particle_filter.add_uncertainty(0.0, 0.1) # This is for when MCL is used. Maybe divided by n??
         #                kør mod l1
                 self.DriveVector((dist-50, 0.0))
+                currLm += 1
                 self.state = "LOCALIZE"
                 
-    #      
-            
+    def localize(self):   
+        # Here we'll call self_localize()
+        # Reset queue, perform MCL with *10 particles while rotating
+        self.currentRoute = q.Queue()
+        self.observe360Degrees()
+        self.state = "GET_PATH"
+        
 
     def boot_and_rally(self):
         currLm = 1
         while True:
-            print(f"\n\nState: {self.state}")
+            self.Log("Main loop")
             if self.state == "LOCALIZE":
-                # Here we'll call self_localize()
-                # Reset queue, perform MCL with *10 particles while rotating
-                self.currentRoute = q.Queue()
-                self.observe360Degrees()
-                self.state = "GET_PATH"
+                self.localize()
             
             elif self.state == "INIT_LOCALIZE":
                 self.init_localize()
-                currLm += 1
                 
             elif self.state == "GET_PATH":
                 # Estimate pose and then perform RRT to get a route to curr LM
