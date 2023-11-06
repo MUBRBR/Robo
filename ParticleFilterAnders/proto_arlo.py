@@ -103,8 +103,8 @@ class proto_arlo():
             if (objectID == 1):
 
                 betterArlo.RotateAngle(angle)
-                print(f"Rotating towards target LM1 with degrees: {np.degrees(angle)}")
-    
+                # print(f"{np.degrees(angle)}")
+                self.Log("Rotating towards target LM1 with degrees: ")
                 self.particle_filter.perform_MCL(750, self_localize = True, early_stopping = True)
 
                 self.particle_filter.move_particles_forward(dist-50)
@@ -422,10 +422,9 @@ class proto_arlo():
 
         # with np.printoptions(sign='+', floatmode="fixed", precision=1):
 
-        # angle = angle_between_vectors([0,1], self.currDir)
             
-
-        # print(f"POS: {self.currPos}, DIR: {self.currDir}, θ: {angle} -> " + action)
+        pose = self.particle_filter.estimate_pose()
+        print(f"POS X: {pose[0]}, POS Y: {pose[1]}, θ: {pose[2]}, State: {self.state} -> " + action)
         # with np.printoptions(sign='+'):
             
         # # with np.printoptions(floatmode="fixed", precision=1):
