@@ -61,12 +61,11 @@ class proto_arlo():
     # spin 360 degrees and find unique landmarks and perform MCL with Self_localization
     def observe360Degrees(self):
         # rotating 20 degrees 18 times (360 degrees) and storing landmarks seen
-        iterations = 15 # should be 18 but it over drives by 45degrees, 15 iterations = 360degrees
+        iterations = 18 # should be 18 but it over drives by 45degrees, 15 iterations = 360degrees
         for _ in range(iterations):
             self.RotateAngle(np.deg2rad(20))
             sleep(0.5)
             print(f"iter{_}")
-            print(f"has slept{_}")
             # self.particle_filter.move_particles(0.0, 0.0, np.deg2rad(20))  # we shouldnt move particles when we spin 360 degrees
             
             
@@ -242,6 +241,7 @@ class proto_arlo():
                 self.arlo.go_diff(turn_speed, turn_speed, 0, 1)
                 sleep(turn_time / n)
 
+            sleep(0.5)
             self.currPos = self.particle_filter.estimate_pose()
             print(f"estimated pose while rotating: {self.currPos}")
             self.arlo.stop()

@@ -264,16 +264,16 @@ class Camera(object):
 
         if not isinstance(self.ids, type(None)):
 
-            for i in range(self.rvecs.shape[1]):
+            # for i in range(self.rvecs.shape[1]):
 
-                # get rotation on y-axis from the rotation vector
-                _, ry, _ = self.rvecs[0, i]
+            #     # get rotation on y-axis from the rotation vector
+            #     _, ry, _ = self.rvecs[0, i]
 
-                # Define a vector with length 20, angle 45, and then rotate it further by the y-axis rotation:
-                translation_vector = np.array([[np.cos(np.pi*0.25-ry), 0, np.sin(np.pi*0.25-ry)]]) * .20
+            #     # Define a vector with length 20, angle 45, and then rotate it further by the y-axis rotation:
+            #     translation_vector = np.array([[np.cos(np.pi*0.25-ry), 0, np.sin(np.pi*0.25-ry)]]) * .20
 
-                # Extend each tvec by the translation_vector
-                self.tvecs[0, i] += translation_vector.ravel()
+            #     # Extend each tvec by the translation_vector
+            #     self.tvecs[0, i] += translation_vector.ravel()
 
             dists = np.linalg.norm(self.tvecs, axis=len(self.tvecs.shape) - 1) * 100
             # Make sure we always return properly shaped arrays
