@@ -106,10 +106,7 @@ class proto_arlo():
             if (objectID == 1):
 
                 self.Log(f"Check angle + 90? {angle+0.47}", "r")
-                betterArlo.RotateAngle(-angle)
-                # theta_target = self.CalcTheta_target(self.currPos, (0.0,0.0))
-                # betterArlo.RotateAngle(-theta_target)
-
+                betterArlo.RotateAngle(angle+0.47)
                 
                 
                 self.Log("Rotating towards target LM1 with degrees: ")
