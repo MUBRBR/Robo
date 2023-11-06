@@ -93,7 +93,7 @@ class proto_arlo():
 
         objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
             #Get all indices that is not a reoccurring objectID. 
-        while(isinstance(objectIDs, type(None)) or 1 not in objectIDs): 
+        while(isinstance(objectIDs, type(None)) or self.currLm not in objectIDs): 
             colour = self.cam.get_next_frame()
 
             objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
@@ -106,7 +106,7 @@ class proto_arlo():
         sleep(0.8)
 
         for objectID, dist, angle in zip(objectIDs, dists, angles):
-            if (objectID == 1):
+            if (objectID == self.currLm):
 
                 # self.Log(f"Check angle + 90? {angle+0.47}", "r")
                 # betterArlo.RotateAngle(angle+0.47)
@@ -118,7 +118,10 @@ class proto_arlo():
                 self.particle_filter.add_uncertainty(0.0, 0.1) # This is for when MCL is used. Maybe divided by n??
         #                kør mod l1
                 self.DriveVector((dist-50, 0.0))
-                self.currLm += 1
+                if self.currLm != 4:
+                    self.currLm += 1
+                else:
+                    self.currLm = 1
 
                 #NO CHANGE IN STATE, 
                 # self.state = "LOCALIZE"
