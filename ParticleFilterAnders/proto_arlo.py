@@ -97,7 +97,7 @@ class proto_arlo():
             colour = self.cam.get_next_frame()
 
             objectIDs, dists, angles = self.cam.detect_aruco_objects(colour)
-            self.Log("while rotate")
+            self.Log(f"{objectIDs = }, {dists = }, {angles = }")
             betterArlo.RotateAngle(np.deg2rad(20))
 
             sleep(0.7)
